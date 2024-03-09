@@ -73,7 +73,6 @@ export const AuthContextProvider = (props) => {
     ]);
 
     const showLoginForm = () => {
-        console.log('login');
         if (!userDetails.isLogged) {
             setShowRegister(false);
             setShowLogin(true);

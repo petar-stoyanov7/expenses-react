@@ -134,44 +134,30 @@ const Login = (props) => {
         const path = ctx.ajaxConfig.server + ctx.ajaxConfig.login;
         if (user.isValid && pass.isValid && form.isValid) {
             axios.post(path, {
-                user: user.value,
-                pass: pass.value,
-                isEmail: + form.isEmail,
+                username: user.value,
+                password: pass.value,
                 hash: ctx.ajaxConfig.hash
             }).then((response) => {
+                console.log('r', response);
                 const data = response.data;
                 if (data.success) {
-                    const isAdmin = data.user.Group === 'admins';
+                    const isAdmin = true; //TODO: change when user groups are implemented
                     const user = {
-                        id: data.user.ID,
-                        username: data.user.Username,
-                        city: data.user.City,
-                        email: data.user.Email,
-                        firstName: data.user.Fname,
-                        lastName: data.user.Lname,
-                        sex: data.user.Sex,
-                        notes: data.user.Notes,
+                        id: data.user.id,
+                        username: data.user.username,
+                        email: data.user.email,
+                        firstName: data.user.firstName,
+                        lastName: data.user.lastName,
+                        notes: data.user.notes,
+                        cars: data.user.cars,
                     }
 
                     ctx.onLogin(user, isAdmin);
-                } else if (!data.success) {
-                    let message = '';
-                    switch(data.status) {
-                        case 2:
-                            message = 'Invalid username or password';
-                            if (form.isEmail) {
-                                message = 'Invalid e-mail or password:';
-                            }
-                            break;
-                        case 1:
-                        default:
-                            message = 'We have a problem with this app, please try again later';
-                            break;
-                    }
+                } else if (!data.success && data.message) {
                     setForm({
                         ...form,
                         isValid: false,
-                        message: message
+                        message: data.message
                     });
                 } else {
                     setForm({

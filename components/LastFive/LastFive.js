@@ -85,7 +85,6 @@ const LastFive = (props) => {
             props.clearRefresh(false);
         }
     }, [ctx.userDetails, refresh]);
-    console.log('render');
 
     return (
         <Fragment>
