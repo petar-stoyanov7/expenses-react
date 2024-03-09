@@ -1,0 +1,15 @@
+{
+  "server": "http://xp.l",
+  "hash": "17808b60a9ae7f6b06c318d1d4f2bd09",
+  "login": "/user/login",
+
+  "getUser": "/account/get-user",
+  "getCars": "/cars/get-user-cars",
+  "getFuels": "/cars/get-fuel-list",
+  "getOverall": "/statistics/get-overall",
+  "getLastFive": "/statistics/get-last-five",
+  "register": "/account/register",
+  "getExpenses": "/expense/get-expenses",
+  "getInsurances": "/expense/get-insurances",
+  "addExpense": "/expense/new-expense"
+}

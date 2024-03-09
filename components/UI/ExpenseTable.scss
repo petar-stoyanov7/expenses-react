@@ -1,0 +1,61 @@
+@import "../../Main";
+
+.expenses-list {
+  width: 100%;
+
+  &__header {
+    background-color: $main-color;
+    color: $white;
+
+    tr:hover {
+      background-color: $main-color;
+    }
+  }
+
+  th,td {
+    padding: 10px 5px;
+    font-size: 14px;
+    text-align: left;
+
+    @media (min-width: $medium) {
+      padding: 5px;
+    }
+  }
+
+
+  tbody tr {
+    //text-align: center;
+
+    &:nth-child(even) {
+      background-color: $main-lighter;
+    }
+
+    &:hover {
+      background-color: $main-light;
+    }
+  }
+
+  &__detail, &__date {
+    display: none;
+    @media (min-width: $medium) {
+      display: table-cell;
+    }
+  }
+  &__mileage, &__notes, &__liters {
+    display: none;
+    @media (min-width: $large) {
+      display: table-cell;
+    }
+  }
+
+  &.exp-small {
+    th,td {
+      font-size: 12px;
+      padding: 0;
+
+      @media (min-width: $medium) {
+        font-size: 14px;
+      }
+    }
+  }
+}

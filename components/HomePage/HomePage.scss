@@ -1,0 +1,57 @@
+@import "../../Main";
+
+.homepage {
+  padding: 0 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .full-width {
+    width: 100%;
+  }
+
+  .half-width {
+    width: 100%;
+    margin-right: 0;
+
+    @media (min-width: $medium) {
+      width: calc((100% - 75px)/2);
+      margin-right: 15px;
+
+      &:nth-child(even) {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .element {
+    display: inline-block;
+    width: auto;
+    margin: 5px;
+    padding: 10px;
+    border-top: 1px solid #e5fcdf;
+    border-left: 1px solid #e5fcdf;
+    box-shadow: 1px 1px 2px #008d03;
+
+    h4 {
+      display: inline-block;
+      margin: 3px 0 3px 0;
+      padding-left: 3px;
+      padding-right: 3px;
+      background-color: #649f70;
+    }
+
+    .container-title {
+      display: inline-block;
+      padding: 5px;
+      margin: 3px 3px 10px;
+      background-color: #66b375;
+      color: white;
+      border-radius: 3px;
+    }
+
+    &:hover {
+      background-color: #d1dbd0;
+    }
+  }
+}

@@ -1,0 +1,181 @@
+@import '../../Main';
+
+.new-expense {
+  padding: 5px;
+  @media (min-width: $medium) {
+    padding: 10px;
+  }
+  @media (min-width: $large) {
+    padding: 15px;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    color: $main-color;
+    margin: 0 0 10px;
+    display: none;
+
+    @media (min-width: $medium) {
+      display: block;
+    }
+  }
+
+  &__form-error {
+    margin: 0;
+    color: $red;
+  }
+
+  .car-element.is-active {
+    background-color: $main-light;
+  }
+
+  .item-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .item-selector {
+    padding: 5px;
+    font-size: 1.5rem;
+    margin: 0 5px 5px 0;
+
+    &.is-active {
+      background-color: $main-light;
+    }
+  }
+
+  &__fuels {
+    margin-bottom: 15px;
+
+    &-list {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .new-expense__inputs-liters {
+      margin-bottom: 0;
+    }
+
+    &-liters {
+      width: 30%;
+      margin-right: 5px;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  &__insurances {
+    margin-bottom: 15px;
+  }
+
+  &__inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    &-mileage ,.react-datepicker-wrapper {
+      width: calc((100% - 15px)/2);
+    }
+
+    &-mileage {
+      margin-right: 15px;
+    }
+
+    &-value {
+      width: 100%;
+    }
+
+    &-notes {
+      width: 100%;
+      height: 60px;
+      resize: none;
+
+      @media (min-width: $medium) {
+        height: 80px;
+      }
+      @media (min-width: $large) {
+        height: 100px;
+      }
+    }
+  }
+
+  &__input {
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    outline: none !important;
+    padding: 5px 15px;
+    border: 2px solid $main-color;
+
+    &:not(textarea) {
+      height: 40px;
+    }
+
+    &.input-error {
+      border: 2px solid salmon;
+      box-shadow: 1px 1px 5px salmon, -1px -1px 5px salmon;
+    }
+
+    &:active, &:focus {
+      border: 2px solid #408948;
+      box-shadow: 1px 1px 5px #408948, -1px -1px 5px #408948;
+    }
+
+    @media (min-width: $medium) {
+      font-size: 18px;
+      &:first-of-type:not(textarea) {
+        margin-right: 15px;
+      }
+    }
+    @media (min-width: $medium) {
+      font-size: 20px;
+    }
+  }
+
+  &__actions {
+    button {
+      box-sizing: border-box;
+      height: 40px;
+      font-size: 16px;
+      border-radius: 5px;
+
+      @media (min-width: $medium) {
+        font-size: 18px;
+      }
+      @media (min-width: $medium) {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .react-datepicker-wrapper {
+    .new-expense__inputs-date {
+      width: 100%;
+    }
+
+    .react-datepicker {
+      border-color: $main-color;
+      font-size: 18px;
+
+      &__triangle {
+      }
+
+      &__navigation-icon::before {
+        border-color: $main-color;
+      }
+
+      &__header {
+        background-color: $main-lighter;
+      }
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+@import '../../Main';
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-height: 60px;
+  padding: 5px;
+  background: $main-color;
+  box-shadow: 2px 2px 8px $main-darker;
+  z-index: $highest-z-index;
+
+  @media (min-width: $large) {
+    max-height: 70px;
+  }
+
+
+  .site-logo {
+    display: none;
+    width: 10%;
+    img {
+      height: 50px;
+      width: 50px;
+      margin: 5px;
+    }
+
+    @media (min-width: $medium) {
+      display: block;
+    }
+  }
+
+  div.toolbar {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    @media (min-width: $medium) {
+      width: 50%;
+    }
+    @media (min-width: $large) {
+      width: 35%;
+    }
+
+    &.is-logged {
+      width: 40%;
+    }
+  }
+
+  .login {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  &.is-logged {
+    .toolbar {
+      width: 90%;
+
+      @media (min-width: $medium) {
+        width: 75%;
+      }
+      @media (min-width: $large) {
+        width: 65%;
+      }
+      @media (min-width: $xlarge) {
+        width: 55%;
+      }
+    }
+    .login {
+      width: 10%;
+    }
+  }
+}

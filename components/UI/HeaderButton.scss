@@ -1,0 +1,58 @@
+@import '../../Main';
+
+.header-button {
+  max-width: 20%;
+  height: 100%;
+  width: auto;
+  cursor: pointer;
+  position: relative;
+
+  &.smaller-icon {
+    height: 50%;
+    margin: auto 0;
+    max-width: none;
+  }
+
+  &__image {
+    max-height: 100%;
+    width: auto;
+    filter: brightness(1) invert(0.9);
+  }
+
+  &.orange-icon {
+    .header-button__image {
+      //#f1b64c
+      filter: invert(89%) sepia(16%) saturate(4207%) hue-rotate(320deg) brightness(102%) contrast(116%);
+    }
+
+    &:hover img {
+      //#f1a14c
+      filter: invert(71%) sepia(49%) saturate(711%) hue-rotate(333deg) brightness(99%) contrast(91%);
+    }
+  }
+
+  &.teal-icon {
+    .header-button__image {
+      //#abd6ab
+      filter: invert(92%) sepia(6%) saturate(1256%) hue-rotate(65deg) brightness(91%) contrast(87%);
+    }
+
+    &:hover img {
+      //#7dd17d
+      filter: invert(95%) sepia(4%) saturate(4692%) hue-rotate(55deg) brightness(88%) contrast(84%);
+    }
+  }
+
+
+  &__description {
+    display: none;
+  }
+
+  &:hover &__image {
+    filter: brightness(0) invert(1);
+  }
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}

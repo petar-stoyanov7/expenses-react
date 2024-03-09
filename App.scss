@@ -1,0 +1,18 @@
+@import "Main";
+
+.main-content {
+  margin: 60px auto 0 auto;
+  max-width: none;
+  background-color: $background-color;
+  padding: 20px 5px;
+  min-height: 90vh;
+
+
+  @media (min-width: $large) {
+    margin-top: 60px;
+  }
+
+  @media (min-width: $xlarge) {
+    max-width: 1200px;
+  }
+}
