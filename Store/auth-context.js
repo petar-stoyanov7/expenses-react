@@ -37,22 +37,23 @@ export const AuthContextProvider = (props) => {
             storedLoggedIn &&
             !userDetails.isLogged
         ) {
-            const path = ajaxConfig.server + ajaxConfig.getUser;
-            axios.post(path, {
-                id: storedUserId,
+            let path = ajaxConfig.server + ajaxConfig.getUser.replace('%u', storedUserId);
+            axios.get(path, {
                 hash: ajaxConfig.hash
             }).then((response) => {
-                const data = response.data;
+                let data = response.data;
                 if (data.success) {
+                    const userData = data.data;
                     const user = {
-                        id: data.user.ID,
-                        username: data.user.Username,
-                        city: data.user.City,
-                        email: data.user.Email,
-                        firstName: data.user.Fname,
-                        lastName: data.user.Lname,
-                        sex: data.user.Sex,
-                        notes: data.user.Notes,
+                        id: userData.id,
+                        username: userData.username,
+                        // city: userData.City,
+                        email: userData.email,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        // sex: userData.Sex,
+                        notes: userData.notes,
+                        cars: userData.cars
                     }
 
                     setUserDetails({

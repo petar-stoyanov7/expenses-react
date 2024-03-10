@@ -37,19 +37,16 @@ const ExpenseTable = (props) => {
                         {expense.date}
                     </td>
                     <td className="expenses-list__car">
-                        {expense.carName}
+                        {expense.car}
                     </td>
                     <td className="expenses-list__type">
-                        {expense.type}
-                    </td>
-                    <td className="expenses-list__detail">
-                        {expense.expenseDetail}
+                        {expense.expense}
                     </td>
                     <td className="expenses-list__liters">
                         {expense.liters}
                     </td>
                     <td className="expenses-list__price">
-                        {expense.price}
+                        {expense.value}
                     </td>
                     <td className="expenses-list__notes">
                         {expense.notes}

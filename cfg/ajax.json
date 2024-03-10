@@ -2,9 +2,10 @@
   "server": "http://xp.l",
   "hash": "17808b60a9ae7f6b06c318d1d4f2bd09",
   "login": "/user/login",
+  "getUser": "/user/get/%u/detail",
+  "getCars": "/car/get/%u",
+  "getUserExpenses": "/expense/get/user/%u",
 
-  "getUser": "/account/get-user",
-  "getCars": "/cars/get-user-cars",
   "getFuels": "/cars/get-fuel-list",
   "getOverall": "/statistics/get-overall",
   "getLastFive": "/statistics/get-last-five",

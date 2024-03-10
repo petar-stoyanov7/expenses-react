@@ -58,40 +58,33 @@ const CarList = (props) => {
     }
 
     useEffect(() => {
-        if (ctx.userDetails.isLogged) {
-            const ajaxCfg = ctx.ajaxConfig;
+        const userData = ctx.userDetails;
 
-            axios.post(ajaxCfg.server + ajaxCfg.getCars, {
-                id: ctx.userDetails.user.id,
-                hash: ajaxCfg.hash
-            }).then((response) => {
-                const data = response.data;
-                if (data.success) {
-                    const formattedCarList = data.cars.map((car) => {
-                        return {
-                            id: car.ID,
-                            brand: car.Brand,
-                            model: car.Model,
-                            year: car.Year,
-                            color: car.Color,
-                            mileage: car.Mileage,
-                            mainFuel: car.fuel_name1,
-                            secondaryFuel: car.fuel_name2,
-                            notes: car.Notes,
-                            fuelId: car.Fuel_ID,
-                            fuelId2: car.Fuel_ID2
-                        }
-                    });
-                    setCarList(formattedCarList);
-                } else {
-                    setCarList([]);
-                }
-            });
-        } else {
+        if (!userData.isLogged) {
             setCarList(dummyData);
             if (hasModal) {
                 setCarModal(dummyCarData);
             }
+        } else if (userData.user && userData.user.cars.length) {
+            const formattedCarList = userData.user.cars.map((car) => {
+                const result = {
+                    id: car.id,
+                    brand: car.brand ? car.brand : '',
+                    model: car.model ? car.model : '',
+                    year: car.year ? car.year : '0000',
+                    color: car.color ? car.color : '',
+                    mileage: car.mileage ? car.mileage : '',
+                    notes: car.notes ? car.notes : '',
+                };
+                result['mainFuel'] = car.fuel[0].displayName;
+
+                if (car.fuel[1]) {
+                    result['secondaryFuel'] = car.fuel[1].displayName;
+                }
+                return result;
+            });
+            setCarList(formattedCarList);
+
         }
     }, [ctx.userDetails, ctx.ajaxConfig]);
 
@@ -115,7 +108,7 @@ const CarList = (props) => {
                         showControls={showControls}
                     />
                     {ReactDOM.createPortal(
-                        <BlackOverlay />,
+                        <BlackOverlay/>,
                         overlayContainer
                     )}
                 </Fragment>
@@ -132,7 +125,9 @@ const CarList = (props) => {
                                 customClass={car.id === activeCar ? 'is-active' : ''}
                                 key={car.id}
                                 currentCar={car}
-                                clickAction={() => {clickAction(car)}}
+                                clickAction={() => {
+                                    clickAction(car)
+                                }}
                                 isDetailed={isDetailed}
                             />
                         );
