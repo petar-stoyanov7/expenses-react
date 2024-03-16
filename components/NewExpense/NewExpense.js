@@ -126,7 +126,6 @@ const NewExpense = () => {
     }
 
     const resetForm = () => {
-        console.log('form reset');
         setExpense(null);
         setActiveCar(null);
         setFuelType(null);
@@ -166,7 +165,6 @@ const NewExpense = () => {
                         setFormIsValid(false); //TODO FIX
 
                     }
-                    console.log('response');
                     console.log(response);
                 });
         }

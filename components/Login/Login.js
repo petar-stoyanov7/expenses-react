@@ -138,7 +138,6 @@ const Login = (props) => {
                 password: pass.value,
                 hash: ctx.ajaxConfig.hash
             }).then((response) => {
-                console.log('r', response);
                 const data = response.data;
                 if (data.success) {
                     const isAdmin = true; //TODO: change when user groups are implemented

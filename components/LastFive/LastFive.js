@@ -53,9 +53,7 @@ const LastFive = (props) => {
     const refresh = props.refresh;
 
     useEffect(() => {
-        console.log('here we go', props.lastFive);
         const lastFive = props.lastFive.map((row) => {
-            console.log('r', row);
             const date = new Date(row.updatedAt.date);
 
             return {

@@ -23,10 +23,8 @@ const HomePage = (props) => {
     const [userData, setUserData] = useState(dummyData);
     const [lastFive, setLastFive] = useState([]);
 
-    console.log('l', lastFive);
 
     useEffect(() => {
-        console.log('u', ctx.userDetails);
         const userDetails = ctx.userDetails.user;
         if (undefined !== userDetails && Object.keys(userDetails).length !== 0) {
             setUserData(userDetails);
@@ -41,8 +39,6 @@ const HomePage = (props) => {
                 // to: currentDate.toISOString().split('T')[0],
                 hash: ctx.ajaxConfig.hash
             }).then((response) => {
-                console.log('d', response.data);
-
                 if (response.data.success) {
                     const data = response.data.data;
                     setLastFive(data);
@@ -51,7 +47,6 @@ const HomePage = (props) => {
                     data.forEach((row) => {
                         total += row.value;
                     });
-                    console.log('t', total);
 
                     setUserData({
                         ...userDetails,

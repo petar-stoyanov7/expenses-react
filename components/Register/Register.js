@@ -304,6 +304,7 @@ const Register = (props) => {
 
     const onSubmit = (e) => {
         console.log('subm');
+        //TODO: rework
         /** Statuses
          * 0 - success
          * 1 - missing data
