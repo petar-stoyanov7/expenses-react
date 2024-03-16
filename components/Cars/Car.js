@@ -7,6 +7,18 @@ const Car = (props) => {
     const car = props.currentCar;
     const isDetailed = null != props.isDetailed ? props.isDetailed : false;
     const customClass = null != props.customClass ? props.customClass : '';
+    let fuelString = "";
+
+    car.fuel.forEach((fuel,i) => {
+        console.log('f', fuel);
+        console.log('i', i);
+        fuelString += fuel.displayName ? fuel.displayName : fuel.name;
+        if (i < (car.fuel.length - 1)) {
+            fuelString += ' / ';
+        }
+    });
+    console.log('f', fuelString);
+
     return (
         <Card
             customClass={`car-element ${customClass} ${!isDetailed && 'brief'}`}
@@ -18,7 +30,7 @@ const Car = (props) => {
             <div className="car-element__container">
                 <span className='car-element__fuel'>
                     <span className="car-element__name">Fuel: </span>
-                    {`${car.mainFuel}${null !== car.secondaryFuel ? `/${car.secondaryFuel}` : ''}`}
+                    {fuelString}
                 </span>
                 {props.isDetailed && (
                     <span className='car-element__color'>

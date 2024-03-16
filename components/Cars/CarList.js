@@ -16,10 +16,15 @@ const dummyData = [
         brand: 'BMW',
         model: '330i',
         color: 'Black',
-        mainFuel: 'Gas',
-        secondaryFuel: 'LPG',
+        fuel: [
+            {
+                id: 1,
+                name: "gasoline",
+                displayName: "Gasoline"
+            }
+        ],
         year: '2014',
-        mileage: '115010',
+        mileage: '100110',
         lastYearSpent: 4315
     }
 ];
@@ -34,8 +39,7 @@ const CarList = (props) => {
 
     const [carList, setCarList] = useState(dummyData);
     const [carModal, setCarModal] = useState(dummyCarData);
-    // const [activeCar, setActiveCar] = useState(null);
-    const activeCar = props.activeCar;
+    const selectedCar = props.selectedCar;
 
     const isDetailed = null != props.isDetailed ? props.isDetailed : false;
     const hasModal = null != props.hasModal ? props.hasModal : false;
@@ -67,21 +71,16 @@ const CarList = (props) => {
             }
         } else if (userData.user && userData.user.cars.length) {
             const formattedCarList = userData.user.cars.map((car) => {
-                const result = {
+                return {
                     id: car.id,
                     brand: car.brand ? car.brand : '',
                     model: car.model ? car.model : '',
                     year: car.year ? car.year : '0000',
+                    fuel: car.fuel ? car.fuel : [],
                     color: car.color ? car.color : '',
                     mileage: car.mileage ? car.mileage : '',
                     notes: car.notes ? car.notes : '',
                 };
-                result['mainFuel'] = car.fuel[0].displayName;
-
-                if (car.fuel[1]) {
-                    result['secondaryFuel'] = car.fuel[1].displayName;
-                }
-                return result;
             });
             setCarList(formattedCarList);
 
@@ -122,10 +121,11 @@ const CarList = (props) => {
                     {carList.map((car) => {
                         return (
                             <Car
-                                customClass={car.id === activeCar ? 'is-active' : ''}
+                                customClass={car.id === selectedCar ? 'is-selected' : ''}
                                 key={car.id}
                                 currentCar={car}
                                 clickAction={() => {
+                                    console.log('c', car);
                                     clickAction(car)
                                 }}
                                 isDetailed={isDetailed}
