@@ -20,7 +20,7 @@ function App() {
 
     useEffect(() => {
         if (!ctx.userDetails.isLogged) {
-            setActiveElement(<HomePage />);
+            setActiveElement(<NewExpense />); //TODO: return to homepage when done
         }
     }, [ctx.userDetails.isLogged]);
 
@@ -32,14 +32,16 @@ function App() {
                 setNewExpense={setNewExpense}
             />
             <main className="main-content">
-                <Switch>
-                    <Route path="/new">
-                        <NewExpense />
-                    </Route>
-                    <Route path="/">
-                        <HomePage />
-                    </Route>
-                </Switch>
+                {/* Switched this app to single page */}
+                {/*<Switch>*/}
+                {/*    <Route path="/new">*/}
+                {/*        <NewExpense />*/}
+                {/*    </Route>*/}
+                {/*    <Route path="/">*/}
+                {/*        <HomePage />*/}
+                {/*    </Route>*/}
+                {/*</Switch>*/}
+                {activeElement}
             </main>
             <Footer/>
         </Fragment>

@@ -10,14 +10,11 @@ const Car = (props) => {
     let fuelString = "";
 
     car.fuel.forEach((fuel,i) => {
-        console.log('f', fuel);
-        console.log('i', i);
         fuelString += fuel.displayName ? fuel.displayName : fuel.name;
         if (i < (car.fuel.length - 1)) {
             fuelString += ' / ';
         }
     });
-    console.log('f', fuelString);
 
     return (
         <Card

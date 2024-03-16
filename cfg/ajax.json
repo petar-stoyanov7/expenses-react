@@ -5,12 +5,11 @@
   "getUser": "/user/get/%u/detail",
   "getCars": "/car/get/%u",
   "getUserExpenses": "/expense/get/user/%u",
+  "getFuels": "/fuel/get/all",
+  "getExpenseTypes": "/expense-type/get/all",
+  "addExpense": "/expense/add",
 
-  "getFuels": "/cars/get-fuel-list",
   "getOverall": "/statistics/get-overall",
   "getLastFive": "/statistics/get-last-five",
-  "register": "/account/register",
-  "getExpenses": "/expense/get-expenses",
-  "getInsurances": "/expense/get-insurances",
-  "addExpense": "/expense/new-expense"
+  "register": "/account/register"
 }

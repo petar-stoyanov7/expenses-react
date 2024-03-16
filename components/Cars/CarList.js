@@ -125,7 +125,6 @@ const CarList = (props) => {
                                 key={car.id}
                                 currentCar={car}
                                 clickAction={() => {
-                                    console.log('c', car);
                                     clickAction(car)
                                 }}
                                 isDetailed={isDetailed}

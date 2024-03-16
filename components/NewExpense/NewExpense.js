@@ -11,17 +11,21 @@ import CarList from "../Cars/CarList";
 import Card from "../UI/Card";
 import AuthContext from "../../Store/auth-context";
 import axios from "axios";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import LastFive from "../LastFive/LastFive";
+import DatePicker from "react-datepicker";
+
+import "./default-datepicker.css";
 
 const currentDate = new Date();
+
+//TODO: Add isActiveCar check, add actual submit
 
 const NewExpense = () => {
     const ctx = useContext(AuthContext);
     const ajx = ctx.ajaxConfig;
+    const fuelExpenseId = 1; //TODO: change if value changes in DB
 
-    const [activeCar, setActiveCar] = useState(null);
+
+    const [selectedCar, setSelectedCar] = useState(null);
     const [expenseType, setExpenseType] = useState(null);
     const [mileage, setMileage] = useState('');
     const [date, setDate] = useState(currentDate);
@@ -30,9 +34,9 @@ const NewExpense = () => {
     const [insuranceType, setInsuranceType] = useState(null);
     const [value, setValue] = useState('');
     const [notes, setNotes] = useState('');
+    //lists
     const [expenseList, setExpenseList] = useState([]);
     const [fuelList, setFuelList] = useState([]);
-    const [insuranceList, setInsuranceList] = useState([]);
     const [possibleFuels, setPossibleFuels] = useState([]);
     const [formIsValid, setFormIsValid] = useState({
         isValid: false,
@@ -40,71 +44,59 @@ const NewExpense = () => {
     });
     const [isFormSubmit, setIsFormSubmit] = useState(true);
 
-
+    /** generate lists of available expense and fuel types */
     useEffect(() => {
-        axios.post(ajx.server+ajx.getExpenses, {hash: ajx.hash})
-            .then((response) => {
-                if (response.data.success) {
-                    setExpenseList(response.data.expenses);
-                }
-            });
         axios.post(ajx.server+ajx.getFuels, {hash: ajx.hash})
             .then((response) => {
-                if (response.data.success) {
-                    setFuelList(response.data.fuels);
+                if (response.data.success && response.data.data) {
+                    setFuelList(response.data.data);
                 }
             });
-        axios.post(ajx.server+ajx.getInsurances, {hash: ajx.hash})
+        axios.get(ajx.server+ajx.getExpenseTypes, {hash: ajx.hash})
             .then((response) => {
-                if (response.data.success) {
-                    setInsuranceList(response.data.insurances);
+                if (response.data.success && response.data.data) {
+                    setExpenseList(response.data.data);
                 }
             });
     }, []);
 
+    /** auto select first car */
+    useEffect(() => {
+        if (ctx.userDetails.user.cars) {
+            setCar(ctx.userDetails.user.cars[0]);
+        }
+    }, [ctx]);
+
     /** validty */
     useEffect(() => {
         let validity =
-            null !== activeCar &&
+            null !== selectedCar &&
             null !== expenseType &&
             '' !== mileage &&
             '' !== value;
-        if (validity && expenseType === '1') {
-            validity = null !== fuelType && '' !== liters;
+        if (validity && expenseType === fuelExpenseId) {
+            validity = null !== fuelType;
+            validity = validity && '' !== liters;
         }
         if (validity && expenseType === '2') {
             validity = null !== insuranceType;
         }
         setFormIsValid(validity);
-    }, [activeCar, expenseType, fuelType, insuranceType, mileage, date, value, liters]);
+    }, [selectedCar, expenseType, fuelType, insuranceType, mileage, date, value, liters]);
 
     const setCar = (car) => {
-        setActiveCar(car);
+        setSelectedCar(car);
         setMileageValue(car.mileage);
         setExpenseType(null);
         setInsuranceType(null);
         setFuelType(null);
         setLiters('');
 
-        let carFuels = [];
-        fuelList.map((fuel) => {
-            if (fuel.ID === car.fuelId) {
-                carFuels.push({
-                    id: fuel.ID,
-                    name: fuel.Name
-                })
-            }
-            if (fuel.ID === car.fuelId2) {
-                carFuels.push({
-                    id: fuel.ID,
-                    name: fuel.Name
-                })
-            }
+        const carFuelsList = car.fuel.map((fuel) => {
+            return fuel.id;
         });
-        setPossibleFuels(carFuels);
-        if (carFuels.length === 1) {
-            setFuel(carFuels[0].id);
-        }
+
+        setPossibleFuels(carFuelsList);
     }
 
     const setMileageValue = (val) => {
@@ -121,13 +113,9 @@ const NewExpense = () => {
         setFuelType(fuelId);
     }
 
-    const setInsurance = (insuranceId) => {
-        setInsuranceType(insuranceId);
-    }
-
     const resetForm = () => {
         setExpense(null);
-        setActiveCar(null);
+        setSelectedCar(null);
         setFuelType(null);
         setInsuranceType(null);
         setMileageValue('');
@@ -143,7 +131,7 @@ const NewExpense = () => {
             const expenseData = {
                 hash: ajx.hash,
                 userId: ctx.userDetails.user.id,
-                carId: activeCar.id,
+                carId: selectedCar.id,
                 date: new Date(date).toISOString().split('T')[0],
                 mileage: mileage,
                 expenseType: expenseType,
@@ -151,22 +139,22 @@ const NewExpense = () => {
                 fuelType: fuelType,
                 liters: liters,
                 insuranceType: insuranceType,
-                partName: null, //TODO IMPLEMENT PARTS FFS!
-                description: notes
+                notes: notes
             }
+            console.log('data', expenseData);
 
-            axios.post(ajx.server+ajx.addExpense, expenseData)
-                .then((response) => {
-                    const result = response.data;
-                    if (result.success) {
-                        resetForm();
-                        //refresh last5
-                    } else {
-                        setFormIsValid(false); //TODO FIX
-
-                    }
-                    console.log(response);
-                });
+            // axios.post(ajx.server+ajx.addExpense, expenseData)
+            //     .then((response) => {
+            //         const result = response.data;
+            //         if (result.success) {
+            //             resetForm();
+            //             //refresh last5
+            //         } else {
+            //             setFormIsValid(false); //TODO FIX
+            //
+            //         }
+            //         console.log(response);
+            //     });
         }
     }
 
@@ -190,50 +178,31 @@ const NewExpense = () => {
                         isDetailed={false}
                         hasModal={false}
                         clickAction={setCar}
-                        activeCar={null != activeCar ? activeCar.id : null}
+                        selectedCar={null != selectedCar ? selectedCar.id : null}
                     />
                 </div>
                 <hr />
                 <div className="new-expense__type item-list">
                     {expenseList.map((expense) => {
-                        let customClass = `item-selector new-expense__type-${expense.Name.toLowerCase()}`;
-                        if (expense.ID === expenseType) {
-                            customClass += ' is-active';
+                        let customClass = `item-selector new-expense__type-${expense.name.toLowerCase()}`;
+                        if (expense.id === expenseType) {
+                            customClass += ' is-selected';
                         }
                         return (
                             <Card
-                                key={expense.ID}
+                                key={expense.id}
                                 customClass={customClass}
-                                clickAction={() => {setExpense(expense.ID)}}
+                                clickAction={() => {setExpense(expense.id)}}
                             >
-                                {expense.Name}
+                                {expense.displayName ? expense.displayName : expense.name}
                             </Card>
                         )
                     })}
-
                 </div>
                 <hr />
                 <div
-                    className="new-expense__insurances item-list"
-                    style={{display: expenseType === '2' ? 'flex' : 'none'}}
-                >
-                    {insuranceList.map((insurance) => {
-                        let customClass = "item-selector";
-                        customClass += insurance.ID === insuranceType ? ' is-active' : '';
-                        return (
-                            <Card
-                                customClass={customClass}
-                                key={insurance.ID}
-                                clickAction={() => {setInsurance(insurance.ID)}}
-                            >
-                                {insurance.Name}
-                            </Card>
-                        )
-                    })}
-                </div>
-                <div
                     className="new-expense__fuels item-list"
-                    style={{display: expenseType === '1' && null != activeCar ? 'flex' : 'none'}}
+                    style={{display: expenseType === fuelExpenseId && null != selectedCar ? 'flex' : 'none'}}
                 >
                     <div className="new-expense__fuels-liters">
                         <input
@@ -247,18 +216,22 @@ const NewExpense = () => {
                         />
                     </div>
                     <div className="new-expense__fuels-list">
-                        {possibleFuels.map((fuel) => {
-                            let customClass = "item-selector";
-                            customClass += fuel.id === fuelType ? ' is-active' : '';
-                            return (
-                                <Card
-                                    customClass={customClass}
-                                    key={fuel.id}
-                                    clickAction={() => {setFuel(fuel.id)}}
-                                >
-                                    {fuel.name}
-                                </Card>
-                            );
+                        {fuelList.map((fuel) => {
+                            if (possibleFuels.includes(fuel.id)) {
+                                let customClass = "item-selector";
+                                customClass += fuel.id === fuelType ? ' is-selected' : '';
+                                return (
+                                    <Card
+                                        customClass={customClass}
+                                        key={fuel.id}
+                                        clickAction={() => {
+                                            setFuel(fuel.id)
+                                        }}
+                                    >
+                                        {fuel.displayName}
+                                    </Card>
+                                );
+                            }
                         })}
                     </div>
 
@@ -274,6 +247,7 @@ const NewExpense = () => {
                         }}
                     />
                     <DatePicker
+                        dateFormat="YYYY-MM-dd"
                         className="new-expense__input new-expense__inputs-date"
                         selected={date}
                         onChange={(date) => {setDate(date)}}
@@ -312,14 +286,6 @@ const NewExpense = () => {
                         Reset
                     </button>
                 </div>
-
-            </Container>
-            <Container>
-                <LastFive
-                    type="user"
-                    refresh={isFormSubmit}
-                    clearRefresh={setIsFormSubmit}
-                />
             </Container>
         </Fragment>
 
