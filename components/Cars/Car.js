@@ -19,6 +19,7 @@ const Car = (props) => {
     return (
         <Card
             customClass={`car-element ${customClass} ${!isDetailed && 'brief'}`}
+            isButton={true}
             clickAction={props.clickAction}
         >
             <h3 className='car-element__title'>

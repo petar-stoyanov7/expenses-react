@@ -6,8 +6,7 @@
   margin-bottom: 10px;
   margin-right: 0;
   box-sizing: border-box;
-  cursor: pointer;
-  
+
   &.is-disabled {
     background-color: $disabled-background;
     color: $disabled-text;

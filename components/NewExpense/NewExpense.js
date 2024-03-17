@@ -17,12 +17,12 @@ import "./default-datepicker.css";
 
 const currentDate = new Date();
 
-//TODO: Add isActiveCar check, add actual submit
-
 const NewExpense = () => {
     const ctx = useContext(AuthContext);
     const ajx = ctx.ajaxConfig;
     const fuelExpenseId = 1; //TODO: change if value changes in DB
+
+    console.log('ctx', ctx);
 
 
     const [selectedCar, setSelectedCar] = useState(null);
@@ -60,9 +60,9 @@ const NewExpense = () => {
             });
     }, []);
 
-    /** auto select first car */
+    /** auto select first car if only one car is present */
     useEffect(() => {
-        if (ctx.userDetails.user.cars) {
+        if (ctx.userDetails.user.cars && 1 === ctx.userDetails.user.cars.length) {
             setCar(ctx.userDetails.user.cars[0]);
         }
     }, [ctx]);
@@ -85,6 +85,9 @@ const NewExpense = () => {
     }, [selectedCar, expenseType, fuelType, insuranceType, mileage, date, value, liters]);
 
     const setCar = (car) => {
+        if (!car.isActive) {
+            return;
+        }
         setSelectedCar(car);
         setMileageValue(car.mileage);
         setExpenseType(null);
@@ -134,27 +137,24 @@ const NewExpense = () => {
                 carId: selectedCar.id,
                 date: new Date(date).toISOString().split('T')[0],
                 mileage: mileage,
-                expenseType: expenseType,
+                expenseId: expenseType,
                 value: value,
-                fuelType: fuelType,
+                fuelId: fuelType,
                 liters: liters,
-                insuranceType: insuranceType,
                 notes: notes
             }
-            console.log('data', expenseData);
 
-            // axios.post(ajx.server+ajx.addExpense, expenseData)
-            //     .then((response) => {
-            //         const result = response.data;
-            //         if (result.success) {
-            //             resetForm();
-            //             //refresh last5
-            //         } else {
-            //             setFormIsValid(false); //TODO FIX
-            //
-            //         }
-            //         console.log(response);
-            //     });
+            axios.post(ajx.server+ajx.addExpense, expenseData)
+                .then((response) => {
+                    const result = response.data;
+                    if (result.success) {
+                        resetForm();
+                    }
+                    console.log("Expense submitted: ", response);
+                })
+                .catch((error) => {
+                    console.log('Error with execution: ', error);
+                });
         }
     }
 
@@ -191,6 +191,7 @@ const NewExpense = () => {
                         return (
                             <Card
                                 key={expense.id}
+                                isButton={true}
                                 customClass={customClass}
                                 clickAction={() => {setExpense(expense.id)}}
                             >
@@ -247,7 +248,7 @@ const NewExpense = () => {
                         }}
                     />
                     <DatePicker
-                        dateFormat="YYYY-MM-dd"
+                        dateFormat="dd-MMM-YYYY"
                         className="new-expense__input new-expense__inputs-date"
                         selected={date}
                         onChange={(date) => {setDate(date)}}

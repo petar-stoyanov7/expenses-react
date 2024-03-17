@@ -106,9 +106,8 @@ const CarList = (props) => {
 
                 <div className="car-list__cars">
                     {carList.map((car) => {
-                        console.log('c', car);
                         let customClass = car.id === selectedCar ? 'is-selected' : '';
-                        customClass += false === car.isActive ? ' is-disabled' : '';
+                        customClass += car.isActive ? '' : ' is-disabled';
                         return (
                             <Car
                                 customClass={customClass}

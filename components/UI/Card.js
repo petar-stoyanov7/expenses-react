@@ -2,9 +2,11 @@ import React from 'react';
 import './Card.scss';
 
 const Card = (props) => {
+    let className = `card ${props.customClass}`;
+    className += props.isButton ? " is-button" : '';
     return (
         <div
-            className={`card ${props.customClass}`}
+            className={className}
             onClick={props.clickAction}
         >
             {props.children}

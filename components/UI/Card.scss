@@ -4,4 +4,8 @@
   background-color: #fff;
   box-shadow: 2px 2px 2px $main-color;
   border-radius: 10px;
+
+  &.is-button {
+    cursor: pointer;
+  }
 }
