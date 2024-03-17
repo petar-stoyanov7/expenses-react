@@ -14,6 +14,7 @@ const AuthContext = createContext({
     showRegister: () => {},
     onLogin: (user, isAdmin) => {},
     onLogout: () => {},
+    updateUserData: () => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -24,6 +25,13 @@ export const AuthContextProvider = (props) => {
         isAdmin: false,
         user: {}
     });
+
+    const updateUserData = (userData) => {
+        setUserDetails({
+            ...userDetails,
+            user: userData
+        })
+    }
 
     const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
@@ -131,7 +139,8 @@ export const AuthContextProvider = (props) => {
                 showLogin: showLoginForm,
                 showRegister: showRegisterForm,
                 onLogin: loginHandler,
-                onLogout: logoutHandler
+                onLogout: logoutHandler,
+                updateUserData: updateUserData
             }}
         >
             {

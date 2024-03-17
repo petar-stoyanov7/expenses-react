@@ -1,20 +1,14 @@
 import React from 'react';
 import './Car.scss';
 import Card from "../UI/Card";
+import {generateFuelString} from "../../helpers/fuel-string-generator";
 
 
 const Car = (props) => {
     const car = props.currentCar;
     const isDetailed = null != props.isDetailed ? props.isDetailed : false;
     const customClass = null != props.customClass ? props.customClass : '';
-    let fuelString = "";
-
-    car.fuel.forEach((fuel,i) => {
-        fuelString += fuel.displayName ? fuel.displayName : fuel.name;
-        if (i < (car.fuel.length - 1)) {
-            fuelString += ' / ';
-        }
-    });
+    const fuelString = generateFuelString(car.fuel);
 
     return (
         <Card

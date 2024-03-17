@@ -12,9 +12,6 @@ const ExpenseTable = (props) => {
         tableClass += " exp-small";
     }
 
-
-
-
     if (null == props.expenses) {
         expenses = (
             <tr>
@@ -23,9 +20,14 @@ const ExpenseTable = (props) => {
         )
     } else {
         expenses = props.expenses.map((expense) => {
+            const date = new Date(expense.updatedAt.date).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            });
             return (
                 <tr
-                    key={expense.id+expense.date}
+                    key={expense.id}
                     onClick={null == props.clickAction ? undefined : () => {
                         props.clickAction(expense.id);
                     }}
@@ -34,7 +36,7 @@ const ExpenseTable = (props) => {
                         {expense.mileage}
                     </td>
                     <td className="expenses-list__date">
-                        {expense.date}
+                        {date}
                     </td>
                     <td className="expenses-list__car">
                         {expense.car}
@@ -74,9 +76,6 @@ const ExpenseTable = (props) => {
                     </th>
                     <th className="expenses-list__type">
                         Type
-                    </th>
-                    <th className="expenses-list__detail">
-                        Detail
                     </th>
                     <th className="expenses-list__liters">
                         Liters

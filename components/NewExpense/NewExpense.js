@@ -22,8 +22,7 @@ const NewExpense = () => {
     const ajx = ctx.ajaxConfig;
     const fuelExpenseId = 1; //TODO: change if value changes in DB
 
-    console.log('ctx', ctx);
-
+    const currentUser = ctx.userDetails.user;
 
     const [selectedCar, setSelectedCar] = useState(null);
     const [expenseType, setExpenseType] = useState(null);
@@ -62,8 +61,8 @@ const NewExpense = () => {
 
     /** auto select first car if only one car is present */
     useEffect(() => {
-        if (ctx.userDetails.user.cars && 1 === ctx.userDetails.user.cars.length) {
-            setCar(ctx.userDetails.user.cars[0]);
+        if (currentUser.cars && 1 === currentUser.cars.length) {
+            setCar(currentUser.cars[0]);
         }
     }, [ctx]);
 
@@ -125,6 +124,7 @@ const NewExpense = () => {
         setDate(currentDate);
         setPossibleFuels([]);
         setValue('');
+        setNotes('');
         setIsFormSubmit(true);
     }
 
@@ -133,7 +133,7 @@ const NewExpense = () => {
         if (formIsValid) {
             const expenseData = {
                 hash: ajx.hash,
-                userId: ctx.userDetails.user.id,
+                userId: currentUser.id,
                 carId: selectedCar.id,
                 date: new Date(date).toISOString().split('T')[0],
                 mileage: mileage,
@@ -147,7 +147,20 @@ const NewExpense = () => {
             axios.post(ajx.server+ajx.addExpense, expenseData)
                 .then((response) => {
                     const result = response.data;
+
                     if (result.success) {
+                        const currentCar = selectedCar; //after resetting the form the state value is erased
+                        resetForm();
+                        /* update context to match new mileage */
+                        if (mileage !== currentCar.mileage) {
+                            const tempCurrentUser = {...currentUser};
+                            const idx = currentUser.cars.findIndex((car) => {
+                                return car.id === currentCar.id;
+                            });
+                            tempCurrentUser.cars[idx].mileage = mileage;
+                            ctx.updateUserData(tempCurrentUser);
+                        }
+
                         resetForm();
                     }
                     console.log("Expense submitted: ", response);

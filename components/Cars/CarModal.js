@@ -1,12 +1,59 @@
-import React from 'react';
+import React,
+{
+    useState,
+    useEffect, useContext
+}
+    from 'react';
 
 import './CarModal.scss';
 import Card from "../UI/Card";
 import iconClose from "../../assets/icons/icon-close.svg";
 import LastFive from "../LastFive/LastFive";
+import {generateFuelString} from "../../helpers/fuel-string-generator";
+import AuthContext from "../../Store/auth-context";
+import axios from "axios";
 
 const CarModal = (props) => {
     const car = props.car;
+    const ctx = useContext(AuthContext);
+
+    const [lastFive, setLastFive] = useState([]);
+    const [lastFiveSpent, setLastFiveSpent] = useState(0);
+
+
+    useEffect(() => {
+        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getCarExpenses.replace('%u', car.id);
+
+        axios.post(
+            path,
+            {
+                count: 5,
+                orderBy: 'date',
+                order: 'DESC',
+                // from: `${currentYear}-01-01`, //TODO: uncomment when we have more recent data
+                // to: currentDate.toISOString().split('T')[0],
+                hash: ctx.ajaxConfig.hash
+            },
+        )
+            .then((response) => {
+                if (response.data.success) {
+                    const data = response.data.data;
+                    setLastFive(data);
+
+                    let total = 0;
+                    data.forEach((row) => {
+                        total += row.value;
+                    });
+                    setLastFiveSpent(total);
+                } else {
+                    console.log(`Server response: [${response.data.message}]`);
+                }
+            })
+            .catch((error) => {
+                console.log('Error with execution', error);
+            });
+    }, []);
+
 
     return (
         <Card customClass='car-details'>
@@ -31,13 +78,20 @@ const CarModal = (props) => {
                 </span>
                 <span className='car-details__info-fuel'>
                     <strong>Fuel: </strong>
-                    {`${car.mainFuel}${null !== car.secondaryFuel ? `/${car.secondaryFuel}` : ''}`}
+                    {generateFuelString(car.fuel)}
+                </span>
+                <span className='car-details__info-fuel'>
+                    <strong>Spent over the last five expenses: </strong>
+                    {lastFiveSpent}
                 </span>
                 <span className="car-details__info-notes">
                     {car.notes}
                 </span>
             </article>
-            <LastFive type='car' carId={car.id} isSmall={true}/>
+            <LastFive
+                isSmall={true}
+                lastFive={lastFive}
+            />
             {props.showControls && (
                 <div className="car-details__actions">
                     <button className="exp-button exp-button__new">

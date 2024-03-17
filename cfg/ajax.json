@@ -5,6 +5,7 @@
   "getUser": "/user/get/%u/detail",
   "getCars": "/car/get/%u",
   "getUserExpenses": "/expense/get/user/%u",
+  "getCarExpenses": "/expense/get/car/%u",
   "getFuels": "/fuel/get/all",
   "getExpenseTypes": "/expense-type/get/all",
   "addExpense": "/expense/add",

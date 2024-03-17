@@ -1,16 +1,9 @@
 import React, {
-    useContext,
-    useEffect,
-    useState,
     Fragment,
-    Component
 } from 'react';
 
 import './LastFive.scss';
-import AuthContext from "../../Store/auth-context";
-import axios from "axios";
 import ExpenseTable from "../UI/ExpenseTable";
-import {parseRawData} from "../../helpers/expense-parser";
 
 const dummyData = [
     {
@@ -18,7 +11,11 @@ const dummyData = [
         expense: 'fuel',
         expenseDetail: 'Gasoline',
         mileage: '114300',
-        date: '2021.01.01',
+        updatedAt: {
+            date: '2021-01-01 00:00:00.000000',
+            timezone: 'Europe/Helsinki',
+            timezone_type: 3
+        },
         car: 'BMW 330i',
         liters: 8,
         price: 20,
@@ -29,7 +26,11 @@ const dummyData = [
         expense: 'fuel',
         expenseDetail: 'LPG',
         mileage: '114500',
-        date: '2021.01.01',
+        updatedAt: {
+            date: '2021-01-01 00:00:00.00000',
+            timezone: 'Europe/Helsinki',
+            timezone_type: 3
+        },
         car: 'BMW 330i',
         liters: 33,
         price: 50,
@@ -40,7 +41,11 @@ const dummyData = [
         expense: 'insurance',
         expenseDetail: 'Kasko + GO',
         mileage: '115010',
-        date: '2021.01.01',
+        updatedAt: {
+            date: '2021-01-01 00:00:00.00000',
+            timezone: 'Europe/Helsinki',
+            timezone_type: 3
+        },
         car: 'BMW 330i',
         price: 50,
         notes: 'Taxation is theft!'
@@ -48,23 +53,7 @@ const dummyData = [
 ];
 
 const LastFive = (props) => {
-    const ctx = useContext(AuthContext);
-    const [lastFive, setLastFive] = useState(dummyData);
-    const refresh = props.refresh;
-
-    useEffect(() => {
-        const lastFive = props.lastFive.map((row) => {
-            const date = new Date(row.updatedAt.date);
-
-            return {
-                ...row,
-                date: `${date.getFullYear()}.${date.getMonth()}.${date.getDay()}`
-            }
-        });
-
-        setLastFive(lastFive);
-
-    }, [ctx.userDetails, props.lastFive]);
+    const lastFive = props.lastFive ? props.lastFive : dummyData;
 
     return (
         <Fragment>

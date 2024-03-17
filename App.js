@@ -20,7 +20,7 @@ function App() {
 
     useEffect(() => {
         if (!ctx.userDetails.isLogged) {
-            setActiveElement(<NewExpense />); //TODO: return to homepage when done
+            setActiveElement(<HomePage />); //TODO: return to homepage when done
         }
     }, [ctx.userDetails.isLogged]);
 
