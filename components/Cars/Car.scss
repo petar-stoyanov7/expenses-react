@@ -9,8 +9,9 @@
   cursor: pointer;
   
   &.is-disabled {
-    background-color: #c5c5c5;
-    color: #626262;
+    background-color: $disabled-background;
+    color: $disabled-text;
+    box-shadow: 2px 2px 2px #1e779b;
   }
 
   &:last-of-type {
@@ -52,11 +53,11 @@
   }
   
   &:hover {
-    background-color: #e6f9ff;
+    background-color: $hover-background;
   }
 
   &.is-disabled:hover {
-    background-color: #c3d1d7;
+    background-color: $disabled-hover;
   }
 
   &__title {
