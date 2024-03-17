@@ -31,29 +31,38 @@ const HomePage = (props) => {
 
             const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getUserExpenses.replace('%u', ctx.userDetails.user.id);
 
-            axios.post(path, {
-                count: 5,
-                orderBy: 'date',
-                order: 'DESC',
-                // from: `${currentYear}-01-01`, //TODO: uncomment when we have more recent data
-                // to: currentDate.toISOString().split('T')[0],
-                hash: ctx.ajaxConfig.hash
-            }).then((response) => {
-                if (response.data.success) {
-                    const data = response.data.data;
-                    setLastFive(data);
+            axios.post(
+                path,
+                {
+                    count: 5,
+                    orderBy: 'date',
+                    order: 'DESC',
+                    // from: `${currentYear}-01-01`, //TODO: uncomment when we have more recent data
+                    // to: currentDate.toISOString().split('T')[0],
+                    hash: ctx.ajaxConfig.hash
+                },
+            )
+                .then((response) => {
+                    if (response.data.success) {
+                        const data = response.data.data;
+                        setLastFive(data);
 
-                    let total = 0;
-                    data.forEach((row) => {
-                        total += row.value;
-                    });
+                        let total = 0;
+                        data.forEach((row) => {
+                            total += row.value;
+                        });
 
-                    setUserData({
-                        ...userDetails,
-                        yearTotal: total
-                    })
-                }
-            });
+                        setUserData({
+                            ...userDetails,
+                            yearTotal: total
+                        })
+                    } else {
+                        console.log(`Server response: [${response.data.message}]`);
+                    }
+                })
+                .catch((error) => {
+                    console.log('Error with execution', error);
+                });
         } else {
             setUserData(dummyData);
         }
@@ -68,12 +77,12 @@ const HomePage = (props) => {
                 )}
                 <h3 className='container-title'>Welcome back, {userData.firstName} {userData.lastName}</h3>
                 <div className="content">
-                <div>
-                    <strong>Number of cars:</strong> {userData.cars.length}
-                </div>
-                <div>
-                    <strong>Total spent for this year</strong>: {userData.yearTotal}
-                </div>
+                    <div>
+                        <strong>Number of cars:</strong> {userData.cars.length}
+                    </div>
+                    <div>
+                        <strong>Total spent for this year</strong>: {userData.yearTotal}
+                    </div>
                 </div>
             </Container>
             <Container customClass="half-width">
@@ -86,7 +95,7 @@ const HomePage = (props) => {
                 <LastFive type="user" lastFive={lastFive}/>
             </Container>
         </div>
-        );
+    );
 };
 
-export default  HomePage;
+export default HomePage;
