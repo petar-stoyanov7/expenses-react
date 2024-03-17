@@ -37,7 +37,7 @@ export const AuthContextProvider = (props) => {
             storedLoggedIn &&
             !userDetails.isLogged
         ) {
-            let path = ajaxConfig.server + ajaxConfig.getUser.replace('%u', storedUserId);
+            const path = ajaxConfig.server + ajaxConfig.getUser.replace('%u', storedUserId);
             axios.get(path, {
                 hash: ajaxConfig.hash
             }).then((response) => {
@@ -105,6 +105,8 @@ export const AuthContextProvider = (props) => {
             isAdmin: false,
             user: {}
         });
+
+        window.location.reload();
     };
 
     const loginHandler = (user, isAdmin) => {

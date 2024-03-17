@@ -70,20 +70,7 @@ const CarList = (props) => {
                 setCarModal(dummyCarData);
             }
         } else if (userData.user && userData.user.cars.length) {
-            const formattedCarList = userData.user.cars.map((car) => {
-                return {
-                    id: car.id,
-                    brand: car.brand ? car.brand : '',
-                    model: car.model ? car.model : '',
-                    year: car.year ? car.year : '0000',
-                    fuel: car.fuel ? car.fuel : [],
-                    color: car.color ? car.color : '',
-                    mileage: car.mileage ? car.mileage : '',
-                    notes: car.notes ? car.notes : '',
-                };
-            });
-            setCarList(formattedCarList);
-
+            setCarList(userData.user.cars);
         }
     }, [ctx.userDetails, ctx.ajaxConfig]);
 
@@ -119,9 +106,12 @@ const CarList = (props) => {
 
                 <div className="car-list__cars">
                     {carList.map((car) => {
+                        console.log('c', car);
+                        let customClass = car.id === selectedCar ? 'is-selected' : '';
+                        customClass += false === car.isActive ? ' is-disabled' : '';
                         return (
                             <Car
-                                customClass={car.id === selectedCar ? 'is-selected' : ''}
+                                customClass={customClass}
                                 key={car.id}
                                 currentCar={car}
                                 clickAction={() => {

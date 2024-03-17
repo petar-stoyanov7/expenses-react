@@ -7,6 +7,11 @@
   margin-right: 0;
   box-sizing: border-box;
   cursor: pointer;
+  
+  &.is-disabled {
+    background-color: #c5c5c5;
+    color: #626262;
+  }
 
   &:last-of-type {
     margin-bottom: 0;
@@ -48,6 +53,10 @@
   
   &:hover {
     background-color: #e6f9ff;
+  }
+
+  &.is-disabled:hover {
+    background-color: #c3d1d7;
   }
 
   &__title {
