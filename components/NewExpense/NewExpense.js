@@ -15,12 +15,13 @@ import DatePicker from "react-datepicker";
 
 import "./default-datepicker.css";
 
+const FUEL_EXPENSE_ID = 1; //TODO: change if value changes in DB
+
 const currentDate = new Date();
 
 const NewExpense = () => {
     const ctx = useContext(AuthContext);
     const ajx = ctx.ajaxConfig;
-    const fuelExpenseId = 1; //TODO: change if value changes in DB
 
     const currentUser = ctx.userDetails.user;
 
@@ -73,7 +74,7 @@ const NewExpense = () => {
             null !== expenseType &&
             '' !== mileage &&
             '' !== value;
-        if (validity && expenseType === fuelExpenseId) {
+        if (validity && expenseType === FUEL_EXPENSE_ID) {
             validity = null !== fuelType;
             validity = validity && '' !== liters;
         }
@@ -102,12 +103,11 @@ const NewExpense = () => {
     }
 
     const setExpense = (expenseId) => {
-        console.log('xcp');
         setExpenseType(expenseId);
         setFuelType(null);
 
         //if only one fuel is available - auto set it
-        if (expenseId === 1 && possibleFuels.length === 1) {
+        if (expenseId === FUEL_EXPENSE_ID && possibleFuels.length === 1) {
             setFuel(possibleFuels[0]);
         }
     }
@@ -216,7 +216,7 @@ const NewExpense = () => {
                 <hr />
                 <div
                     className="new-expense__fuels item-list"
-                    style={{display: expenseType === fuelExpenseId && null != selectedCar ? 'flex' : 'none'}}
+                    style={{display: expenseType === FUEL_EXPENSE_ID && null != selectedCar ? 'flex' : 'none'}}
                 >
                     <div className="new-expense__fuels-liters">
                         <input
