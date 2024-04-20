@@ -30,9 +30,9 @@ const NewExpense = () => {
     const [date, setDate] = useState(currentDate);
     const [fuelType, setFuelType] = useState(null);
     const [liters, setLiters] = useState('');
-    const [insuranceType, setInsuranceType] = useState(null);
     const [value, setValue] = useState('');
     const [notes, setNotes] = useState('');
+
     //lists
     const [expenseList, setExpenseList] = useState([]);
     const [fuelList, setFuelList] = useState([]);
@@ -77,11 +77,8 @@ const NewExpense = () => {
             validity = null !== fuelType;
             validity = validity && '' !== liters;
         }
-        if (validity && expenseType === '2') {
-            validity = null !== insuranceType;
-        }
         setFormIsValid(validity);
-    }, [selectedCar, expenseType, fuelType, insuranceType, mileage, date, value, liters]);
+    }, [selectedCar, expenseType, fuelType, mileage, date, value, liters]);
 
     const setCar = (car) => {
         if (!car.isActive) {
@@ -90,7 +87,6 @@ const NewExpense = () => {
         setSelectedCar(car);
         setMileageValue(car.mileage);
         setExpenseType(null);
-        setInsuranceType(null);
         setFuelType(null);
         setLiters('');
 
@@ -106,9 +102,14 @@ const NewExpense = () => {
     }
 
     const setExpense = (expenseId) => {
+        console.log('xcp');
         setExpenseType(expenseId);
-        setInsuranceType(null);
         setFuelType(null);
+
+        //if only one fuel is available - auto set it
+        if (expenseId === 1 && possibleFuels.length === 1) {
+            setFuel(possibleFuels[0]);
+        }
     }
 
     const setFuel = (fuelId) => {
@@ -119,7 +120,6 @@ const NewExpense = () => {
         setExpense(null);
         setSelectedCar(null);
         setFuelType(null);
-        setInsuranceType(null);
         setMileageValue('');
         setDate(currentDate);
         setPossibleFuels([]);
