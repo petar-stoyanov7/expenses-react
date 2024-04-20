@@ -4,13 +4,15 @@ import Header from './components/Header/Header';
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import NewExpense from "./components/NewExpense/NewExpense";
+import Statistics from "./components/Statistics/Statistics";
 import AuthContext from "./Store/auth-context";
 import {Route, Switch} from 'react-router-dom'
 
 function App() {
     const ctx = useContext(AuthContext);
 
-    const [activeElement, setActiveElement] = useState(<HomePage />);
+    // const [activeElement, setActiveElement] = useState(<HomePage />); //TODO: restore
+    const [activeElement, setActiveElement] = useState(<Statistics />);
     const setHomepage = () => {
         setActiveElement(<HomePage />);
     }
@@ -18,9 +20,13 @@ function App() {
         setActiveElement(<NewExpense />);
     }
 
+    const setStatistics = () => {
+        setActiveElement(<Statistics />);
+    }
+
     useEffect(() => {
         if (!ctx.userDetails.isLogged) {
-            setActiveElement(<HomePage />); //TODO: return to homepage when done
+            setActiveElement(<HomePage />);
         }
     }, [ctx.userDetails.isLogged]);
 
@@ -30,6 +36,7 @@ function App() {
             <Header
                 setHomepage={setHomepage}
                 setNewExpense={setNewExpense}
+                setStatistics={setStatistics}
             />
             <main className="main-content">
                 {/* Switched this app to single page */}

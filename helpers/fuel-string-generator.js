@@ -1,4 +1,8 @@
 export const generateFuelString = (fuelArray) => {
+    if (!fuelArray || !fuelArray.length) {
+        return;
+    }
+
     let fuelString = "";
 
     fuelArray.forEach((fuel,i) => {

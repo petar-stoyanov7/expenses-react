@@ -13,7 +13,7 @@ import AuthContext from "../../Store/auth-context";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 
-import "./default-datepicker.css";
+import "../../assets/css/default-datepicker.css";
 
 const FUEL_EXPENSE_ID = 1; //TODO: change if value changes in DB
 
@@ -191,7 +191,7 @@ const NewExpense = () => {
                         isDetailed={false}
                         hasModal={false}
                         clickAction={setCar}
-                        selectedCar={null != selectedCar ? selectedCar.id : null}
+                        selectedCar={selectedCar}
                     />
                 </div>
                 <hr />

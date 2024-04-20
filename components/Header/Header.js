@@ -41,6 +41,7 @@ const Header = (props) => {
                             imageAlt='New Expense'
                         />
                         <HeaderButton
+                            clickAction={props.setStatistics}
                             text='Statistics'
                             imageUrl={iconStatistics}
                             imageAlt='Statistics'

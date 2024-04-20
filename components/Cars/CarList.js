@@ -82,9 +82,8 @@ const CarList = (props) => {
         }
     }
 
-
     return (
-        <Fragment>
+        <div className={props.customClass}>
             {(carModal.showModal && hasModal) && (
                 <Fragment>
                     <CarModal
@@ -105,8 +104,21 @@ const CarList = (props) => {
                 )}
 
                 <div className="car-list__cars">
+                    {(props.allCars && carList.length > 1) && (
+                        <Car
+                            customClass={"all" === selectedCar ? 'is-selected' : ''}
+                            key={0}
+                            allCars={true}
+                            clickAction={() => {
+                                clickAction('all');
+                            }}
+                        />
+                    )}
                     {carList.map((car) => {
-                        let customClass = car.id === selectedCar ? 'is-selected' : '';
+                        let customClass;
+                        if (selectedCar && selectedCar.id) {
+                            customClass = car.id === selectedCar.id ? 'is-selected' : '';
+                        }
                         customClass += car.isActive ? '' : ' is-disabled';
                         return (
                             <Car
@@ -122,7 +134,7 @@ const CarList = (props) => {
                     })}
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
 }
 

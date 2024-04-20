@@ -8,6 +8,22 @@ const Car = (props) => {
     const car = props.currentCar;
     const isDetailed = null != props.isDetailed ? props.isDetailed : false;
     const customClass = null != props.customClass ? props.customClass : '';
+
+    if (props.allCars) {
+        return (
+            <Card
+                customClass={`car-element ${customClass} ${!isDetailed && 'brief'}`}
+                isButton={true}
+                clickAction={props.clickAction}
+            >
+                <h3 className='car-element__title'>
+                    All Cars
+                </h3>
+            </Card>
+
+        );
+    }
+
     const fuelString = generateFuelString(car.fuel);
 
     return (
