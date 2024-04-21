@@ -3,7 +3,7 @@ import './App.scss';
 import Header from './components/Header/Header';
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
-import NewExpense from "./components/NewExpense/NewExpense";
+import NewExpense from "./components/Expenses/NewExpense";
 import Statistics from "./components/Statistics/Statistics";
 import AuthContext from "./Store/auth-context";
 import {Route, Switch} from 'react-router-dom'
@@ -11,8 +11,7 @@ import {Route, Switch} from 'react-router-dom'
 function App() {
     const ctx = useContext(AuthContext);
 
-    // const [activeElement, setActiveElement] = useState(<HomePage />); //TODO: restore
-    const [activeElement, setActiveElement] = useState(<Statistics />);
+    const [activeElement, setActiveElement] = useState(<HomePage />);
     const setHomepage = () => {
         setActiveElement(<HomePage />);
     }
@@ -27,8 +26,11 @@ function App() {
     useEffect(() => {
         if (!ctx.userDetails.isLogged) {
             setActiveElement(<HomePage />);
+        } else {
+            setActiveElement(<Statistics />); //todo: remove
         }
     }, [ctx.userDetails.isLogged]);
+
 
     return (
 

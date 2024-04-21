@@ -29,29 +29,8 @@
     background-color: $main-light;
   }
 
-  .item-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .item-selector {
-    padding: 5px;
-    font-size: 1.5rem;
-    margin: 0 15px 5px 0;
-
-    &.is-selected {
-      background-color: $main-light;
-    }
-  }
-
   &__fuels {
     margin-bottom: 15px;
-
-    &-list {
-      display: flex;
-      flex-direction: row;
-    }
 
     .new-expense__inputs-liters {
       margin-bottom: 0;

@@ -117,3 +117,19 @@ $xxlarge: '1920px';
     }
   }
 }
+
+.item-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.item-selector {
+  padding: 5px;
+  font-size: 1.5rem;
+  margin: 0 15px 5px 0;
+
+  &.is-selected {
+    background-color: $main-light;
+  }
+}

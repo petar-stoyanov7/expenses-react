@@ -14,6 +14,8 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 
 import "../../assets/css/default-datepicker.css";
+import ExpenseList from "./ExpenseList";
+import FuelList from "../Cars/FuelList";
 
 const FUEL_EXPENSE_ID = 1; //TODO: change if value changes in DB
 
@@ -92,7 +94,7 @@ const NewExpense = () => {
         setLiters('');
 
         const carFuelsList = car.fuel.map((fuel) => {
-            return fuel.id;
+            return fuel;
         });
 
         setPossibleFuels(carFuelsList);
@@ -108,7 +110,7 @@ const NewExpense = () => {
 
         //if only one fuel is available - auto set it
         if (expenseId === FUEL_EXPENSE_ID && possibleFuels.length === 1) {
-            setFuel(possibleFuels[0]);
+            setFuel(possibleFuels[0].id);
         }
     }
 
@@ -195,24 +197,14 @@ const NewExpense = () => {
                     />
                 </div>
                 <hr />
-                <div className="new-expense__type item-list">
-                    {expenseList.map((expense) => {
-                        let customClass = `item-selector new-expense__type-${expense.name.toLowerCase()}`;
-                        if (expense.id === expenseType) {
-                            customClass += ' is-selected';
-                        }
-                        return (
-                            <Card
-                                key={expense.id}
-                                isButton={true}
-                                customClass={customClass}
-                                clickAction={() => {setExpense(expense.id)}}
-                            >
-                                {expense.displayName ? expense.displayName : expense.name}
-                            </Card>
-                        )
-                    })}
-                </div>
+                <ExpenseList
+                    multiple={false}
+                    expenseList={expenseList}
+                    activeExpenses={expenseType}
+                    clickAction={setExpense}
+                    customClass="new-expense__type item-list"
+                    elementClass="new-expense__type-"
+                />
                 <hr />
                 <div
                     className="new-expense__fuels item-list"
@@ -229,26 +221,14 @@ const NewExpense = () => {
                             }}
                         />
                     </div>
-                    <div className="new-expense__fuels-list">
-                        {fuelList.map((fuel) => {
-                            if (possibleFuels.includes(fuel.id)) {
-                                let customClass = "item-selector";
-                                customClass += fuel.id === fuelType ? ' is-selected' : '';
-                                return (
-                                    <Card
-                                        customClass={customClass}
-                                        key={fuel.id}
-                                        clickAction={() => {
-                                            setFuel(fuel.id)
-                                        }}
-                                    >
-                                        {fuel.displayName}
-                                    </Card>
-                                );
-                            }
-                        })}
-                    </div>
-
+                    <FuelList
+                        multiple={false}
+                        fuelList={possibleFuels}
+                        selectedFuels={fuelType}
+                        customClass="new-expense__fuels-list"
+                        elementClass="item-selector"
+                        clickAction={setFuel}
+                    />
                 </div>
                 <div className="new-expense__inputs">
                     <input
