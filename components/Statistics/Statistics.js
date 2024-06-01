@@ -38,10 +38,13 @@ const Statistics = () => {
     const [dateTo, setDateTo] = useState(new Date());
     const [expenseTypes, setExpenseTypes] = useState([]);
     const [selectedExpenses, setSelectedExpenses] = useState([]);
-    const [fuelList, setFuelList] = useState([]);
+    const [possibleFuels, setPossibleFuels] = useState([]);
+    const [selectedFuels, setSelectedFuels] = useState([]);
+
 
     //---//
 
+    /* startup */
     useEffect(() => {
         axios.get(ajx.server+ajx.getExpenseTypes, {hash: ajx.hash})
             .then((response) => {
@@ -53,6 +56,39 @@ const Statistics = () => {
                 console.log("Error with getting expense list: ", e);
             });
     }, []);
+
+    /* form validation */
+    useEffect(() => {
+        const validity =
+            null !== selectedCar &&
+            selectedExpenses.length > 0;
+
+        const formValid = {...formIsValid};
+        //TODO: finish
+
+    }, [selectedCar, dateFrom, dateTo, expenseTypes, selectedExpenses]);
+
+    /* car change */
+    useEffect(() => {
+        if (!selectedCar) {
+            return;
+        }
+
+        let fuelList = [];
+        if ('all' === selectedCar) {
+            currentUser.cars.forEach((car) => {
+                fuelList = fuelList.concat(car.fuel);
+            });
+        } else {
+            fuelList = fuelList.concat(selectedCar.fuel);
+        }
+
+        setSelectedFuels([]);
+        setPossibleFuels(fuelList);
+
+    }, [selectedCar])
+
+    //---//
 
     const setCar = (car) => {
         if (!car.isActive && "all" !== car) {
@@ -73,15 +109,34 @@ const Statistics = () => {
         setSelectedExpenses(tempExpenses);
     }
 
+    const setFuel = (fuel) => {
+        if ('all' === fuel) {
+            setSelectedFuels(fuel);
+            return;
+        }
+
+        const tempFuels = [...selectedFuels];
+        if (tempFuels.includes(fuel)) {
+            const i = tempFuels.indexOf(fuel);
+            tempFuels.splice(i, 1);
+        } else {
+            tempFuels.push(fuel);
+        }
+
+        setSelectedFuels(tempFuels);
+    }
+
     const resetForm = () => {
         setSelectedCar(null);
         setDateFrom(firstOfJan);
         setDateTo(new Date());
         setSelectedExpenses([]);
-        setFuelList([]);
+        setPossibleFuels([]);
+        setSelectedFuels([])
     }
 
     const submitHandler = () => {
+        //todo: FINISH!
         console.log('submitted');
     }
 
@@ -136,10 +191,21 @@ const Statistics = () => {
                     clickAction={setExpenses}
                     customClass="stat-form__expenses"
                 />
-                {/* TODO: Add fuel list. Add logic to check for selected or all cars */}
+                {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 1) && (
+                    <FuelList
+                        multiple={true}
+                        showAll={true}
+                        fuelList={possibleFuels}
+                        selectedFuels={selectedFuels}
+                        customClass="new-expense__fuels-list"
+                        elementClass="item-selector"
+                        clickAction={setFuel}
+                    />
+                )}
                 <div className="stat-form__actions">
                     <button
-                        disabled={!formIsValid.isValid}
+                        // disabled={!formIsValid.isValid}
+                        disabled={true}
                         className={`exp-button exp-button__success`}
                         type='submit'
                         onClick={submitHandler}

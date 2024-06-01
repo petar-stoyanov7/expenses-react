@@ -93,7 +93,7 @@ $xxlarge: '1920px';
       background-color: #247633;
     }
 
-    &.disabled {
+    &.disabled, &:disabled {
       background-color: #8c9e92;
       color: #7d6f6f;
     }
@@ -102,7 +102,7 @@ $xxlarge: '1920px';
   &__danger {
     background-color: $red;
 
-    &.disabled {
+    &.disabled, &:disabled {
       background-color: #cc8c8c;
       color: #786a6a;
     }
@@ -111,10 +111,14 @@ $xxlarge: '1920px';
   &__new {
     background-color: $main-color;
 
-    &.disabled {
+    &.disabled, &:disabled {
       background-color: #6dc2e4;
       color: #786a6a;
     }
+  }
+
+  &:disabled {
+    pointer-events: none;
   }
 }
 
