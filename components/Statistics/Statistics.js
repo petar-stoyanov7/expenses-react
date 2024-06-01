@@ -28,17 +28,14 @@ const Statistics = () => {
 
     const currentUser = ctx.userDetails.user;
 
-    const [formIsValid, setFormIsValid] = useState({
-        isValid: false,
-        message: ''
-    });
+    const [formIsValid, setFormIsValid] = useState(false);
 
-    const [selectedCar, setSelectedCar] = useState(null);
     const [dateFrom, setDateFrom] = useState(firstOfJan);
     const [dateTo, setDateTo] = useState(new Date());
     const [expenseTypes, setExpenseTypes] = useState([]);
-    const [selectedExpenses, setSelectedExpenses] = useState([]);
     const [possibleFuels, setPossibleFuels] = useState([]);
+    const [selectedCars, setSelectedCars] = useState("all");
+    const [selectedExpenses, setSelectedExpenses] = useState("all");
     const [selectedFuels, setSelectedFuels] = useState([]);
 
 
@@ -59,34 +56,48 @@ const Statistics = () => {
 
     /* form validation */
     useEffect(() => {
-        const validity =
-            null !== selectedCar &&
-            selectedExpenses.length > 0;
+        let validity =
+            null !== selectedCars &&
+            selectedExpenses.length > 0 &&
+            dateFrom < dateTo;
 
-        const formValid = {...formIsValid};
-        //TODO: finish
+        if (selectedExpenses.includes(FUEL_EXPENSE_ID)) {
+            validity = validity && selectedFuels.length > 0;
+        }
 
-    }, [selectedCar, dateFrom, dateTo, expenseTypes, selectedExpenses]);
+        setFormIsValid(validity);
+    }, [selectedCars, dateFrom, dateTo, expenseTypes, selectedExpenses, selectedFuels]);
 
     /* car change */
     useEffect(() => {
-        if (!selectedCar) {
+        if (!selectedCars) {
             return;
         }
 
         let fuelList = [];
-        if ('all' === selectedCar) {
+        if ('all' === selectedCars) {
             currentUser.cars.forEach((car) => {
                 fuelList = fuelList.concat(car.fuel);
             });
         } else {
-            fuelList = fuelList.concat(selectedCar.fuel);
+            fuelList = fuelList.concat(selectedCars.fuel);
         }
 
-        setSelectedFuels([]);
         setPossibleFuels(fuelList);
+        setSelectedFuels([]);
 
-    }, [selectedCar])
+    }, [selectedCars]);
+
+    /* expense change */
+    useEffect(() => {
+        if (!selectedExpenses.includes(FUEL_EXPENSE_ID)) {
+            setSelectedFuels([]);
+        }
+
+        if (selectedExpenses.length === expenseTypes.length) {
+            setSelectedExpenses(['all']);
+        }
+    }, [selectedExpenses])
 
     //---//
 
@@ -95,14 +106,22 @@ const Statistics = () => {
             return;
         }
 
-        setSelectedCar(car);
+        setSelectedCars(car);
     }
 
     const setExpenses = (expenseId) => {
-        const tempExpenses = [...selectedExpenses];
+        if ('all' === expenseId) {
+            setSelectedExpenses(expenseId);
+            return;
+        }
+
+        let tempExpenses = [...selectedExpenses];
+        if (tempExpenses.includes("all")) {
+            tempExpenses = _removeArrayElement(tempExpenses, "all")
+        }
+
         if (tempExpenses.includes(expenseId)) {
-            const i = tempExpenses.indexOf(expenseId);
-            tempExpenses.splice(i, 1);
+            tempExpenses = _removeArrayElement(tempExpenses, expenseId);
         } else {
             tempExpenses.push(expenseId);
         }
@@ -111,14 +130,17 @@ const Statistics = () => {
 
     const setFuel = (fuel) => {
         if ('all' === fuel) {
-            setSelectedFuels(fuel);
+            setSelectedFuels([fuel]);
             return;
         }
 
-        const tempFuels = [...selectedFuels];
+        let tempFuels = [...selectedFuels];
+        if (tempFuels.includes("all")) {
+            tempFuels = _removeArrayElement(tempFuels, "all");
+        }
+
         if (tempFuels.includes(fuel)) {
-            const i = tempFuels.indexOf(fuel);
-            tempFuels.splice(i, 1);
+            tempFuels = _removeArrayElement(tempFuels, fuel);
         } else {
             tempFuels.push(fuel);
         }
@@ -127,7 +149,7 @@ const Statistics = () => {
     }
 
     const resetForm = () => {
-        setSelectedCar(null);
+        setSelectedCars(null);
         setDateFrom(firstOfJan);
         setDateTo(new Date());
         setSelectedExpenses([]);
@@ -137,7 +159,19 @@ const Statistics = () => {
 
     const submitHandler = () => {
         //todo: FINISH!
+        console.log('dateFrom',dateFrom)
+        console.log('dateTo',dateTo)
+        console.log('selectedCars',selectedCars)
+        console.log('selectedExpenses',selectedExpenses)
+        console.log('selectedFuels',selectedFuels)
         console.log('submitted');
+    }
+
+    const _removeArrayElement = (array, value) => {
+        const i = array.indexOf(value);
+        array.splice(i, 1);
+
+        return array;
     }
 
 
@@ -158,7 +192,7 @@ const Statistics = () => {
                     isDetailed={false}
                     clickAction={setCar}
                     allCars={true}
-                    selectedCar={selectedCar}
+                    selectedCar={selectedCars}
                 />
                 <div className="stat-form__dates">
                     <div className="stat-form__date">
@@ -166,6 +200,7 @@ const Statistics = () => {
                         <DatePicker
                             dateFormat="dd-MMM-YYYY"
                             className="new-expense__input new-expense__inputs-date"
+                            showYearDropdown={true}
                             selected={dateFrom}
                             onChange={(date) => {
                                 setDateFrom(date)
@@ -177,6 +212,7 @@ const Statistics = () => {
                         <DatePicker
                             dateFormat="dd-MMM-YYYY"
                             className="new-expense__input new-expense__inputs-date"
+                            showYearDropdown={true}
                             selected={dateTo}
                             onChange={(date) => {
                                 setDateTo(date)
@@ -185,6 +221,7 @@ const Statistics = () => {
                     </div>
                 </div>
                 <ExpenseList
+                    showAll={true}
                     multiple={true}
                     expenseList={expenseTypes}
                     activeExpenses={selectedExpenses}
@@ -204,8 +241,7 @@ const Statistics = () => {
                 )}
                 <div className="stat-form__actions">
                     <button
-                        // disabled={!formIsValid.isValid}
-                        disabled={true}
+                        disabled={!formIsValid}
                         className={`exp-button exp-button__success`}
                         type='submit'
                         onClick={submitHandler}
