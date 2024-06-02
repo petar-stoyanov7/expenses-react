@@ -48,6 +48,7 @@ const Header = (props) => {
                             onClick=''
                         />
                         <HeaderButton
+                            disabled={true} //todo: enable when you start working on it
                             text='Profile'
                             imageUrl={iconProfile}
                             imageAlt='Profile'
@@ -58,6 +59,7 @@ const Header = (props) => {
                 <div className="test">
                     {ctx.userDetails.isAdmin && (
                         <HeaderButton
+                            disabled={true} //todo: enabled when you start working on it
                             text='Admin Panel'
                             imageUrl={iconAdmin}
                             imageAlt='Admin Panel'
