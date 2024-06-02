@@ -54,6 +54,40 @@ const Statistics = () => {
             });
     }, []);
 
+    /* car change */
+    useEffect(() => {
+        if (!selectedCars) {
+            return;
+        }
+
+        let fuelList = [];
+        let selectedFuels = [];
+        if ('all' === selectedCars) {
+            currentUser.cars.forEach((car) => {
+                fuelList = fuelList.concat(car.fuel);
+            });
+        } else {
+            fuelList = fuelList.concat(selectedCars.fuel);
+            // when we have one fuel type - we don't display fuel types menu and we auto select "all"
+            selectedFuels = selectedCars.fuel.length < 2 ? ['all'] : [];
+        }
+
+        setPossibleFuels(fuelList);
+        setSelectedFuels(selectedFuels);
+
+    }, [selectedCars]);
+
+    /* expense change */
+    useEffect(() => {
+        if (!selectedExpenses.includes(FUEL_EXPENSE_ID)) {
+            setSelectedFuels([]);
+        }
+
+        if (selectedExpenses.length === expenseTypes.length) {
+            setSelectedExpenses(['all']);
+        }
+    }, [selectedExpenses]);
+
     /* form validation */
     useEffect(() => {
         let validity =
@@ -67,37 +101,6 @@ const Statistics = () => {
 
         setFormIsValid(validity);
     }, [selectedCars, dateFrom, dateTo, expenseTypes, selectedExpenses, selectedFuels]);
-
-    /* car change */
-    useEffect(() => {
-        if (!selectedCars) {
-            return;
-        }
-
-        let fuelList = [];
-        if ('all' === selectedCars) {
-            currentUser.cars.forEach((car) => {
-                fuelList = fuelList.concat(car.fuel);
-            });
-        } else {
-            fuelList = fuelList.concat(selectedCars.fuel);
-        }
-
-        setPossibleFuels(fuelList);
-        setSelectedFuels([]);
-
-    }, [selectedCars]);
-
-    /* expense change */
-    useEffect(() => {
-        if (!selectedExpenses.includes(FUEL_EXPENSE_ID)) {
-            setSelectedFuels([]);
-        }
-
-        if (selectedExpenses.length === expenseTypes.length) {
-            setSelectedExpenses(['all']);
-        }
-    }, [selectedExpenses])
 
     //---//
 
@@ -159,6 +162,10 @@ const Statistics = () => {
 
     const submitHandler = () => {
         //todo: FINISH!
+        const expenseData = {
+            //
+        };
+
         console.log('dateFrom',dateFrom)
         console.log('dateTo',dateTo)
         console.log('selectedCars',selectedCars)
