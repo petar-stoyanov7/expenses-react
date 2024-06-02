@@ -15,6 +15,9 @@ import DatePicker from "react-datepicker";
 import ExpenseList from "../Expenses/ExpenseList";
 import axios from "axios";
 import FuelList from "../Cars/FuelList";
+import ExpenseTable from "../UI/ExpenseTable";
+
+import {removeArrayElement} from "../../helpers/general";
 
 const firstOfJan = new Date();
 firstOfJan.setMonth(0);
@@ -34,10 +37,11 @@ const Statistics = () => {
     const [dateTo, setDateTo] = useState(new Date());
     const [expenseTypes, setExpenseTypes] = useState([]);
     const [possibleFuels, setPossibleFuels] = useState([]);
-    const [selectedCars, setSelectedCars] = useState("all");
+    const [selectedCar, setSelectedCar] = useState("all");
     const [selectedExpenses, setSelectedExpenses] = useState("all");
     const [selectedFuels, setSelectedFuels] = useState([]);
 
+    const [expenseList, setExpenseList] = useState([]);
 
     //---//
 
@@ -56,26 +60,26 @@ const Statistics = () => {
 
     /* car change */
     useEffect(() => {
-        if (!selectedCars) {
+        if (!selectedCar) {
             return;
         }
 
         let fuelList = [];
         let selectedFuels = [];
-        if ('all' === selectedCars) {
+        if ('all' === selectedCar) {
             currentUser.cars.forEach((car) => {
                 fuelList = fuelList.concat(car.fuel);
             });
         } else {
-            fuelList = fuelList.concat(selectedCars.fuel);
+            fuelList = fuelList.concat(selectedCar.fuel);
             // when we have one fuel type - we don't display fuel types menu and we auto select "all"
-            selectedFuels = selectedCars.fuel.length < 2 ? ['all'] : [];
+            selectedFuels = selectedCar.fuel.length < 2 ? ['all'] : [];
         }
 
         setPossibleFuels(fuelList);
         setSelectedFuels(selectedFuels);
 
-    }, [selectedCars]);
+    }, [selectedCar]);
 
     /* expense change */
     useEffect(() => {
@@ -91,7 +95,7 @@ const Statistics = () => {
     /* form validation */
     useEffect(() => {
         let validity =
-            null !== selectedCars &&
+            null !== selectedCar &&
             selectedExpenses.length > 0 &&
             dateFrom < dateTo;
 
@@ -100,7 +104,7 @@ const Statistics = () => {
         }
 
         setFormIsValid(validity);
-    }, [selectedCars, dateFrom, dateTo, expenseTypes, selectedExpenses, selectedFuels]);
+    }, [selectedCar, dateFrom, dateTo, expenseTypes, selectedExpenses, selectedFuels]);
 
     //---//
 
@@ -109,25 +113,26 @@ const Statistics = () => {
             return;
         }
 
-        setSelectedCars(car);
+        setSelectedCar(car);
     }
 
     const setExpenses = (expenseId) => {
+        console.log('?', selectedExpenses);
         if ('all' === expenseId) {
-            setSelectedExpenses(expenseId);
+            setSelectedExpenses('all');
             return;
         }
 
-        let tempExpenses = [...selectedExpenses];
-        if (tempExpenses.includes("all")) {
-            tempExpenses = _removeArrayElement(tempExpenses, "all")
-        }
+        let tempExpenses = "all" === selectedExpenses
+            ? []
+            : [...selectedExpenses];
 
         if (tempExpenses.includes(expenseId)) {
-            tempExpenses = _removeArrayElement(tempExpenses, expenseId);
+            tempExpenses = removeArrayElement(tempExpenses, expenseId);
         } else {
             tempExpenses.push(expenseId);
         }
+
         setSelectedExpenses(tempExpenses);
     }
 
@@ -139,11 +144,11 @@ const Statistics = () => {
 
         let tempFuels = [...selectedFuels];
         if (tempFuels.includes("all")) {
-            tempFuels = _removeArrayElement(tempFuels, "all");
+            tempFuels = removeArrayElement(tempFuels, "all");
         }
 
         if (tempFuels.includes(fuel)) {
-            tempFuels = _removeArrayElement(tempFuels, fuel);
+            tempFuels = removeArrayElement(tempFuels, fuel);
         } else {
             tempFuels.push(fuel);
         }
@@ -152,7 +157,7 @@ const Statistics = () => {
     }
 
     const resetForm = () => {
-        setSelectedCars(null);
+        setSelectedCar(null);
         setDateFrom(firstOfJan);
         setDateTo(new Date());
         setSelectedExpenses([]);
@@ -161,24 +166,36 @@ const Statistics = () => {
     }
 
     const submitHandler = () => {
-        //todo: FINISH!
         const expenseData = {
-            //
+            from: dateFrom.toISOString().split('T')[0],
+            to: dateTo.toISOString().split('T')[0],
         };
+        if ('all' !== selectedCar) {
+            expenseData['car'] = selectedCar.id;
+        }
+        if ('all' !== selectedExpenses) {
+            expenseData['expenses'] = selectedExpenses;
+        }
+        if (!selectedFuels.includes('all') && selectedFuels.length > 0) {
+            expenseData['fuels'] = selectedFuels;
+        }
 
-        console.log('dateFrom',dateFrom)
-        console.log('dateTo',dateTo)
-        console.log('selectedCars',selectedCars)
-        console.log('selectedExpenses',selectedExpenses)
-        console.log('selectedFuels',selectedFuels)
-        console.log('submitted');
-    }
+        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getUserExpenses.replace('%u', currentUser.id);
 
-    const _removeArrayElement = (array, value) => {
-        const i = array.indexOf(value);
-        array.splice(i, 1);
+        axios.post(
+            path,
+            expenseData
+        ).then((response) => {
+            if (!response.data || !response.data.success) {
+                console.log('Error with execution!');
+                return;
+            }
 
-        return array;
+            setExpenseList(response.data.data);
+        }).catch((e) => {
+            console.log('Error with execution: ', e);
+        })
+
     }
 
 
@@ -199,7 +216,7 @@ const Statistics = () => {
                     isDetailed={false}
                     clickAction={setCar}
                     allCars={true}
-                    selectedCar={selectedCars}
+                    selectedCar={selectedCar}
                 />
                 <div className="stat-form__dates">
                     <div className="stat-form__date">
@@ -234,6 +251,7 @@ const Statistics = () => {
                     activeExpenses={selectedExpenses}
                     clickAction={setExpenses}
                     customClass="stat-form__expenses"
+                    elementClass="expense"
                 />
                 {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 1) && (
                     <FuelList
@@ -268,8 +286,14 @@ const Statistics = () => {
             </Container>
             <Container customClass="full-width">
                 <h3>Statistics</h3>
-                {/*    Overall*/}
-                {/*    Statistics */}
+                {/*    TODO: add overall */}
+                {expenseList.length !== 0 && (
+                    <ExpenseTable
+                        expenses={expenseList}
+                        isSmall={false}
+                        isDetailed={true}
+                    />
+                )}
             </Container>
         </div>
     )
