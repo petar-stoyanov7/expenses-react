@@ -18,18 +18,17 @@ function App() {
     const setNewExpense = () => {
         setActiveElement(<NewExpense />);
     }
-
     const setStatistics = () => {
         setActiveElement(<Statistics />);
     }
 
-    useEffect(() => {
-        if (!ctx.userDetails.isLogged) {
-            setActiveElement(<HomePage />);
-        } else {
-            setActiveElement(<Statistics />); //todo: remove
-        }
-    }, [ctx.userDetails.isLogged]);
+    // useEffect(() => {
+    //     if (!ctx.userDetails.isLogged) {
+    //         setActiveElement(<HomePage />);
+    //     } else {
+    //         setActiveElement(<Statistics />); //todo: remove
+    //     }
+    // }, [ctx.userDetails.isLogged]);
 
 
     return (

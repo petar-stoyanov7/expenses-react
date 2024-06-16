@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 
 import './LastFive.scss';
-import ExpenseTable from "../UI/ExpenseTable";
+import ExpenseTable from "../Expenses/ExpenseTable";
 
 const dummyData = [
     {

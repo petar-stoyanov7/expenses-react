@@ -15,7 +15,7 @@ import DatePicker from "react-datepicker";
 import ExpenseList from "../Expenses/ExpenseList";
 import axios from "axios";
 import FuelList from "../Cars/FuelList";
-import ExpenseTable from "../UI/ExpenseTable";
+import ExpenseTable from "../Expenses/ExpenseTable";
 
 import {removeArrayElement} from "../../helpers/general";
 
