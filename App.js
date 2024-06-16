@@ -22,13 +22,13 @@ function App() {
         setActiveElement(<Statistics />);
     }
 
-    // useEffect(() => {
-    //     if (!ctx.userDetails.isLogged) {
-    //         setActiveElement(<HomePage />);
-    //     } else {
-    //         setActiveElement(<Statistics />); //todo: remove
-    //     }
-    // }, [ctx.userDetails.isLogged]);
+    useEffect(() => {
+        if (!ctx.userDetails.isLogged) {
+            setActiveElement(<HomePage />);
+        } else {
+            setActiveElement(<Statistics />); //todo: remove
+        }
+    }, [ctx.userDetails.isLogged]);
 
 
     return (

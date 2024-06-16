@@ -18,6 +18,7 @@ import FuelList from "../Cars/FuelList";
 import ExpenseTable from "../Expenses/ExpenseTable";
 
 import {removeArrayElement} from "../../helpers/general";
+import Overall from '../Expenses/Overall'
 
 const firstOfJan = new Date();
 firstOfJan.setMonth(0);
@@ -42,6 +43,7 @@ const Statistics = () => {
     const [selectedFuels, setSelectedFuels] = useState([]);
 
     const [expenseList, setExpenseList] = useState([]);
+    const [overall, setOverall] = useState({});
 
     //---//
 
@@ -106,6 +108,41 @@ const Statistics = () => {
         setFormIsValid(validity);
     }, [selectedCar, dateFrom, dateTo, expenseTypes, selectedExpenses, selectedFuels]);
 
+    /* expenses list change */
+    useEffect(() => {
+        if (!expenseList.length) {
+            return null;
+        }
+
+        let overallData = {};
+        let overall = 0;
+        let liters = 0;
+        let minMileage = 999999999;
+        let maxMileage = 0;
+        expenseList.map((expense) => {
+            overall += expense.value;
+            if ('all' !== selectedCar && selectedCar.id) {
+                minMileage = expense.mileage < minMileage ? expense.mileage : minMileage;
+                maxMileage = expense.mileage > maxMileage ? expense.mileage : maxMileage;
+            }
+            if (selectedFuels.length === 1) {
+                liters += expense.liters;
+            }
+        });
+        overallData.overall = overall;
+        if (maxMileage !== 0 && minMileage !== 999999999) {
+            overallData.mileage = maxMileage - minMileage;
+        }
+        if (liters) {
+            overallData.liters = liters;
+        }
+        if (overallData.mileage) {
+            overallData.rate = (overallData.overall / overallData.mileage).toFixed(2);
+        }
+
+        setOverall(overallData);
+    }, [expenseList]);
+
     //---//
 
     const setCar = (car) => {
@@ -117,7 +154,6 @@ const Statistics = () => {
     }
 
     const setExpenses = (expenseId) => {
-        console.log('?', selectedExpenses);
         if ('all' === expenseId) {
             setSelectedExpenses('all');
             return;
@@ -163,6 +199,8 @@ const Statistics = () => {
         setSelectedExpenses([]);
         setPossibleFuels([]);
         setSelectedFuels([])
+        setExpenseList([]);
+        setOverall({});
     }
 
     const submitHandler = () => {
@@ -286,13 +324,15 @@ const Statistics = () => {
             </Container>
             <Container customClass="full-width">
                 <h3>Statistics</h3>
-                {/*    TODO: add overall */}
                 {expenseList.length !== 0 && (
-                    <ExpenseTable
+                  <>
+                      <Overall data={overall} />
+                      <ExpenseTable
                         expenses={expenseList}
                         isSmall={false}
                         isDetailed={true}
-                    />
+                      />
+                  </>
                 )}
             </Container>
         </div>
