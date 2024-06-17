@@ -38,13 +38,13 @@ const Register = (props) => {
         isValid: true,
         message: '',
     });
-    const [city, setCity] = useState({
+    const [gender, setGender] = useState();
+    const [notes, setNotes] = useState({
         value: '',
         isValid: true,
-        message: ''
+        message: '',
     });
-    const [gender, setGender] = useState('male');
-    const [notes, setNotes] = useState('');
+    const [currency, setCurrency] = useState('EUR');
 
 
     const [form, setForm] = useState({
@@ -54,51 +54,114 @@ const Register = (props) => {
 
     const ctx = useContext(AuthContext);
 
+    /* -- check user -- */
     useEffect(() => {
-        if (
-            user.value.length > 0 ||
-            pass.value1.length > 0 ||
-            email.value1.length > 0 ||
-            firstName.value.length > 0 ||
-            lastName.value.length > 0 ||
-            city.value.length > 0
-        ) {
-            const timer = setTimeout(() => {
-                const userIsValid = _checkUserValidity();
-                const passIsValid = _checkPassValidity();
-                const emailIsValid = _checkEmailValidity();
-                const firstNameIsValid = _checkFirstNameValidity();
-                const lastNameIsValid = _checkLastNameValidity();
-                const cityIsValid = _checkCityValidity();
-                if (
-                    userIsValid &&
-                    passIsValid &&
-                    emailIsValid &&
-                    firstNameIsValid &&
-                    lastNameIsValid &&
-                    cityIsValid
-                ) {
-                    setForm({
-                        ...form,
-                        isValid: user.isValid && pass.isValid,
-                        message: ''
-                    })
-                }
-            }, 150);
-
-            return () => {
-                clearTimeout(timer);
+        const timer = setTimeout(() => {
+            if (user.value.length > 0) {
+                _checkUserValidity();
             }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
         }
-    }, [
-        user.value,
-        pass.value1,
-        pass.value2,
-        email.value1,
-        email.value2,
-        firstName.value,
-        city.value
-    ]);
+    }, [user.value]);
+
+    /* -- check pass -- */
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (pass.value1.length || pass.value2.length) {
+                _checkPassValidity();
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [[pass.value1, pass.value2]]);
+
+    /* -- check email -- */
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (email.value1.length || email.value2.length) {
+                _checkEmailValidity();
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [[email.value1, email.value2]]);
+
+    /* -- check firstname -- */
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (firstName.value.length) {
+                _checkStringValidity('firstName', setFirstName);
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [firstName.value]);
+
+    /* -- check lastname -- */
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (lastName.value.length) {
+                // _checkLastNameValidity();
+                _checkStringValidity('lastName', setLastName);
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [lastName.value]);
+
+    /* -- check notes -- */
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (notes.value.length) {
+                // _checkLastNameValidity();
+                _checkStringValidity('notes', setNotes, false);
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [notes.value]);
+
+    /* -- check form validity -- */
+    useEffect(() => {
+        const validity = user.isValid
+          && pass.isValid
+          && email.isValid
+          && firstName.isValid
+          && lastName.isValid
+          && notes.isValid;
+
+        setForm({
+            ...form,
+            isValid: validity
+        });
+
+    },[
+      user.isValid,
+      pass.isValid,
+      email.isValid,
+      firstName.isValid,
+      lastName.isValid,
+      notes.isValid
+
+    ])
 
     const BlackOverlay = (props) => {
         return <div className="site-overlay black-overlay-1" onClick={props.onClose}></div>;
@@ -111,7 +174,7 @@ const Register = (props) => {
             isValid = false;
             message = 'Invalid characters';
         }
-        if (user.value.length < 4) {
+        if (user.value.length < 5) {
             isValid = false;
             message = 'Username is too short';
         }
@@ -179,64 +242,26 @@ const Register = (props) => {
         return isValid;
     }
 
-    const _checkFirstNameValidity = () => {
+    const _checkStringValidity = (variable, setter, isRequired = true) => {
+        const toCheck = eval(variable);
         let isValid = true;
         let message = '';
-        if (null === firstName.value.match(/^[A-Za-z0-9.-_]+$/g)) {
+        if (null === toCheck.value.match(/^[A-Za-z0-9.-_]+$/g)) {
             isValid = false;
             message = 'Invalid characters';
         }
-        if (firstName.value.length < 2) {
+        if (isRequired && toCheck.value.length < 2) {
             isValid = false;
-            message = 'First Name is too short';
+            message = `Value is too short`;
         }
-        setFirstName({
-            ...firstName,
+        setter({
+            ...toCheck,
             isValid: isValid,
             message: message
         });
 
         return isValid;
-    }
 
-    const _checkLastNameValidity = () => {
-        let isValid = true;
-        let message = '';
-        if (null === lastName.value.match(/^[A-Za-z0-9.-_]+$/g)) {
-            isValid = false;
-            message = 'Invalid characters';
-        }
-        if (lastName.value.length < 2) {
-            isValid = false;
-            message = 'Last Name is too short';
-        }
-        setLastName({
-            ...lastName,
-            isValid: isValid,
-            message: message
-        });
-
-        return isValid;
-    }
-
-    const _checkCityValidity = () => {
-        let isValid = true;
-        let message = '';
-        if (null === city.value.match(/^[A-Za-z.-_ ]+$/g)) {
-            isValid = false;
-            message = 'Invalid characters';
-        }
-        if (city.value.length < 2) {
-            isValid = false;
-            message = 'City is too short';
-        }
-        setCity({
-            ...city,
-            isValid: isValid,
-            message: message
-        });
-
-        return isValid;
     }
 
     const handleInput = (e) => {
@@ -251,6 +276,9 @@ const Register = (props) => {
                 break;
             case 'gender':
                 setGender(val);
+                break;
+            case 'currency':
+                setCurrency(val);
                 break;
             case 'password1':
                 setPass({
@@ -288,14 +316,11 @@ const Register = (props) => {
                     value: val
                 });
                 break;
-            case 'city':
-                setCity({
-                    ...city,
+            case 'notes':
+                setNotes({
+                    ...notes,
                     value: val
                 });
-                break;
-            case 'notes':
-                setNotes(val);
                 break;
             default:
                 break;
@@ -304,70 +329,46 @@ const Register = (props) => {
 
     const onSubmit = (e) => {
         console.log('subm');
-        //TODO: rework
-        /** Statuses
-         * 0 - success
-         * 1 - missing data
-         * 2 - user exists
-         */
         e.preventDefault();
         const path = ctx.ajaxConfig.server + ctx.ajaxConfig.register;
-        if (form.isValid) {
-            const postData = {
-                username: user.value,
-                gender: gender,
-                password: pass.value1,
-                email: email.value1,
-                firstName: firstName.value,
-                lastName: lastName.value,
-                city: city.value,
-                notes: notes,
-                group: 'users',
-                hash: ctx.ajaxConfig.hash
-            };
-            axios.post(path, postData).then((response) => {
-                const data = response.data;
-                if (data.success) {
-                    const isAdmin = data.user.Group === 'admins';
-                    const user = {
-                        id: data.user.ID,
-                        username: data.user.Username,
-                        city: data.user.City,
-                        email: data.user.Email,
-                        firstName: data.user.Fname,
-                        lastName: data.user.Lname,
-                        sex: data.user.Sex,
-                        notes: data.user.Notes,
-                    }
-                    ctx.onLogin(user, isAdmin);
-                } else if (!data.success) {
-                    let message = '';
-                    switch(data.status) {
-                        case 2:
-                            message = 'Username is already taken';
-                            break;
-                        case 3:
-                            message = 'Email address is already used';
-                            break;
-                        case 1:
-                        default:
-                            message = 'We have a problem with this app, please try again later';
-                            break;
-                    }
-                    setForm({
-                        ...form,
-                        isValid: false,
-                        message: message
-                    });
-                } else {
-                    setForm({
-                        ...form,
-                        isValid: false,
-                        message: 'No connection to DB. Please check later!'
-                    });
-                }
-            });
+        if (!form.isValid) {
+            console.log('Form data is not valid');
+            return;
         }
+        const postData = {
+            username: user.value,
+            gender: gender,
+            currency: currency,
+            password: pass.value1,
+            email: email.value1,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            notes: notes.value,
+            hash: ctx.ajaxConfig.hash
+        };
+        axios.post(path, postData).then((response) => {
+            console.log('d', response.data);
+            const data = response.data;
+            if (data.success) {
+                const user = {
+                    id: data.id,
+                    username: data.username,
+                    email: data.email,
+                    gender: data.gender,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    currency: data.currency,
+                    notes: data.notes,
+                }
+                ctx.onLogin(user, true); //TODO: change hardcoded value when roles are implemented
+            } else {
+                setForm({
+                    ...form,
+                    isValid: false,
+                    message: 'No connection to DB. Please check later!'
+                });
+            }
+        });
     }
 
     return (
@@ -404,6 +405,18 @@ const Register = (props) => {
                             onChange={handleInput}
                             placeholder='Username'
                         />
+                    </div>
+                    {/*---------- currency ----------*/}
+                    <div className="register-form__container input-currency">
+                        <select
+                            name='currency'
+                            onChange={handleInput}
+                            value={currency}
+                        >
+                            <option value='EUR'>EUR</option>
+                            <option value='BGN'>BGN</option>
+                            <option value='USD'>USD</option>
+                        </select>
                     </div>
                     {/*---------- gender ----------*/}
                     <div className="register-form__container input-gender">
@@ -510,24 +523,13 @@ const Register = (props) => {
                             placeholder='Last Name'
                         />
                     </div>
-                    {/*---------- city ----------*/}
-                    <div className="register-form__container input-city">
-                        {!city.isValid && (
-                            <div className="register-form__error">
-                                {city.message}
-                            </div>
-                        )}
-                        <input
-                            type='text'
-                            className={` ${city.isValid ? '' : 'input-error'}`}
-                            name='city'
-                            value={city.value}
-                            onChange={handleInput}
-                            placeholder='City of residence'
-                        />
-                    </div>
                     {/*---------- notes ----------*/}
                     <div className="register-form__container input-notes">
+                        {!notes.isValid && (
+                          <div className="register-form__error">
+                              {notes.message}
+                          </div>
+                        )}
                         <textarea
                             name='notes'
                             value={notes.value}

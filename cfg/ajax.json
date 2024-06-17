@@ -1,6 +1,7 @@
 {
   "server": "http://xp.l",
   "hash": "17808b60a9ae7f6b06c318d1d4f2bd09",
+  "register": "/user/add",
   "login": "/user/login",
   "getUser": "/user/get/%u/detail",
   "getCars": "/car/get/%u",
@@ -11,6 +12,5 @@
   "addExpense": "/expense/add",
 
   "getOverall": "/statistics/get-overall",
-  "getLastFive": "/statistics/get-last-five",
-  "register": "/account/register"
+  "getLastFive": "/statistics/get-last-five"
 }

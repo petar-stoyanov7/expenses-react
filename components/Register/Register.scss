@@ -14,7 +14,7 @@
     padding: 20px;
   }
   @media screen and  (min-width: $large) {
-    width: 40%;
+    width: 50%;
     left: 30%;
     padding: 30px;
   }
@@ -62,11 +62,14 @@
       flex-basis: 100%;
     }
     &.input-username {
-      flex-basis: 65%;
+      flex-basis: 50%;
       margin-right: 10px;
     }
+    &.input-currency {
+      flex-basis: calc(22% - 10px);
+    }
     &.input-gender {
-      flex-basis: calc(35% - 10px);
+      flex-basis: calc(28% - 10px);
     }
     &.input-city {
       flex-basis: 100%;
