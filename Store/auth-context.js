@@ -61,7 +61,8 @@ export const AuthContextProvider = (props) => {
                         lastName: userData.lastName,
                         // sex: userData.Sex,
                         notes: userData.notes,
-                        cars: userData.cars
+                        cars: userData.cars,
+                        currency: userData.currency
                     }
 
                     setUserDetails({

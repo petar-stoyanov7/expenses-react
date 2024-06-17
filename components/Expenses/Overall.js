@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react'
 import Card from "../UI/Card";
 
 import './Overall.scss';
+import AuthContext from '../../Store/auth-context'
 
 const Overall = (props) => {
   const data = props.data;
   const overall = data.overall ? data.overall : 0;
+  const ctx = useContext(AuthContext);
+  console.log('c', ctx);
+
+  const currency = ctx.userDetails.user.currency
+    ? ctx.userDetails.user.currency
+    : 'EUR';
 
 
   return (
@@ -31,7 +38,7 @@ const Overall = (props) => {
         {data.rate && (
           <div className="expense-overall__row">
             <div className="expense-overall__index">Spent rate</div>
-            <div className="expense-overall__value">{data.rate + " {currency} per kilometer"} </div>
+            <div className="expense-overall__value">{`${data.rate} ${currency} per kilometer`} </div>
           </div>
         )}
       </div>
