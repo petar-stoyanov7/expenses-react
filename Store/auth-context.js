@@ -55,8 +55,8 @@ export const AuthContextProvider = (props) => {
                     const user = {
                         id: userData.id,
                         username: userData.username,
-                        // city: userData.City,
                         email: userData.email,
+                        gender: userData.gender,
                         firstName: userData.firstName,
                         lastName: userData.lastName,
                         // sex: userData.Sex,
@@ -155,6 +155,7 @@ export const AuthContextProvider = (props) => {
             {
                 showRegister &&
                 <Register
+                    showLogin={true}
                     onLogin={showLoginForm}
                     onClose={hideRegisterForm}
                 />

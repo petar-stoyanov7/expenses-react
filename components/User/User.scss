@@ -1,0 +1,25 @@
+@import '../../Main';
+
+.user-panel {
+  width: 100%;
+  max-width: 100vw;
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &__user {
+    display: flex;
+    flex-direction: column;
+
+    .row {
+      margin-bottom: 5px;
+    }
+  }
+
+  h1,h3 {
+    margin: 0 0 15px 0;
+  }
+}

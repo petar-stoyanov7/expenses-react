@@ -265,7 +265,7 @@ const NewExpense = () => {
                 <div className="new-expense__actions">
                     <button
                         disabled={!formIsValid}
-                        className={`exp-button exp-button__success ${formIsValid ? '' : 'disabled'} `}
+                        className={`exp-button button-small exp-button__success ${formIsValid ? '' : 'disabled'} `}
                         type='submit'
                         onClick={submitHandler}
                     >
@@ -273,7 +273,7 @@ const NewExpense = () => {
                     </button>
                     <button
                         type='button'
-                        className="exp-button exp-button__danger"
+                        className="exp-button button-small exp-button__danger"
                         value="Cancel"
                         onClick={resetForm}
                     >

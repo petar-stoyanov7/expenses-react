@@ -48,7 +48,7 @@ const Header = (props) => {
                             onClick=''
                         />
                         <HeaderButton
-                            disabled={true} //todo: enable when you start working on it
+                            clickAction={props.setUser}
                             text='Profile'
                             imageUrl={iconProfile}
                             imageAlt='Profile'

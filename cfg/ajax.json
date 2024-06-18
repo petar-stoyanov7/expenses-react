@@ -3,6 +3,7 @@
   "hash": "17808b60a9ae7f6b06c318d1d4f2bd09",
   "register": "/user/add",
   "login": "/user/login",
+  "userEdit": "/user/edit/%u",
   "getUser": "/user/get/%u/detail",
   "getCars": "/car/get/%u",
   "getUserExpenses": "/expense/get/user/%u",

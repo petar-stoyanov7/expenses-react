@@ -6,24 +6,6 @@
   flex-direction: row;
   flex-wrap: wrap;
 
-  .full-width {
-    width: 100%;
-  }
-
-  .half-width {
-    width: 100%;
-    margin-right: 0;
-
-    @media (min-width: $medium) {
-      width: calc((100% - 75px)/2);
-      margin-right: 15px;
-
-      &:nth-child(even) {
-        margin-right: 0;
-      }
-    }
-  }
-
   .element {
     display: inline-block;
     width: auto;

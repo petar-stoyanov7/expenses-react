@@ -10,45 +10,46 @@ const overlayContainer = document.getElementById('black-overlay-1');
 
 const Register = (props) => {
     const [user, setUser] = useState({
-        value: '',
+        editable: !props.user,
+        value: props.user && props.user.username,
         isValid: true,
         message: '',
     });
     const [pass, setPass] = useState({
-        value1: '',
-        value2: '',
+        value1: props.user && '*******',
+        value2: props.user && '*******',
         isValid: true,
         message1: '',
         message2: '',
     });
     const [email, setEmail] = useState({
-        value1: '',
-        value2: '',
+        value1: props.user && props.user.email,
+        value2: props.user && props.user.email,
         isValid: true,
         message1: '',
         message2: ''
     });
     const [firstName, setFirstName] = useState({
-        value: '',
+        value: props.user && props.user.firstName,
         isValid: true,
         message: '',
     });
     const [lastName, setLastName] = useState({
-        value: '',
+        value: props.user && props.user.lastName,
         isValid: true,
         message: '',
     });
-    const [gender, setGender] = useState('male');
+    const [gender, setGender] = useState(props.user ? props.user.gender : 'male');
     const [notes, setNotes] = useState({
-        value: '',
+        value: props.user && props.user.notes,
         isValid: true,
         message: '',
     });
-    const [currency, setCurrency] = useState('EUR');
+    const [currency, setCurrency] = useState(props.user ? props.user.currency : 'EUR');
 
 
     const [form, setForm] = useState({
-        isValid: false,
+        isValid: !!props.user,
         message: '',
     });
 
@@ -329,7 +330,7 @@ const Register = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.register;
+        let path = ctx.ajaxConfig.server + ctx.ajaxConfig.register;
         if (!form.isValid) {
             setForm({
                 ...form,
@@ -337,22 +338,60 @@ const Register = (props) => {
             })
             return;
         }
-        const postData = {
-            username: user.value,
-            gender: gender,
-            currency: currency,
-            password: pass.value1,
-            email: email.value1,
-            firstName: firstName.value,
-            lastName: lastName.value,
-            notes: notes.value,
-            hash: ctx.ajaxConfig.hash
-        };
+        let postData = {};
+        if (props.user) {
+            const userData = props.user;
+            console.log('ud', userData);
+            if (userData.username !== user.value) {
+                postData.username = user.value;
+            }
+            if (pass.value1 !== '*******') {
+                postData.password = pass.value1;
+            }
+            if (userData.email !== email.value1) {
+                postData.email = email.value1
+            }
+            if (userData.firstName !== firstName.value) {
+                postData.firstName = firstName.value;
+            }
+            if (userData.lastName !== lastName.value) {
+                postData.lastName = lastName.value;
+            }
+            if (userData.notes !== notes.value) {
+                postData.notes = notes.value;
+            }
+            if (userData.gender !== gender) {
+                postData.gender = gender;
+            }
+            if (userData.currency !== currency) {
+                postData.currency = currency;
+            }
+            if (!Object.keys(postData).length) {
+                props.onClose();
+                return;
+            }
+            console.log('p', postData);
+            path = ctx.ajaxConfig.server + ctx.ajaxConfig.userEdit.replace('%u', userData.id);
+        } else {
+            postData = {
+                username: user.value,
+                gender: gender,
+                currency: currency,
+                password: pass.value1,
+                email: email.value1,
+                firstName: firstName.value,
+                lastName: lastName.value,
+                notes: notes.value,
+                hash: ctx.ajaxConfig.hash
+            };
+        }
         axios.post(path, postData).then((response) => {
             const data = response.data;
+            console.log('d', data);
             if (data.success) {
                 const user = data.data;
                 ctx.onLogin(user, true); //TODO: change hardcoded value when roles are implemented
+                props.onClose();
             } else if (data.message) {
                 setForm({
                     ...form,
@@ -381,7 +420,7 @@ const Register = (props) => {
                     <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
                 </button>
                 <form className="register-form__form" onSubmit={onSubmit}>
-                    <h1 className="register-form__title">Register</h1>
+                    <h1 className="register-form__title">{props.user ? 'Edit' : 'Register'}</h1>
                     <div className="register-form__container form-error">
                         {!form.isValid && (
                             <div className="register-form__error">
@@ -398,6 +437,7 @@ const Register = (props) => {
                         )}
                         <input
                             type='text'
+                            disabled={props.user}
                             className={`${user.isValid ? '' : ' input-error'}`}
                             name='username'
                             value={user.value}
@@ -543,15 +583,17 @@ const Register = (props) => {
                                 ? '' : ' disabled'}`}
                             type="submit"
                         >
-                            Register
+                            {props.user ? 'Edit' : 'Register'}
                         </button>
-                        <button
+                        {props.showLogin && (
+                          <button
                             className='exp-button exp-button__success '
                             type='button'
                             onClick={props.onLogin}
-                        >
-                            Login
-                        </button>
+                          >
+                              Login
+                          </button>
+                        )}
                         <button
                             type='button'
                             className="exp-button exp-button__danger"
