@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState, Fragment} from 'react';
 
 import './CarList.scss';
 import AuthContext from "../../Store/auth-context";
-import axios from "axios";
 import Car from "./Car";
 import ReactDOM from "react-dom";
 import CarModal from "./CarModal";
@@ -13,9 +12,10 @@ const overlayContainer = document.getElementById('black-overlay-1');
 const dummyData = [
     {
         id: 0,
-        brand: 'BMW',
-        model: '330i',
-        color: 'Black',
+        brand: 'No',
+        model: 'Cars',
+        color: 'None',
+        notes: 'This is a placeholder. Add cars to make it go away',
         fuel: [
             {
                 id: 1,
