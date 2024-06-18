@@ -126,10 +126,6 @@ const Login = (props) => {
     }
 
     const onSubmit = (e) => {
-        /** Statuses
-         * 0 - missing data
-         * 1 - incorrect username/password
-         */
         e.preventDefault();
         const path = ctx.ajaxConfig.server + ctx.ajaxConfig.login;
         if (user.isValid && pass.isValid && form.isValid) {

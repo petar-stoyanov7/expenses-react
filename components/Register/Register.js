@@ -38,7 +38,7 @@ const Register = (props) => {
         isValid: true,
         message: '',
     });
-    const [gender, setGender] = useState();
+    const [gender, setGender] = useState('male');
     const [notes, setNotes] = useState({
         value: '',
         isValid: true,
@@ -154,12 +154,12 @@ const Register = (props) => {
         });
 
     },[
-      user.isValid,
-      pass.isValid,
-      email.isValid,
-      firstName.isValid,
-      lastName.isValid,
-      notes.isValid
+      user.value,
+      pass.value,
+      email.value,
+      firstName.value,
+      lastName.value,
+      notes.value
 
     ])
 
@@ -328,11 +328,13 @@ const Register = (props) => {
     }
 
     const onSubmit = (e) => {
-        console.log('subm');
         e.preventDefault();
         const path = ctx.ajaxConfig.server + ctx.ajaxConfig.register;
         if (!form.isValid) {
-            console.log('Form data is not valid');
+            setForm({
+                ...form,
+                message: "Form is invalid"
+            })
             return;
         }
         const postData = {
@@ -347,26 +349,23 @@ const Register = (props) => {
             hash: ctx.ajaxConfig.hash
         };
         axios.post(path, postData).then((response) => {
-            console.log('d', response.data);
             const data = response.data;
             if (data.success) {
-                const user = {
-                    id: data.id,
-                    username: data.username,
-                    email: data.email,
-                    gender: data.gender,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    currency: data.currency,
-                    notes: data.notes,
-                }
+                const user = data.data;
                 ctx.onLogin(user, true); //TODO: change hardcoded value when roles are implemented
+            } else if (data.message) {
+                setForm({
+                    ...form,
+                    isValid: false,
+                    message: data.message
+                });
             } else {
                 setForm({
                     ...form,
                     isValid: false,
-                    message: 'No connection to DB. Please check later!'
+                    message: "Error with Database Server"
                 });
+
             }
         });
     }
