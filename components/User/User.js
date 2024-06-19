@@ -3,7 +3,9 @@ import React, {useContext, useEffect, useState, Fragment} from 'react';
 import './User.scss';
 import Container from '../UI/Container'
 import AuthContext from '../../Store/auth-context'
-import Register from '../Register/Register'
+import UserForm from './UserForm'
+import CarList from '../Cars/CarList'
+import CarForm from '../Cars/CarForm'
 
 const User = () => {
   const ctx = useContext(AuthContext);
@@ -11,6 +13,7 @@ const User = () => {
 
   const [showRegister, setShowRegister] = useState(false);
   const [showEditCar, setShowEditCar] = useState(false);
+  const [car, setCar] = useState(false);
 
   const editUser = () => {
     setShowRegister(true);
@@ -18,6 +21,16 @@ const User = () => {
 
   const hideRegister = () => {
     setShowRegister(false);
+  }
+
+  const showCarForm = (car = false) => {
+    if (car) {
+      setCar(car);
+    }
+    setShowEditCar(true);
+  }
+  const hideCarForm = () => {
+    setShowEditCar(false)
   }
 
   return (
@@ -48,16 +61,33 @@ const User = () => {
             Edit
           </button>
           {showRegister && (
-            <Register
+            <UserForm
               user={user}
               showLogin={false}
               onLogin={null}
               onClose={hideRegister}
             />
           )}
+          {showEditCar && (
+            <CarForm
+              onClose={hideCarForm}
+            />
+          )}
         </Container>
+
         <Container customClass="half-width">
-          <h3>Cars</h3>
+          <CarList
+            isDetailed={true}
+            hasModal={false}
+          />
+
+          <button
+            className='exp-button button-small exp-button__success'
+            type='button'
+            onClick={showCarForm}
+          >
+            New
+          </button>
         </Container>
       </div>
     </div>

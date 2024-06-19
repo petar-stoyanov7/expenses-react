@@ -6,6 +6,8 @@
   "userEdit": "/user/edit/%u",
   "getUser": "/user/get/%u/detail",
   "getCars": "/car/get/%u",
+  "createCar": "/car/add",
+  "editCar": "/car/edit/%u",
   "getUserExpenses": "/expense/get/user/%u",
   "getCarExpenses": "/expense/get/car/%u",
   "getFuels": "/fuel/get/all",

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, createContext} from 'react';
 import {useCookies} from "react-cookie";
 import Login from "../components/Login/Login";
-import Register from "../components/Register/Register";
+import UserForm from '../components/User/UserForm'
 import ajaxConfig from "../cfg/ajax.json";
 import axios from "axios";
 
@@ -154,7 +154,7 @@ export const AuthContextProvider = (props) => {
             }
             {
                 showRegister &&
-                <Register
+                <UserForm
                     showLogin={true}
                     onLogin={showLoginForm}
                     onClose={hideRegisterForm}

@@ -152,3 +152,146 @@ $xxlarge: '1920px';
     background-color: $main-light;
   }
 }
+
+
+.create-form {
+  box-sizing: border-box;
+  position: absolute;
+  width: 90%;
+  left: 5%;
+  z-index: $low-z-index;
+  padding: 15px;
+
+  @media screen and (min-width: 768px) {
+    width: 60%;
+    left: 20%;
+    padding: 20px;
+  }
+  @media screen and  (min-width: $large) {
+    width: 50%;
+    left: 30%;
+    padding: 30px;
+  }
+
+  &__title {
+    color: $main-color;
+    margin: 0 0 15px 0;
+  }
+
+  &__error {
+    color: red;
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    @media (min-width: $medium) {
+      justify-content: start;
+    }
+  }
+
+  &__title {
+    width: 100%;
+  }
+
+
+  &__form {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+
+    input, button, select, textarea {
+      box-sizing: border-box;
+      height: 40px;
+      font-size: 16px;
+      border-radius: 5px;
+      outline: none !important;
+
+      @media (min-width: $medium) {
+        font-size: 18px;
+      }
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 5px 15px;
+      border: 2px solid $main-color;
+      background-color: $white;
+      margin-right: 0;
+
+
+      &.input-error {
+        border: 2px solid salmon;
+        box-shadow: 1px 1px 5px salmon, -1px -1px 5px salmon;
+      }
+
+      &:active, &:focus {
+        border: 2px solid #408948;
+        box-shadow: 1px 1px 5px #408948, -1px -1px 5px #408948;
+      }
+
+    }
+
+    input[type=checkbox] {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    textarea {
+      height: 100px;
+    }
+
+    label {
+      font-size: 28px;
+    }
+
+    button {
+      margin-right: 10px;
+    }
+  }
+
+  &__container {
+    flex-basis: 100%;
+    margin-bottom: 10px;
+    align-self: end;
+
+    @media (min-width: $medium) {
+      flex-basis: calc(50% - 5px);
+      margin-right: 10px;
+
+      &:nth-child(even) {
+        margin-right: 0;
+      }
+    }
+
+    &.form-error {
+      flex-basis: 100%;
+    }
+    &.input-full {
+      flex-basis: 100%;
+      margin-right: 10px;
+    }
+    &.input-half {
+      flex-basis: calc(50% - 10px);
+      margin-right: 10px;
+    }
+    &.input-quarter {
+      flex-basis: calc(25% - 10px);
+      margin-right: 10px;
+    }
+    .input-checkbox {
+      label {
+        font-size: 28px;
+      }
+    }
+  }
+
+}

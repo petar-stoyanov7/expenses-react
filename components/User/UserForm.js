@@ -3,45 +3,47 @@ import Card from "../UI/Card";
 import ReactDOM from "react-dom";
 import AuthContext from "../../Store/auth-context";
 import axios from "axios";
-import './Register.scss';
 import iconClose from '../../assets/icons/icon-close.svg';
+import { checkStringValidity } from '../../helpers/general';
+
+import './UserForm.scss';
 
 const overlayContainer = document.getElementById('black-overlay-1');
 
-const Register = (props) => {
+const UserForm = (props) => {
     const [user, setUser] = useState({
         editable: !props.user,
-        value: props.user && props.user.username,
+        value: props.user ? props.user.username : '',
         isValid: true,
         message: '',
     });
     const [pass, setPass] = useState({
-        value1: props.user && '*******',
-        value2: props.user && '*******',
+        value1: props.user ? '*******' : '',
+        value2: props.user ? '*******' : '',
         isValid: true,
         message1: '',
         message2: '',
     });
     const [email, setEmail] = useState({
-        value1: props.user && props.user.email,
-        value2: props.user && props.user.email,
+        value1: props.user ? props.user.email : '',
+        value2: props.user ? props.user.email : '',
         isValid: true,
         message1: '',
         message2: ''
     });
     const [firstName, setFirstName] = useState({
-        value: props.user && props.user.firstName,
+        value: props.user ? props.user.firstName : '',
         isValid: true,
         message: '',
     });
     const [lastName, setLastName] = useState({
-        value: props.user && props.user.lastName,
+        value: props.user ? props.user.lastName : '',
         isValid: true,
         message: '',
     });
     const [gender, setGender] = useState(props.user ? props.user.gender : 'male');
     const [notes, setNotes] = useState({
-        value: props.user && props.user.notes,
+        value: props.user ? props.user.notes : '',
         isValid: true,
         message: '',
     });
@@ -100,7 +102,7 @@ const Register = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (firstName.value.length) {
-                _checkStringValidity('firstName', setFirstName);
+                _checkStringValidity(firstName, setFirstName);
             }
         }, 300);
 
@@ -114,8 +116,7 @@ const Register = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (lastName.value.length) {
-                // _checkLastNameValidity();
-                _checkStringValidity('lastName', setLastName);
+                _checkStringValidity(lastName, setLastName);
             }
         }, 300);
 
@@ -129,8 +130,7 @@ const Register = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (notes.value.length) {
-                // _checkLastNameValidity();
-                _checkStringValidity('notes', setNotes, false);
+                _checkStringValidity(notes, setNotes, false);
             }
         }, 300);
 
@@ -169,16 +169,9 @@ const Register = (props) => {
     }
 
     const _checkUserValidity = () => {
-        let isValid = true;
-        let message = '';
-        if (null === user.value.match(/^[A-Za-z0-9.-_]+$/g)) {
-            isValid = false;
-            message = 'Invalid characters';
-        }
-        if (user.value.length < 5) {
-            isValid = false;
-            message = 'Username is too short';
-        }
+        const response = checkStringValidity(user.value, 'user');
+        let isValid = response.isValid;
+        let message = response.message;
         setUser({
             ...user,
             isValid: isValid,
@@ -224,13 +217,13 @@ const Register = (props) => {
             message1 = message2 = 'Email addressess don\'t match';
         }
 
-        if (null === email.value1.match(/^[a-z0-9-_.]{3,}@[a-z0-9-_.]{3,}.[a-z-_.]{2,}$/g)) {
-            isValid = false;
-            message1 = 'Invalid e-mail address';
+        const response1 = checkStringValidity(email.value1, 'email');
+        const response2 = checkStringValidity(email.value2, 'email');
+        if (!response1.isValid) {
+            message1 = response1.message;
         }
-        if (null === email.value2.match(/^[a-z0-9-_.]{3,}@[a-z0-9-_.]{3,}.[a-z-_.]{2,}$/g)) {
-            isValid = false;
-            message2 = 'Invalid e-mail address';
+        if (!response2.isValid) {
+            message2 = response2.message;
         }
         
         setEmail({
@@ -243,27 +236,16 @@ const Register = (props) => {
         return isValid;
     }
 
-    const _checkStringValidity = (variable, setter, isRequired = true) => {
-        const toCheck = eval(variable);
-        let isValid = true;
-        let message = '';
-        if (null === toCheck.value.match(/^[A-Za-z0-9.-_]+$/g)) {
-            isValid = false;
-            message = 'Invalid characters';
-        }
-        if (isRequired && toCheck.value.length < 2) {
-            isValid = false;
-            message = `Value is too short`;
-        }
+    const _checkStringValidity = (value, setter) => {
+        const response = checkStringValidity(value.value);
         setter({
-            ...toCheck,
-            isValid: isValid,
-            message: message
-        });
-
-        return isValid;
-
+            ...value,
+            isValid: response.isValid,
+            message: response.message
+        })
     }
+
+
 
     const handleInput = (e) => {
         const val = e.target.value;
@@ -415,23 +397,23 @@ const Register = (props) => {
                 <BlackOverlay onClose={props.onClose}/>,
                 overlayContainer
             )}
-            <Card customClass="register-form">
+            <Card customClass="create-form">
                 <button className="icon-modal-close" onClick={props.onClose}>
                     <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
                 </button>
-                <form className="register-form__form" onSubmit={onSubmit}>
-                    <h1 className="register-form__title">{props.user ? 'Edit' : 'Register'}</h1>
-                    <div className="register-form__container form-error">
+                <form className="create-form__form" onSubmit={onSubmit}>
+                    <h1 className="create-form__title">{props.user ? 'Edit' : 'Register'}</h1>
+                    <div className="create-form__container form-error">
                         {!form.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {form.message}
                             </div>
                         )}
                     </div>
                     {/*---------- user ----------*/}
-                    <div className="register-form__container input-username">
+                    <div className="create-form__container input-half">
                         {!user.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {user.message}
                             </div>
                         )}
@@ -446,7 +428,7 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- currency ----------*/}
-                    <div className="register-form__container input-currency">
+                        <div className="create-form__container input-quarter">
                         <select
                             name='currency'
                             onChange={handleInput}
@@ -458,7 +440,7 @@ const Register = (props) => {
                         </select>
                     </div>
                     {/*---------- gender ----------*/}
-                    <div className="register-form__container input-gender">
+                    <div className="create-form__container input-quarter">
                         <select
                             name='gender'
                             onChange={handleInput}
@@ -469,9 +451,9 @@ const Register = (props) => {
                         </select>
                     </div>
                     {/*---------- pass ----------*/}
-                    <div className="register-form__container input-password">
+                    <div className="create-form__container input-half">
                         {!pass.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {pass.message1}
                             </div>
                         )}
@@ -484,15 +466,15 @@ const Register = (props) => {
                             placeholder='Password'
                         />
                     </div>
-                    <div className="register-form__container input-password">
+                    <div className="create-form__container input-half">
                         {!pass.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {pass.message2}
                             </div>
                         )}
                         <input
                             type='password'
-                            className={`register-form__password ${pass.isValid ? '' : 'input-error'}`}
+                            className={`create-form__password ${pass.isValid ? '' : 'input-error'}`}
                             name='password2'
                             value={pass.value2}
                             onChange={handleInput}
@@ -500,9 +482,9 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- email ----------*/}
-                    <div className="register-form__container input-email">
+                    <div className="create-form__container input-half">
                         {!email.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {email.message1}
                             </div>
                         )}
@@ -515,9 +497,9 @@ const Register = (props) => {
                             placeholder='Email Address'
                         />
                     </div>
-                    <div className="register-form__container input-email">
+                    <div className="create-form__container input-half">
                         {!email.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {email.message2}
                             </div>
                         )}
@@ -531,9 +513,9 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- fname ----------*/}
-                    <div className="register-form__container input-firstname">
+                    <div className="create-form__container input-half">
                         {!firstName.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {firstName.message}
                             </div>
                         )}
@@ -547,9 +529,9 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- lname ----------*/}
-                    <div className="register-form__container input-lastname">
+                    <div className="create-form__container input-half">
                         {!lastName.isValid && (
-                            <div className="register-form__error">
+                            <div className="create-form__error">
                                 {lastName.message}
                             </div>
                         )}
@@ -563,9 +545,9 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- notes ----------*/}
-                    <div className="register-form__container input-notes">
+                    <div className="create-form__container input-full input-textarea">
                         {!notes.isValid && (
-                          <div className="register-form__error">
+                          <div className="create-form__error">
                               {notes.message}
                           </div>
                         )}
@@ -577,7 +559,7 @@ const Register = (props) => {
                         />
                     </div>
                     {/*---------- actions ----------*/}
-                    <div className="register-form__actions">
+                    <div className="create-form__actions">
                         <button
                             className={`exp-button exp-button__new ${form.isValid
                                 ? '' : ' disabled'}`}
@@ -609,4 +591,4 @@ const Register = (props) => {
     );
 }
 
-export default Register;
+export default UserForm;
