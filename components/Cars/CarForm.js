@@ -18,8 +18,9 @@ const ELECTRIC = 5;
 const CarForm = (props) => {
 
   const ctx = useContext(AuthContext);
+  console.log('c', props.car);
 
-  const [active, setActive] = useState(props.car ? props.car.active : true);
+  const [isActive, setIsActive] = useState(props.car ? props.car.isActive : true);
   const [availableFuels, setAvailableFuels] = useState([]);
   const [brand, setBrand] = useState({
     value: props.car ? props.car.brand : '',
@@ -42,8 +43,8 @@ const CarForm = (props) => {
     message: ''
   });
   const [selectedFuels, setSelectedFuels] = useState({
-    value: props.car ? props.car.fuels : [],
-    isValid: props.car ? props.car.fuel.length : false,
+    value: [],
+    isValid: false,
     message: ''
   });
   const [year, setYear] = useState({
@@ -64,6 +65,16 @@ const CarForm = (props) => {
 
   /* --- get fuel list --- */
   useEffect(() => {
+    if (props.car && props.car.fuel) {
+      const fuelList = props.car.fuel.map((fuel) => {
+        return fuel.id;
+      });
+
+      setSelectedFuels({
+        ...selectedFuels,
+        value: fuelList
+      });
+    }
     axios.get(ctx.ajaxConfig.server + ctx.ajaxConfig.getFuels)
       .then((response) => {
         if (response.data.success && response.data.data.length) {
@@ -95,7 +106,7 @@ const CarForm = (props) => {
   /* -- check brand -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (brand.value.length) {
+      if (brand.value) {
         _checkStringValidity(brand, setBrand);
       }
     }, 300);
@@ -108,7 +119,7 @@ const CarForm = (props) => {
   /* -- check model -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (model.value.length) {
+      if (model.value) {
         _checkStringValidity(model, setModel);
       }
     }, 300);
@@ -121,7 +132,7 @@ const CarForm = (props) => {
   /* -- check color -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (color.value.length) {
+      if (color.value) {
         _checkStringValidity(color, setColor);
       }
     }, 300);
@@ -134,7 +145,7 @@ const CarForm = (props) => {
   /* -- check year -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (year.value.length) {
+      if (year.value) {
         _checkYearValidity();
       }
     }, 300);
@@ -147,7 +158,7 @@ const CarForm = (props) => {
   /* -- check mileage -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (mileage.value.length) {
+      if (mileage.value) {
         _checkMileageValidity();
       }
     }, 300);
@@ -160,7 +171,9 @@ const CarForm = (props) => {
   /* -- check fuels -- */
   useEffect(() => {
     const timer = setTimeout(() => {
+      if (selectedFuels.value) {
         _checkFuelValidity();
+      }
     }, 300);
 
     return () => {
@@ -171,7 +184,7 @@ const CarForm = (props) => {
   /* -- check notes -- */
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (notes.value.length) {
+      if (notes.value) {
         _checkStringValidity(notes, setNotes,false);
       }
     }, 300);
@@ -340,7 +353,7 @@ const CarForm = (props) => {
         });
         break;
       case 'active':
-        setActive(e.target.checked);
+        setIsActive(e.target.checked);
         break;
     }
   }
@@ -408,14 +421,13 @@ const CarForm = (props) => {
     axios.post(path, postData)
       .then((response) => {
         if (response.data.success) {
-          console.log('r', response.data.data);
+          window.location.reload(); //todo: try to make the context refresh
         } else {
           setForm({
             isValid: false,
             message: response.data.message ? response.data.message : "Error with DB"
           })
         }
-        console.log('rere', response);
       })
       .catch((e) => {
         console.log('Error with execution', e);
@@ -450,13 +462,13 @@ const CarForm = (props) => {
           {/*---------- active ----------*/}
           <div className="create-form__container input-full input-checkbox">
             <input
-              checked={active}
+              checked={isActive}
               type='checkbox'
               name='active'
               onChange={handleInput}
               id='active'
             />
-            <label htmlFor='active'>Is Active</label>
+            <label htmlFor='active'>Active</label>
           </div>
           {/*---------- brand ----------*/}
           <div className="create-form__container input-half">

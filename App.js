@@ -5,7 +5,7 @@ import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import NewExpense from "./components/Expenses/NewExpense";
 import Statistics from "./components/Statistics/Statistics";
-import User from './components/User/User'
+import UserPanel from './components/User/UserPanel'
 import AuthContext from "./Store/auth-context";
 import {Route, Switch} from 'react-router-dom'
 
@@ -23,14 +23,14 @@ function App() {
         setActiveElement(<Statistics />);
     }
     const setUser = () => {
-        setActiveElement(<User />);
+        setActiveElement(<UserPanel />);
     }
 
     useEffect(() => {
         if (!ctx.userDetails.isLogged) {
             setActiveElement(<HomePage />);
         } else {
-            setActiveElement(<User />); //todo: remove
+            setActiveElement(<UserPanel />); //todo: remove
         }
     }, [ctx.userDetails.isLogged]);
 

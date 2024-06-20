@@ -2,6 +2,7 @@ import React from 'react';
 import './Car.scss';
 import Card from "../UI/Card";
 import {generateFuelString} from "../../helpers/fuel-string-generator";
+import iconClose from '../../assets/icons/icon-close.svg'
 
 
 const Car = (props) => {
@@ -24,6 +25,11 @@ const Car = (props) => {
         );
     }
 
+    const handleDelete = (e) => {
+        e.stopPropagation();
+        props.deleteAction();
+    }
+
     const fuelString = generateFuelString(car.fuel);
 
     return (
@@ -32,6 +38,11 @@ const Car = (props) => {
             isButton={true}
             clickAction={props.clickAction}
         >
+            {props.showDeleteButton && (
+              <button className="car-element__delete" onClick={handleDelete}>
+                  <img src={iconClose} />
+              </button>
+            )}
             <h3 className='car-element__title'>
                 {`${car.brand} ${car.model}`}
             </h3>

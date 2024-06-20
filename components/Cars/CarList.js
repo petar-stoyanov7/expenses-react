@@ -128,6 +128,10 @@ const CarList = (props) => {
                                 clickAction={() => {
                                     clickAction(car)
                                 }}
+                                showDeleteButton={props.showDeleteButton}
+                                deleteAction={() => {
+                                    props.deleteAction(car)
+                                }}
                                 isDetailed={isDetailed}
                             />
                         );

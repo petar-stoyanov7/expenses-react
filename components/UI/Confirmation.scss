@@ -1,0 +1,41 @@
+@import "../../Main";
+
+.black-overlay-2 {
+  z-index: $med-z-index;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.confirmation-window {
+  position: absolute;
+  width: 90%;
+  left: 5%;
+  z-index: $med-plus-z-index;
+  padding: 15px;
+
+  @media screen and (min-width: 768px) {
+    width: 80%;
+    left: 10%;
+    padding: 20px;
+  }
+  @media screen and  (min-width: $large) {
+    width: 60%;
+    left: 20%;
+    padding: 30px;
+  }
+
+  h2 {
+    //
+  }
+
+  &__text {
+    display: inline-block;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  &__actions {
+    button {
+      margin-right: 10px;
+    }
+  }
+}
