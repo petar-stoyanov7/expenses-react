@@ -18,12 +18,6 @@ const Header = (props) => {
 
     return (
         <header className={`top-bar${ctx.userDetails.isLogged ? ' is-logged' : '' }`}>
-            <div className="site-logo">
-                {/*<a href="/">*/}
-                {/*    <img src={siteLogo} alt='Site Logo'/>*/}
-                {/*</a>*/}
-            </div>
-
             <div className="toolbar">
                 <HeaderButton
                     clickAction={props.setHomepage}
@@ -32,29 +26,29 @@ const Header = (props) => {
                     imageAlt='Home Page'
                 />
                 {ctx.userDetails.isLogged && (
-                    <React.Fragment>
-                        <HeaderButton
-                            clickAction={props.setNewExpense}
-                            customClass='teal-icon'
-                            text='New Expense'
-                            imageUrl={iconAdd}
-                            imageAlt='New Expense'
-                        />
-                        <HeaderButton
-                            clickAction={props.setStatistics}
-                            text='Statistics'
-                            imageUrl={iconStatistics}
-                            imageAlt='Statistics'
-                            onClick=''
-                        />
-                        <HeaderButton
-                            clickAction={props.setUser}
-                            text='Profile'
-                            imageUrl={iconProfile}
-                            imageAlt='Profile'
-                            onClick=''
-                        />
-                    </React.Fragment>
+                  <>
+                    <HeaderButton
+                      clickAction={props.setNewExpense}
+                      customClass='teal-icon'
+                      text='New Expense'
+                      imageUrl={iconAdd}
+                      imageAlt='New Expense'
+                    />
+                    <HeaderButton
+                      clickAction={props.setStatistics}
+                      text='Statistics'
+                      imageUrl={iconStatistics}
+                      imageAlt='Statistics'
+                      onClick=''
+                    />
+                    <HeaderButton
+                      clickAction={props.setUser}
+                      text='Profile'
+                      imageUrl={iconProfile}
+                      imageAlt='Profile'
+                      onClick=''
+                    />
+                  </>
                 )}
                 <div className="test">
                     {ctx.userDetails.isAdmin && (

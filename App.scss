@@ -1,15 +1,19 @@
 @import "Main";
 
 .main-content {
-  margin: 60px auto 0 auto;
+  margin: $header-mobile auto 0 auto;
   max-width: none;
   background-color: $background-color;
   padding: 20px 5px;
   min-height: 90vh;
+  font-size: 30px;
 
 
   @media (min-width: $large) {
-    margin-top: 60px;
+    font-size: 20px;
+  }
+  @media (min-width: $xlarge) {
+    margin-top: $header-large;
   }
 
   @media (min-width: $xlarge) {
@@ -25,12 +29,24 @@
   width: 100%;
   margin-right: 0;
 
-  @media (min-width: $medium) {
+  @media (min-width: $xlarge) {
     width: calc((100% - 75px)/2);
     margin-right: 15px;
 
     &:nth-child(even) {
       margin-right: 0;
+    }
+  }
+}
+
+table {
+  tr {
+    th,td {
+      font-size: 30px;
+
+      @media (min-width: $xlarge) {
+        font-size: 20px;
+      }
     }
   }
 }
