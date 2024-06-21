@@ -74,18 +74,21 @@ $xxlarge: '1920px';
   max-width: 33%;
   color: #fff;
   margin: 1px 2px 3px 1px;
-  padding: 0 15px;
+  padding: 10px 20px;
   outline: none !important;
   border: none;
   height: 50px;
-  font-size: 16px;
+  font-size: 40px;
+  font-weight: 600;
 
 
-  @media (min-width: $medium) {
-    font-size: 18px;
+  @media (min-width: $large) {
+    font-size: 30px;
+    padding: 5px 15px;
   }
-  @media (min-width: $medium) {
+  @media (min-width: $xlarge) {
     font-size: 20px;
+    padding: 0 15px;
   }
 
 
