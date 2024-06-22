@@ -7,7 +7,7 @@
   width: 90%;
   left: 5%;
   z-index: $low-z-index;
-  padding: 15px;
+  padding: 30px;
 
   @media screen and (min-width: $large) {
     width: 80%;
@@ -17,6 +17,7 @@
   @media screen and (min-width: $xlarge) {
     width: 40%;
     left: 30%;
+    padding: 20px;
   }
   @media screen and (min-width: $xxlarge) {
     width: 25%;
@@ -36,6 +37,14 @@
 
   &__error {
     color: red;
+    font-size: 30px;
+
+    @media (min-width: $large) {
+      font-size: 25px;
+    }
+    @media (min-width: $xlarge) {
+      font-size: 20px;
+    }
   }
 
   &__actions {
@@ -50,25 +59,34 @@
     }
   }
 
+  &__input {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
   &__form {
     position: relative;
 
     input, button {
       box-sizing: border-box;
       margin-bottom: 15px;
-      height: 60px;
+      height: 75px;
       font-size: 30px;
       border-radius: 5px;
       outline: none !important;
 
       @media (min-width: $large) {
+        font-size: 25px;
+        height: 60px;
+      }
+      @media (min-width: $xlarge) {
         font-size: 20px;
         height: 50px;
       }
     }
 
     input {
-      width: 100%;
+      width: 95%;
       padding: 5px 15px;
       border: 2px solid $main-color;
 

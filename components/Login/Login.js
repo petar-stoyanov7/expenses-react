@@ -183,32 +183,37 @@ const Login = (props) => {
                             {form.message}
                         </div>
                     )}
-                    {!user.isValid && (
-                        <div className="login-form__error">
-                            {user.message}
-                        </div>
-                    )}
-                    <input
-                        type='text'
-                        className={user.isValid ? '' : 'input-error'}
-                        name='username'
-                        value={user.value}
-                        onChange={handleInput}
-                        placeholder='Username or e-mail'
-                    />
-                    {!pass.isValid && (
-                        <div className="login-form__error">
-                            {pass.message}
-                        </div>
-                    )}
-                    <input
-                        type='password'
-                        className={pass.isValid ? '' : 'input-error'}
-                        name='password'
-                        value={pass.value}
-                        onChange={handleInput}
-                        placeholder='Password'
-                    />
+                    <div className="login-form__input">
+                        {!user.isValid && (
+                          <div className="login-form__error">
+                              {user.message}
+                          </div>
+                        )}
+                        <input
+                          type='text'
+                          className={user.isValid ? '' : 'input-error'}
+                          name='username'
+                          value={user.value}
+                          onChange={handleInput}
+                          placeholder='Username or e-mail'
+                        />
+                    </div>
+                    <div className="login-form__input">
+                        {!pass.isValid && (
+                          <div className="login-form__error">
+                              {pass.message}
+                          </div>
+                        )}
+                        <input
+                          type='password'
+                          className={pass.isValid ? '' : 'input-error'}
+                          name='password'
+                          value={pass.value}
+                          onChange={handleInput}
+                          placeholder='Password'
+                        />
+
+                    </div>
                     <div className="login-form__actions">
                         <button
                             className={`exp-button exp-button__success ${user.isValid &&

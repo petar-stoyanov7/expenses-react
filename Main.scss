@@ -44,6 +44,7 @@ $xxlarge: '1920px';
 }
 
 .icon-modal-close {
+  display: none;
   position: absolute;
   top: 10px;
   right: 10px;
@@ -56,6 +57,11 @@ $xxlarge: '1920px';
   //border: 1px solid red;
   color: red;
   cursor: pointer;
+
+
+  @media (min-width: $large) {
+    display: block;
+  }
 
   &__icon {
     max-width: 100%;
@@ -165,15 +171,16 @@ $xxlarge: '1920px';
   position: absolute;
   width: 90%;
   left: 5%;
+  top: 10%;
   z-index: $low-z-index;
   padding: 15px;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: $large) {
     width: 60%;
     left: 20%;
     padding: 20px;
   }
-  @media screen and  (min-width: $large) {
+  @media screen and  (min-width: $xlarge) {
     width: 50%;
     left: 30%;
     padding: 30px;
@@ -185,7 +192,15 @@ $xxlarge: '1920px';
   }
 
   &__error {
+    font-size: 30px;
     color: red;
+
+    @media (min-width: $large) {
+      font-size: 25px;
+    }
+    @media (min-width: $xlarge) {
+      font-size: 20px;
+    }
   }
 
   &__actions {
@@ -212,15 +227,18 @@ $xxlarge: '1920px';
     flex-wrap: wrap;
     width: 100%;
 
+
     input, button, select, textarea {
       box-sizing: border-box;
-      height: 40px;
-      font-size: 16px;
       border-radius: 5px;
+      font-size: 30px;
       outline: none !important;
 
-      @media (min-width: $medium) {
-        font-size: 18px;
+      @media (min-width: $xlarge) {
+        font-size: 25px;
+      }
+      @media (min-width: $xxlarge) {
+        font-size: 20px;
       }
     }
 
@@ -251,6 +269,18 @@ $xxlarge: '1920px';
       margin-right: 10px;
     }
 
+    input, button, select {
+      display: block;
+      height: 75px;
+
+      @media (min-width: $large) {
+        height: 50px;
+      }
+      @media (min-width: $large) {
+        height: 50px;
+      }
+    }
+
     textarea {
       height: 100px;
     }
@@ -265,34 +295,34 @@ $xxlarge: '1920px';
   }
 
   &__container {
-    flex-basis: 100%;
-    margin-bottom: 10px;
-    align-self: end;
-
-    @media (min-width: $medium) {
-      flex-basis: calc(50% - 5px);
-      margin-right: 10px;
-
-      &:nth-child(even) {
-        margin-right: 0;
-      }
-    }
+    margin-bottom: 15px;
 
     &.form-error {
-      flex-basis: 100%;
+      width: 100%;
     }
     &.input-full {
-      flex-basis: 100%;
+      width: 100%;
       margin-right: 10px;
     }
     &.input-half {
-      flex-basis: calc(50% - 10px);
-      margin-right: 10px;
+      width: 100%;
+      margin-right: 0;
+
+      @media (min-width: $large) {
+        width: calc(50% - 10px);
+        margin-right: 10px;
+      }
     }
     &.input-quarter {
-      flex-basis: calc(25% - 10px);
+      width: calc(50% - 10px);
       margin-right: 10px;
+
+      @media (min-width: $large) {
+        width: calc(25% - 10px);
+        margin-right: 10px;
+      }
     }
+
     .input-checkbox {
       label {
         font-size: 28px;
