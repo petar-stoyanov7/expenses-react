@@ -1,22 +1,28 @@
-@import '../../Main';
+@import '../../Style/Main';
 
 .new-expense {
-  padding: 5px;
+  padding: 20px;
+
   @media (min-width: $medium) {
-    padding: 10px;
+    padding: 15px;
   }
   @media (min-width: $large) {
-    padding: 15px;
+    padding: 10px;
   }
 
   &__title {
-    font-size: 1.5rem;
+    display: block;
     color: $main-color;
     margin: 0 0 10px;
-    display: none;
+    font-size: 70px;
 
-    @media (min-width: $medium) {
+    @media (min-width: $large) {
+      font-size: 60px;
       display: block;
+    }
+    @media (min-width: $xlarge) {
+      display: block;
+      font-size: 40px;
     }
   }
 

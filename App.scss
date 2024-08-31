@@ -1,18 +1,21 @@
-@import "Main";
+@import "Style/Main";
 
 .main-content {
-  margin: 60px auto 0 auto;
+  margin: 110px auto 0 auto;
   max-width: none;
   background-color: $background-color;
   padding: 20px 5px;
   min-height: 90vh;
+  font-size: 40px;
 
 
   @media (min-width: $large) {
-    margin-top: 60px;
+    margin-top: 90px;
+    font-size: 30px;
   }
-
   @media (min-width: $xlarge) {
+    margin-top: 80px;
     max-width: 1200px;
+    font-size: 20px;
   }
 }

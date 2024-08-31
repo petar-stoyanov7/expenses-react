@@ -26,6 +26,7 @@ $medium: '768px';
 $large: '1024px';
 $xlarge: '1200px';
 $xxlarge: '1920px';
+$xxxlarge: '2560px';
 
 .site-overlay {
   position: fixed;
@@ -50,7 +51,6 @@ $xxlarge: '1920px';
   border: none;
   background-color: #fff;
   padding: 3px;
-  //border: 1px solid red;
   color: red;
   cursor: pointer;
 
@@ -62,7 +62,6 @@ $xxlarge: '1920px';
   }
 
   &:hover {
-    //background-color: #eab7b7;
     box-shadow: 0 0 5px #eab7b7;
   }
 }
@@ -71,17 +70,21 @@ $xxlarge: '1920px';
   max-width: 33%;
   color: #fff;
   margin: 1px 2px 3px 1px;
-  padding: 0 15px;
+  padding: 15px 20px;
   outline: none !important;
   border: none;
-  height: 50px;
-  font-size: 16px;
+  font-size: 50px;
 
 
-  @media (min-width: $medium) {
-    font-size: 18px;
+  @media (min-width: $large) {
+    padding: 10px 15px;
+    font-size: 40px;
   }
-  @media (min-width: $medium) {
+  @media (min-width: $xlarge) {
+    padding: 10px;
+    font-size: 30px;
+  }
+  @media (min-width: $xxlarge) {
     font-size: 20px;
   }
 

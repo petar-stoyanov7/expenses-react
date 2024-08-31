@@ -27,7 +27,7 @@ function App() {
         if (!ctx.userDetails.isLogged) {
             setActiveElement(<HomePage />);
         } else {
-            setActiveElement(<Statistics />); //todo: remove
+            setActiveElement(<NewExpense />); //todo: remove
         }
     }, [ctx.userDetails.isLogged]);
 
