@@ -1,0 +1,132 @@
+@import 'Main';
+@import 'Button';
+
+.xp-form {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+
+  input, button, select, textarea {
+    box-sizing: border-box;
+    border-radius: 5px;
+    outline: none !important;
+    font-size: 50px;
+    padding: 15px 20px;
+
+    @media (min-width: $large) {
+      font-size: 40px;
+    }
+    @media (min-width: $xlarge) {
+      padding: 10px 20px;
+      font-size: 30px;
+    }
+    @media (min-width: $xxlarge) {
+      padding: 5px 15px;
+      font-size: 20px;
+    }
+  }
+
+  input, select, textarea {
+    width: 100%;
+    border: 3px solid $main-color;
+    background-color: $white;
+    margin-right: 0;
+
+
+    &.input-error {
+      border: 3px solid salmon;
+      box-shadow: 1px 1px 5px salmon, -1px -1px 5px salmon;
+    }
+
+    &:active, &:focus {
+      border: 3px solid #408948;
+      box-shadow: 1px 1px 5px #408948, -1px -1px 5px #408948;
+    }
+
+  }
+
+  input[type=checkbox] {
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  input, button, select {
+    display: block;
+
+    @media (min-width: $large) {
+    }
+    @media (min-width: $large) {
+    }
+  }
+
+  textarea {
+    height: 200px;
+  }
+
+  label {
+    font-size: 28px;
+  }
+
+  button {
+    margin-right: 10px;
+  }
+
+  &__container {
+    margin-bottom: 15px;
+
+    &.form-error {
+      width: 100%;
+    }
+
+    &.input-full {
+      width: 100%;
+      margin-right: 10px;
+    }
+
+    &.input-half {
+      width: 100%;
+      margin-right: 0;
+
+      @media (min-width: $large) {
+        width: calc(50% - 10px);
+        margin-right: 10px;
+      }
+    }
+
+    &.input-quarter {
+      width: calc(50% - 10px);
+      margin-right: 10px;
+
+      @media (min-width: $large) {
+        width: calc(25% - 10px);
+        margin-right: 10px;
+      }
+    }
+
+    .input-checkbox {
+      label {
+        font-size: 28px;
+      }
+    }
+  }
+
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+
+  &__actions {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    @media (min-width: $medium) {
+      justify-content: start;
+    }
+  }
+}

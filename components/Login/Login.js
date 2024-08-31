@@ -3,7 +3,7 @@ import Card from "../UI/Card";
 import ReactDOM from "react-dom";
 import AuthContext from "../../Store/auth-context";
 import axios from "axios";
-import './Login.scss';
+import '../../Style/CreateForm.scss';
 import iconClose from '../../assets/icons/icon-close.svg';
 
 const overlayContainer = document.getElementById('black-overlay-1');
@@ -172,20 +172,20 @@ const Login = (props) => {
                 <BlackOverlay onClose={props.onClose}/>,
                 overlayContainer
             )}
-            <Card customClass="login-form">
+            <Card customClass="login-form create-form">
                 <button className="icon-modal-close" onClick={props.onClose}>
                     <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
                 </button>
-                <form className="login-form__form" onSubmit={onSubmit}>
-                    <h1 className="login-form__title">Login</h1>
+                <form className="create-form__form xp-form" onSubmit={onSubmit}>
+                    <h1 className="create-form__title">Login</h1>
                     {!form.isValid && (
-                        <div className="login-form__error">
+                        <div className="create-form__error">
                             {form.message}
                         </div>
                     )}
-                    <div className="login-form__input">
+                    <div className="xp-form__container input-full">
                         {!user.isValid && (
-                          <div className="login-form__error">
+                          <div className="create-form__error">
                               {user.message}
                           </div>
                         )}
@@ -198,9 +198,9 @@ const Login = (props) => {
                           placeholder='Username or e-mail'
                         />
                     </div>
-                    <div className="login-form__input">
+                    <div className="xp-form__container input-full">
                         {!pass.isValid && (
-                          <div className="login-form__error">
+                          <div className="create-form__error">
                               {pass.message}
                           </div>
                         )}
@@ -214,7 +214,7 @@ const Login = (props) => {
                         />
 
                     </div>
-                    <div className="login-form__actions">
+                    <div className="xp-form__actions">
                         <button
                             className={`exp-button exp-button__success ${user.isValid &&
                             pass.isValid &&

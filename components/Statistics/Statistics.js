@@ -256,9 +256,9 @@ const Statistics = () => {
                     allCars={true}
                     selectedCar={selectedCar}
                 />
-                <div className="stat-form__dates">
-                    <div className="stat-form__date">
-                        <h4>From</h4>
+                <div className="xp-form">
+                    <div className="xp-form__container container-half">
+                        <h3>From</h3>
                         <DatePicker
                             dateFormat="dd-MMM-YYYY"
                             className="new-expense__input new-expense__inputs-date"
@@ -269,8 +269,8 @@ const Statistics = () => {
                             }}
                         />
                     </div>
-                    <div className="stat-form__date">
-                        <h4>To</h4>
+                    <div className="xp-form__container container-half">
+                        <h3>To</h3>
                         <DatePicker
                             dateFormat="dd-MMM-YYYY"
                             className="new-expense__input new-expense__inputs-date"
@@ -280,6 +280,12 @@ const Statistics = () => {
                                 setDateTo(date)
                             }}
                         />
+                    </div>
+                </div>
+                <div className="stat-form__dates">
+                    <div className="stat-form__date">
+                    </div>
+                    <div className="stat-form__date">
                     </div>
                 </div>
                 <ExpenseList

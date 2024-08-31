@@ -1,4 +1,6 @@
 @import '../../Style/Main';
+@import '../../Style/Form';
+@import '../../Style/Button';
 
 .new-expense {
   padding: 20px;
@@ -35,116 +37,22 @@
     background-color: $main-light;
   }
 
-  &__fuels {
-    margin-bottom: 15px;
+  &__fuel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 
-    .new-expense__inputs-liters {
-      margin-bottom: 0;
+    input.fuel-input {
+      width: calc(30% - 10px);
+      margin-right: 10px;
     }
 
-    &-liters {
-      width: 30%;
-      margin-right: 5px;
-
-      input {
-        width: 100%;
-      }
+    &-list {
+      width: 70%;
     }
   }
 
   &__insurances {
     margin-bottom: 15px;
-  }
-
-  &__inputs {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    &-mileage ,.react-datepicker-wrapper {
-      width: calc((100% - 15px)/2);
-    }
-
-    &-mileage {
-      margin-right: 15px;
-    }
-
-    &-value {
-      width: 100%;
-    }
-
-    &-notes {
-      width: 100%;
-      height: 60px;
-      resize: none;
-
-      @media (min-width: $medium) {
-        height: 80px;
-      }
-      @media (min-width: $large) {
-        height: 100px;
-      }
-    }
-  }
-
-  &__input {
-    box-sizing: border-box;
-    margin-bottom: 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    outline: none !important;
-    padding: 5px 15px;
-    border: 2px solid $main-color;
-
-    &:not(textarea) {
-      height: 40px;
-    }
-
-    &.input-error {
-      border: 2px solid salmon;
-      box-shadow: 1px 1px 5px salmon, -1px -1px 5px salmon;
-    }
-
-    &:active, &:focus {
-      border: 2px solid #408948;
-      box-shadow: 1px 1px 5px #408948, -1px -1px 5px #408948;
-    }
-
-    @media (min-width: $medium) {
-      font-size: 18px;
-      &:first-of-type:not(textarea) {
-        margin-right: 15px;
-      }
-    }
-    @media (min-width: $medium) {
-      font-size: 20px;
-    }
-  }
-
-  .react-datepicker-wrapper {
-    .new-expense__inputs-date {
-      width: 100%;
-    }
-
-    .react-datepicker {
-      border-color: $main-color;
-      font-size: 18px;
-
-      &__triangle {
-      }
-
-      &__navigation-icon::before {
-        border-color: $main-color;
-      }
-
-      &__header {
-        background-color: $main-lighter;
-      }
-
-      input {
-        width: 100%;
-      }
-    }
   }
 }

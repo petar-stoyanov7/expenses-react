@@ -18,7 +18,6 @@ const ELECTRIC = 5;
 const CarForm = (props) => {
 
   const ctx = useContext(AuthContext);
-  console.log('c', props.car);
 
   const [isActive, setIsActive] = useState(props.car ? props.car.isActive : true);
   const [availableFuels, setAvailableFuels] = useState([]);
@@ -450,9 +449,9 @@ const CarForm = (props) => {
         <button className="icon-modal-close" onClick={props.onClose}>
           <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
         </button>
-        <form className="create-form__form" onSubmit={onSubmit}>
+        <form className="create-form__form xp-form" onSubmit={onSubmit}>
           <h1 className="create-form__title">{props.user ? 'Edit Car' : 'Create Car'}</h1>
-          <div className="create-form__container form-error">
+          <div className="xp-form__container form-error">
             {!form.isValid && (
               <div className="create-form__error">
                 {form.message}
@@ -460,7 +459,7 @@ const CarForm = (props) => {
             )}
           </div>
           {/*---------- active ----------*/}
-          <div className="create-form__container input-full input-checkbox">
+          <div className="xp-form__container input-full input-checkbox">
             <input
               checked={isActive}
               type='checkbox'
@@ -471,7 +470,7 @@ const CarForm = (props) => {
             <label htmlFor='active'>Active</label>
           </div>
           {/*---------- brand ----------*/}
-          <div className="create-form__container input-half">
+          <div className="xp-form__container input-half">
             {!brand.isValid && (
               <div className="create-form__error">
                 {brand.message}
@@ -487,7 +486,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- model ----------*/}
-          <div className="create-form__container input-half">
+          <div className="xp-form__container input-half">
             {!model.isValid && (
               <div className="create-form__error">
                 {model.message}
@@ -503,7 +502,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- color ----------*/}
-          <div className="create-form__container input-half">
+          <div className="xp-form__container input-half">
             {!color.isValid && (
               <div className="create-form__error">
                 {color.message}
@@ -519,7 +518,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- year ----------*/}
-          <div className="create-form__container input-half">
+          <div className="xp-form__container input-half">
             {!year.isValid && (
               <div className="create-form__error">
                 {year.message}
@@ -535,7 +534,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- mileage ----------*/}
-          <div className="create-form__container input-full">
+          <div className="xp-form__container input-full">
             {!mileage.isValid && (
               <div className="create-form__error">
                 {mileage.message}
@@ -551,7 +550,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- fuel ----------*/}
-          <div className="create-form__container input-full">
+          <div className="xp-form__container input-full">
             {!selectedFuels.isValid && (
               <div className="create-form__error">
                 {selectedFuels.message}
@@ -589,7 +588,7 @@ const CarForm = (props) => {
           )}
           </div>
           {/*---------- notes ----------*/}
-          <div className="create-form__container input-full input-textarea">
+          <div className="xp-form__container input-full input-textarea">
             {!notes.isValid && (
               <div className="create-form__error">
                 {notes.message}
@@ -603,7 +602,7 @@ const CarForm = (props) => {
             />
           </div>
           {/*---------- actions ----------*/}
-          <div className="create-form__actions">
+          <div className="xp-form__actions">
             <button
               className={`exp-button exp-button__new ${form.isValid
                 ? '' : ' disabled'}`}

@@ -6,7 +6,7 @@ import axios from "axios";
 import iconClose from '../../assets/icons/icon-close.svg';
 import { checkStringValidity } from '../../helpers/general';
 
-import './UserForm.scss';
+import '../../Style/CreateForm.scss';
 
 const overlayContainer = document.getElementById('black-overlay-1');
 
@@ -401,9 +401,9 @@ const UserForm = (props) => {
                 <button className="icon-modal-close" onClick={props.onClose}>
                     <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
                 </button>
-                <form className="create-form__form" onSubmit={onSubmit}>
+                <form className="create-form__form xp-form" onSubmit={onSubmit}>
                     <h1 className="create-form__title">{props.user ? 'Edit' : 'Register'}</h1>
-                    <div className="create-form__container form-error">
+                    <div className="xp-form__container form-error">
                         {!form.isValid && (
                             <div className="create-form__error">
                                 {form.message}
@@ -411,7 +411,7 @@ const UserForm = (props) => {
                         )}
                     </div>
                     {/*---------- user ----------*/}
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!user.isValid && (
                             <div className="create-form__error">
                                 {user.message}
@@ -428,7 +428,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- currency ----------*/}
-                        <div className="create-form__container input-quarter">
+                    <div className="xp-form__container input-quarter">
                         <select
                             name='currency'
                             onChange={handleInput}
@@ -440,7 +440,7 @@ const UserForm = (props) => {
                         </select>
                     </div>
                     {/*---------- gender ----------*/}
-                    <div className="create-form__container input-quarter">
+                    <div className="xp-form__container input-quarter">
                         <select
                             name='gender'
                             onChange={handleInput}
@@ -451,7 +451,7 @@ const UserForm = (props) => {
                         </select>
                     </div>
                     {/*---------- pass ----------*/}
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!pass.isValid && (
                             <div className="create-form__error">
                                 {pass.message1}
@@ -466,7 +466,7 @@ const UserForm = (props) => {
                             placeholder='Password'
                         />
                     </div>
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!pass.isValid && (
                             <div className="create-form__error">
                                 {pass.message2}
@@ -482,7 +482,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- email ----------*/}
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!email.isValid && (
                             <div className="create-form__error">
                                 {email.message1}
@@ -497,7 +497,7 @@ const UserForm = (props) => {
                             placeholder='Email Address'
                         />
                     </div>
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!email.isValid && (
                             <div className="create-form__error">
                                 {email.message2}
@@ -513,7 +513,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- fname ----------*/}
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!firstName.isValid && (
                             <div className="create-form__error">
                                 {firstName.message}
@@ -529,7 +529,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- lname ----------*/}
-                    <div className="create-form__container input-half">
+                    <div className="xp-form__container input-half">
                         {!lastName.isValid && (
                             <div className="create-form__error">
                                 {lastName.message}
@@ -545,7 +545,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- notes ----------*/}
-                    <div className="create-form__container input-full input-textarea">
+                    <div className="xp-form__container input-full input-textarea">
                         {!notes.isValid && (
                           <div className="create-form__error">
                               {notes.message}
@@ -559,7 +559,7 @@ const UserForm = (props) => {
                         />
                     </div>
                     {/*---------- actions ----------*/}
-                    <div className="create-form__actions">
+                    <div className="xp-form__actions">
                         <button
                             className={`exp-button exp-button__new ${form.isValid
                                 ? '' : ' disabled'}`}

@@ -53,12 +53,18 @@ const NewExpense = () => {
                 if (response.data.success && response.data.data) {
                     setFuelList(response.data.data);
                 }
+            })
+            .catch((e) => {
+                console.log("Error fetching fuels: ", e);
             });
         axios.get(ajx.server+ajx.getExpenseTypes, {hash: ajx.hash})
             .then((response) => {
                 if (response.data.success && response.data.data) {
                     setExpenseList(response.data.data);
                 }
+            })
+            .catch((e) => {
+                console.log("Error fetching expense types: ", e);
             });
     }, []);
 
@@ -69,8 +75,12 @@ const NewExpense = () => {
         }
     }, [ctx]);
 
-    /** validty */
+    /** validity, fuel */
     useEffect(() => {
+        if (expenseType !== FUEL_EXPENSE_ID) {
+            setLiters('');
+            setFuel(null);
+        }
         let validity =
             null !== selectedCar &&
             null !== expenseType &&
@@ -146,30 +156,32 @@ const NewExpense = () => {
                 notes: notes
             }
 
-            axios.post(ajx.server+ajx.addExpense, expenseData)
-                .then((response) => {
-                    const result = response.data;
+            console.log(expenseData);
 
-                    if (result.success) {
-                        const currentCar = selectedCar; //after resetting the form the state value is erased
-                        resetForm();
-                        /* update context to match new mileage */
-                        if (mileage !== currentCar.mileage) {
-                            const tempCurrentUser = {...currentUser};
-                            const idx = currentUser.cars.findIndex((car) => {
-                                return car.id === currentCar.id;
-                            });
-                            tempCurrentUser.cars[idx].mileage = mileage;
-                            ctx.updateUserData(tempCurrentUser);
-                        }
-
-                        resetForm();
-                    }
-                    console.log("Expense submitted: ", response);
-                })
-                .catch((error) => {
-                    console.log('Error with execution: ', error);
-                });
+            // axios.post(ajx.server+ajx.addExpense, expenseData)
+            //     .then((response) => {
+            //         const result = response.data;
+            //
+            //         if (result.success) {
+            //             const currentCar = selectedCar; //after resetting the form the state value is erased
+            //             resetForm();
+            //             /* update context to match new mileage */
+            //             if (mileage !== currentCar.mileage) {
+            //                 const tempCurrentUser = {...currentUser};
+            //                 const idx = currentUser.cars.findIndex((car) => {
+            //                     return car.id === currentCar.id;
+            //                 });
+            //                 tempCurrentUser.cars[idx].mileage = mileage;
+            //                 ctx.updateUserData(tempCurrentUser);
+            //             }
+            //
+            //             resetForm();
+            //         }
+            //         console.log("Expense submitted: ", response);
+            //     })
+            //     .catch((error) => {
+            //         console.log('Error with execution: ', error);
+            //     });
         }
     }
 
@@ -206,79 +218,89 @@ const NewExpense = () => {
                     elementClass="new-expense__type-"
                 />
                 <hr />
-                <div
-                    className="new-expense__fuels item-list"
-                    style={{display: expenseType === FUEL_EXPENSE_ID && null != selectedCar ? 'flex' : 'none'}}
-                >
-                    <div className="new-expense__fuels-liters">
+                <div className="new-expense__inputs xp-form">
+                    {expenseType === FUEL_EXPENSE_ID && (
+                        <div className="xp-form__container input-full">
+                            <div className="new-expense__fuel">
+                                <input
+                                    className="fuel-input"
+                                    type="number"
+                                    placeholder="Liters"
+                                    value={liters}
+                                    onChange={(e) => {
+                                        setLiters(e.target.value);
+                                    }}
+                                />
+                                <FuelList
+                                    multiple={false}
+                                    fuelList={possibleFuels}
+                                    selectedFuels={fuelType}
+                                    customClass="new-expense__fuel-list"
+                                    elementClass="item-selector"
+                                    clickAction={setFuel}
+                                />
+                            </div>
+                        </div>
+                    )}
+                    <div className="xp-form__container input-half">
                         <input
-                            className="new-expense__inputs-liters new-expense__input"
                             type="number"
-                            placeholder="Liters"
-                            value={liters}
+                            value={mileage}
+                            placeholder="Mileage"
                             onChange={(e) => {
-                                setLiters(e.target.value);
+                                setMileageValue(e.target.value);
                             }}
                         />
                     </div>
-                    <FuelList
-                        multiple={false}
-                        fuelList={possibleFuels}
-                        selectedFuels={fuelType}
-                        customClass="new-expense__fuels-list"
-                        elementClass="item-selector"
-                        clickAction={setFuel}
-                    />
-                </div>
-                <div className="new-expense__inputs">
-                    <input
-                        className="new-expense__inputs-mileage new-expense__input"
-                        type="number"
-                        value={mileage}
-                        placeholder="Mileage"
-                        onChange={(e) => {
-                            setMileageValue(e.target.value);
-                        }}
-                    />
-                    <DatePicker
-                        dateFormat="dd-MMM-YYYY"
-                        className="new-expense__input new-expense__inputs-date"
-                        selected={date}
-                        onChange={(date) => {setDate(date)}}
-                    />
-                    <input
-                        className="new-expense__inputs-value new-expense__input"
-                        type="number"
-                        value={value}
-                        placeholder="Value"
-                        onChange={(e) => {
-                            setValue(e.target.value);
-                        }}
-                    />
+                    <div className="xp-form__container input-half">
+                        <DatePicker
+                            dateFormat="dd-MMM-YYYY"
+                            selected={date}
+                            onChange={(date) => {
+                                setDate(date)
+                            }}
+                        />
+                    </div>
+                    <div className="xp-form__container input-full">
+                        <input
+                            className="new-expense__inputs-value new-expense__input"
+                            type="number"
+                            value={value}
+                            placeholder="Value"
+                            onChange={(e) => {
+                                setValue(e.target.value);
+                            }}
+                        />
+
+                    </div>
+                    <div className="xp-form__container input-half"></div>
+
                     <textarea
                         placeholder="Additional info"
                         className="new-expense__input new-expense__inputs-notes"
-                        onChange={(e) => {setNotes(e.target.value)}}
+                        onChange={(e) => {
+                            setNotes(e.target.value)
+                        }}
                         value={notes}
                     />
-                </div>
-                <div className="new-expense__actions">
-                    <button
-                        disabled={!formIsValid}
-                        className={`exp-button button-small exp-button__success ${formIsValid ? '' : 'disabled'} `}
-                        type='submit'
-                        onClick={submitHandler}
-                    >
-                        Submit
-                    </button>
-                    <button
-                        type='button'
-                        className="exp-button button-small exp-button__danger"
-                        value="Cancel"
-                        onClick={resetForm}
-                    >
-                        Reset
-                    </button>
+                    <div className="xp-form__actions">
+                        <button
+                            disabled={!formIsValid}
+                            className={`exp-button exp-button__success ${formIsValid ? '' : 'disabled'} `}
+                            type='submit'
+                            onClick={submitHandler}
+                        >
+                            Submit
+                        </button>
+                        <button
+                            type='button'
+                            className="exp-button exp-button__danger"
+                            value="Cancel"
+                            onClick={resetForm}
+                        >
+                            Reset
+                        </button>
+                    </div>
                 </div>
             </Container>
         </Fragment>

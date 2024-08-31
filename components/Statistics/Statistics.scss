@@ -1,12 +1,15 @@
 @import '../../Style/Main';
-.stat-form {
+@import '../../Style/Form';
 
+.stat-form {
   &__errors {
     margin: 0;
     color: $red;
   }
 
   &__cars {
+    margin-bottom: 15px;
+
     .car-element.is-selected {
       background-color: $main-light;
     }
@@ -23,5 +26,21 @@
 
   &__actions {
     margin-top: 15px;
+  }
+
+  .xp-form {
+    margin-bottom: 15px;
+
+    &__container.container-half {
+      width: calc(50% - 5px);
+      h3 {
+        font-size: 40px;
+        margin: 5px 0 15px 0;
+      }
+
+      &:nth-child(odd) {
+        margin-right: 10px;
+      }
+    }
   }
 }

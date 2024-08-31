@@ -1,0 +1,54 @@
+@import 'Main';
+@import 'Form';
+
+.create-form {
+  box-sizing: border-box;
+  position: absolute;
+  width: 90%;
+  left: 5%;
+  top: 5%;
+  z-index: $low-z-index;
+  padding: 15px;
+
+  @media screen and (min-width: $large) {
+    width: 60%;
+    left: 20%;
+    top: 10%;
+    padding: 20px;
+  }
+  @media screen and  (min-width: $xlarge) {
+    width: 50%;
+    left: 30%;
+    padding: 30px;
+  }
+
+  &__title {
+    color: $main-color;
+    margin: 0 0 15px 0;
+    font-size: 70px;
+
+    @media screen and  (min-width: $large) {
+      font-size: 40px;
+    }
+    @media screen and  (min-width: $xlarge) {
+      font-size: 30px;
+    }
+  }
+
+  &__error {
+    font-size: 40px;
+    color: red;
+
+    @media (min-width: $large) {
+      font-size: 30px;
+    }
+    @media (min-width: $xlarge) {
+      font-size: 20px;
+    }
+  }
+
+  &__title {
+    width: 100%;
+  }
+}
+

@@ -1,0 +1,70 @@
+.exp-button {
+  max-width: 33%;
+  color: #fff;
+  margin: 1px 2px 3px 1px;
+  padding: 10px 20px;
+  outline: none !important;
+  border: none;
+  font-size: 40px;
+  font-weight: 600;
+
+
+  @media (min-width: $large) {
+    font-size: 30px;
+    padding: 5px 15px;
+  }
+  @media (min-width: $xlarge) {
+    font-size: 20px;
+    padding: 0 15px;
+  }
+
+
+  &__success {
+    background-color: #649f70;
+
+    &:focus {
+      background-color: #247633;
+    }
+
+    &.disabled, &:disabled {
+      background-color: #8c9e92;
+      color: #7d6f6f;
+    }
+  }
+
+  &__danger {
+    background-color: $red;
+
+    &.disabled, &:disabled {
+      background-color: #cc8c8c;
+      color: #786a6a;
+    }
+  }
+
+  &__new {
+    background-color: $main-color;
+
+    &.disabled, &:disabled {
+      background-color: #6dc2e4;
+      color: #786a6a;
+    }
+  }
+
+
+  &.button-small {
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 5px;
+
+    @media (min-width: $medium) {
+      font-size: 18px;
+    }
+    @media (min-width: $medium) {
+      font-size: 20px;
+    }
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+}
