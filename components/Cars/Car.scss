@@ -1,4 +1,4 @@
-@import '../../Main';
+@import '../../Style/Main';
 
 .car-element {
   width: 100%;
@@ -7,6 +7,10 @@
   margin-right: 0;
   box-sizing: border-box;
   position: relative;
+
+  h1 {
+    margin: 10px 0 20px 0;
+  }
 
   &.is-disabled {
     background-color: $disabled-background;
