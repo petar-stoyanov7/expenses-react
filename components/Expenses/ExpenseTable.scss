@@ -16,14 +16,11 @@
     padding: 10px 5px;
     text-align: left;
 
-    @media (min-width: $medium) {
+    @media (min-width: $large) {
       padding: 5px;
     }
   }
-
-
   tbody tr {
-    //text-align: center;
 
     &:nth-child(even) {
       background-color: $main-lighter;
@@ -34,25 +31,40 @@
     }
   }
 
+  tr {
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $large) {
+      margin-bottom: 0;
+    }
+  }
+
   &__detail, &__date {
     display: none;
     @media (min-width: $medium) {
       display: table-cell;
     }
   }
+
   &__mileage, &__notes, &__liters {
     display: none;
+
     @media (min-width: $large) {
       display: table-cell;
     }
   }
 
+
+  /* -- small -- */
   &.exp-small {
     th,td {
-      font-size: 12px;
+      font-size: 28px;
       padding: 0;
 
-      @media (min-width: $medium) {
+      @media (min-width: $large) {
+        font-size: 24px;
+      }
+      @media (min-width: $large) {
         font-size: 14px;
       }
     }

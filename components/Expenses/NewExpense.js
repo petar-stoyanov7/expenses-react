@@ -156,32 +156,30 @@ const NewExpense = () => {
                 notes: notes
             }
 
-            console.log(expenseData);
+            axios.post(ajx.server+ajx.addExpense, expenseData)
+                .then((response) => {
+                    const result = response.data;
 
-            // axios.post(ajx.server+ajx.addExpense, expenseData)
-            //     .then((response) => {
-            //         const result = response.data;
-            //
-            //         if (result.success) {
-            //             const currentCar = selectedCar; //after resetting the form the state value is erased
-            //             resetForm();
-            //             /* update context to match new mileage */
-            //             if (mileage !== currentCar.mileage) {
-            //                 const tempCurrentUser = {...currentUser};
-            //                 const idx = currentUser.cars.findIndex((car) => {
-            //                     return car.id === currentCar.id;
-            //                 });
-            //                 tempCurrentUser.cars[idx].mileage = mileage;
-            //                 ctx.updateUserData(tempCurrentUser);
-            //             }
-            //
-            //             resetForm();
-            //         }
-            //         console.log("Expense submitted: ", response);
-            //     })
-            //     .catch((error) => {
-            //         console.log('Error with execution: ', error);
-            //     });
+                    if (result.success) {
+                        const currentCar = selectedCar; //after resetting the form the state value is erased
+                        resetForm();
+                        /* update context to match new mileage */
+                        if (mileage !== currentCar.mileage) {
+                            const tempCurrentUser = {...currentUser};
+                            const idx = currentUser.cars.findIndex((car) => {
+                                return car.id === currentCar.id;
+                            });
+                            tempCurrentUser.cars[idx].mileage = mileage;
+                            ctx.updateUserData(tempCurrentUser);
+                        }
+
+                        resetForm();
+                    }
+                    console.log("Expense submitted: ", response);
+                })
+                .catch((error) => {
+                    console.log('Error with execution: ', error);
+                });
         }
     }
 

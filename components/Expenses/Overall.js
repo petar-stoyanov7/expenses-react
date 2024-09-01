@@ -8,7 +8,6 @@ const Overall = (props) => {
   const data = props.data;
   const overall = data.overall ? data.overall : 0;
   const ctx = useContext(AuthContext);
-  console.log('c', ctx);
 
   const currency = ctx.userDetails.user.currency
     ? ctx.userDetails.user.currency

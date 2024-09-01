@@ -1,4 +1,4 @@
-import React, {Fragment, useContext, useEffect, useState} from 'react';
+import React, {Fragment, Profiler, useContext, useEffect, useState} from 'react';
 import './App.scss';
 import Header from './components/Header/Header';
 import Footer from "./components/Footer/Footer";
@@ -30,7 +30,7 @@ function App() {
         if (!ctx.userDetails.isLogged) {
             setActiveElement(<HomePage />);
         } else {
-            setActiveElement(<Statistics />); //todo: remove
+            setActiveElement(<UserPanel />); //todo: remove
         }
     }, [ctx.userDetails.isLogged]);
 

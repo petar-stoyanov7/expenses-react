@@ -25,6 +25,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    font-size: 30px;
 
     span {
       display: block;
@@ -39,6 +40,21 @@
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &-spent {
+      width: 100% !important;
+    }
+
+    & * {
+      font-size: 40px;
+
+      @media screen and (min-width: $large) {
+        font-size: 30px;
+      }
+      @media screen and (min-width: $xlarge) {
+        font-size: 22px;
+      }
     }
   }
 }

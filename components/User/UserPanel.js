@@ -71,42 +71,47 @@ const UserPanel = () => {
     <div className="user-panel">
       <h1>User [{user.username}] Profile</h1>
       <div className="user-panel__container">
-        <Container customClass="half-width">
-          <h3>User profile:</h3>
-          <div className="user-panel__user">
-            <div className="row">
-              <strong>Name: </strong> {user.firstName} {user.lastName}
-            </div>
-            <div className="row">
-              <strong>Gender: </strong> {user.gender}
-            </div>
-            <div className="row">
-              <strong>Email: </strong> {user.email}
-            </div>
-            <div className="row">
-              <strong>Currency: </strong> {user.currency}
+        <Container customClass="user-panel__user half-width">
+          <div className="user-panel__user-info">
+            <h3>User profile:</h3>
+            <div className="user-panel__user-data">
+              <div className="row">
+                <strong>Name: </strong> {user.firstName} {user.lastName}
+              </div>
+              <div className="row">
+                <strong>Gender: </strong> {user.gender}
+              </div>
+              <div className="row">
+                <strong>Email: </strong> {user.email}
+              </div>
+              <div className="row">
+                <strong>Currency: </strong> {user.currency}
+              </div>
             </div>
           </div>
-          <button
-            className='exp-button button-small exp-button__success'
-            type='button'
-            onClick={editUser}
-          >
-            Edit
-          </button>
+          <div className="user-panel__actions">
+            <button
+                className='exp-button exp-button__success'
+                type='button'
+                onClick={editUser}
+            >
+              Edit
+            </button>
+          </div>
+
           {showRegister && (
-            <UserForm
-              user={user}
-              showLogin={false}
-              onLogin={null}
-              onClose={hideRegister}
-            />
+              <UserForm
+                  user={user}
+                  showLogin={false}
+                  onLogin={null}
+                  onClose={hideRegister}
+              />
           )}
           {showEditCar && (
-            <CarForm
-              onClose={hideCarForm}
-              car={car}
-            />
+              <CarForm
+                  onClose={hideCarForm}
+                  car={car}
+              />
           )}
           {showConfirmation && (
             <Confirmation
@@ -120,23 +125,26 @@ const UserPanel = () => {
         </Container>
 
         <Container customClass="half-width">
-          <div className="user-panel__car-list">
+          <div className="user-panel__cars">
             <CarList
-              isDetailed={true}
-              hasModal={false}
-              clickAction={showCarForm}
-              showDeleteButton={true}
-              deleteAction={showDeleteModal}
+                customClass="user-panel__cars-list"
+                isDetailed={true}
+                hasModal={false}
+                clickAction={showCarForm}
+                showDeleteButton={true}
+                deleteAction={showDeleteModal}
             />
+            <div className="create-form__actions">
+              <button
+                  className='exp-button exp-button__success'
+                  type='button'
+                  onClick={showCarForm}
+              >
+                New
+              </button>
+            </div>
           </div>
 
-          <button
-            className='exp-button button-small exp-button__success'
-            type='button'
-            onClick={showCarForm}
-          >
-            New
-          </button>
         </Container>
       </div>
     </div>

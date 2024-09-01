@@ -239,7 +239,7 @@ const Statistics = () => {
 
     return (
         <div className="statistics">
-            <Container customClass="full-width stat-form">
+            <Container customClass="full-width stat-form xp-form">
                 <h1>Statistics</h1>
                 <div
                     className="stat-form__errors"
@@ -303,12 +303,12 @@ const Statistics = () => {
                         showAll={true}
                         fuelList={possibleFuels}
                         selectedFuels={selectedFuels}
-                        customClass="new-expense__fuels-list"
+                        customClass="new-expense__fuels-list stat-form__fuel-list"
                         elementClass="item-selector"
                         clickAction={setFuel}
                     />
                 )}
-                <div className="stat-form__actions">
+                <div className="stat-form__actions xp-form__actions">
                     <button
                         disabled={!formIsValid}
                         className={`exp-button exp-button__success`}

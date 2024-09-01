@@ -8,7 +8,7 @@
   flex-wrap: wrap;
   width: 100%;
 
-  input, button, select, textarea {
+  input, select, textarea {
     box-sizing: border-box;
     border-radius: 5px;
     outline: none !important;
@@ -51,15 +51,6 @@
     width: 30px;
     vertical-align: middle;
     margin-right: 10px;
-  }
-
-  input, button, select {
-    display: block;
-
-    @media (min-width: $large) {
-    }
-    @media (min-width: $large) {
-    }
   }
 
   textarea {

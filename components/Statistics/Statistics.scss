@@ -7,6 +7,14 @@
     color: $red;
   }
 
+  &__expenses, &__fuel-list {
+    margin-bottom: 20px;
+
+    @media screen and  (min-width: $large) {
+      margin-bottom: 15px;
+    }
+  }
+
   &__cars {
     margin-bottom: 15px;
 

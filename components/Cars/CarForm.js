@@ -7,6 +7,7 @@ import iconClose from '../../assets/icons/icon-close.svg';
 import { checkStringValidity, removeArrayElement } from '../../helpers/general'
 
 import './CarForm.scss';
+import FuelList from "./FuelList";
 const overlayContainer = document.getElementById('black-overlay-1');
 
 const GASOLINE = 1;
@@ -20,6 +21,7 @@ const CarForm = (props) => {
   const ctx = useContext(AuthContext);
 
   const [isActive, setIsActive] = useState(props.car ? props.car.isActive : true);
+  const [allFuels, setAllFuels] = useState([]);
   const [availableFuels, setAvailableFuels] = useState([]);
   const [brand, setBrand] = useState({
     value: props.car ? props.car.brand : '',
@@ -75,31 +77,32 @@ const CarForm = (props) => {
       });
     }
     axios.get(ctx.ajaxConfig.server + ctx.ajaxConfig.getFuels)
-      .then((response) => {
-        if (response.data.success && response.data.data.length) {
-          const fuelData = response.data.data.map((fuel) => {
-            return {
-              id: fuel.id,
-              name: fuel.displayName ? fuel.displayName : fuel.name
-            }
-          });
+        .then((response) => {
+          if (response.data.success && response.data.data.length) {
+            const fuelData = response.data.data.map((fuel) => {
+              return {
+                id: fuel.id,
+                name: fuel.displayName ? fuel.displayName : fuel.name
+              }
+            });
 
-          setAvailableFuels(fuelData);
-        } else {
+            setAllFuels(fuelData);
+            setAvailableFuels(fuelData);
+          } else {
+            setForm({
+              isValid: false,
+              message: "Fuel list could not be retrieved. Please try again later"
+            })
+          }
+        })
+        .catch((e) => {
+          console.log("Server error: ", e);
+
           setForm({
             isValid: false,
             message: "Fuel list could not be retrieved. Please try again later"
           })
-        }
-      })
-      .catch((e) => {
-        console.log("Server error: ", e);
-
-        setForm({
-          isValid: false,
-          message: "Fuel list could not be retrieved. Please try again later"
         })
-      })
   }, []);
 
   /* -- check brand -- */
@@ -167,8 +170,15 @@ const CarForm = (props) => {
     }
   }, [mileage.value]);
 
+  /* -- filter fuels on init -- */
+  useEffect(() => {
+    _handleAvailableFuels();
+  }, [allFuels]);
+
   /* -- check fuels -- */
   useEffect(() => {
+    _handleAvailableFuels();
+
     const timer = setTimeout(() => {
       if (selectedFuels.value) {
         _checkFuelValidity();
@@ -196,12 +206,12 @@ const CarForm = (props) => {
   /* -- check form -- */
   useEffect(() => {
     const isValid = brand.isValid
-      && model.isValid
-      && color.isValid
-      && mileage.isValid
-      && year.isValid
-      && notes.isValid
-      && selectedFuels.isValid;
+        && model.isValid
+        && color.isValid
+        && mileage.isValid
+        && year.isValid
+        && notes.isValid
+        && selectedFuels.isValid;
 
     setForm({
       ...form,
@@ -351,14 +361,21 @@ const CarForm = (props) => {
           value: val
         });
         break;
-      case 'active':
-        setIsActive(e.target.checked);
-        break;
     }
   }
 
-  const handleFuel = (e) => {
-    const fuelId = parseInt(e.target.id);
+  const _handleAvailableFuels = () => {
+    let fuelList = [...allFuels];
+
+    if (selectedFuels.value.length) {
+      selectedFuels.value.forEach((fuelId) => {
+        fuelList = _fuelCompatibility(fuelId, fuelList);
+      });
+    }
+    setAvailableFuels(fuelList);
+  }
+
+  const handleFuel = (fuelId) => {
     let tmpFuels = [...selectedFuels.value];
     if (tmpFuels.includes(fuelId)) {
       tmpFuels = removeArrayElement(tmpFuels, fuelId);
@@ -411,11 +428,13 @@ const CarForm = (props) => {
       notes: notes.value
     }
 
+
     let path = ctx.ajaxConfig.server + ctx.ajaxConfig.createCar;
 
     if (props.car && props.car.id) {
       path = ctx.ajaxConfig.server + ctx.ajaxConfig.editCar.replace('%u', props.car.id);
     }
+    console.log('pp', postData, path);
 
     axios.post(path, postData)
       .then((response) => {
@@ -434,194 +453,202 @@ const CarForm = (props) => {
           isValid: false,
           message: "Error with DB"
         })
-      })
+      });
+  }
 
-    console.log('pp', postData);
+  const _fuelCompatibility = (fuelId, fuelList) => {
+    switch (fuelId) {
+      case GASOLINE:
+        fuelList = _removeById(fuelList, [DIESEL]);
+        break;
+      case LPG:
+        fuelList = _removeById(fuelList, [DIESEL, CNG, ELECTRIC]);
+        break;
+      case CNG:
+        fuelList = _removeById(fuelList, [DIESEL, LPG, ELECTRIC]);
+        break;
+      case DIESEL:
+        fuelList = _removeById(fuelList, [GASOLINE, LPG, CNG]);
+        break;
+      case ELECTRIC:
+        fuelList = _removeById(fuelList, [LPG, CNG]);
+        break;
+    }
+
+    return fuelList;
+  }
+
+  const _removeById = (array, indexes) => {
+    let tempArray = [];
+    array.forEach((obj) => {
+      if (!indexes.includes(obj.id)) {
+        tempArray.push(obj);
+      }
+    });
+
+    return tempArray;
   }
 
   return (
-    <React.Fragment>
-      {ReactDOM.createPortal(
-        <BlackOverlay onClose={props.onClose}/>,
-        overlayContainer
-      )}
-      <Card customClass="create-form">
-        <button className="icon-modal-close" onClick={props.onClose}>
-          <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
-        </button>
-        <form className="create-form__form xp-form" onSubmit={onSubmit}>
-          <h1 className="create-form__title">{props.user ? 'Edit Car' : 'Create Car'}</h1>
-          <div className="xp-form__container form-error">
-            {!form.isValid && (
-              <div className="create-form__error">
-                {form.message}
-              </div>
-            )}
-          </div>
-          {/*---------- active ----------*/}
-          <div className="xp-form__container input-full input-checkbox">
-            <input
-              checked={isActive}
-              type='checkbox'
-              name='active'
-              onChange={handleInput}
-              id='active'
-            />
-            <label htmlFor='active'>Active</label>
-          </div>
-          {/*---------- brand ----------*/}
-          <div className="xp-form__container input-half">
-            {!brand.isValid && (
-              <div className="create-form__error">
-                {brand.message}
-              </div>
-            )}
-            <input
-              type='text'
-              className={`${brand.isValid ? '' : ' input-error'}`}
-              name='brand'
-              value={brand.value}
-              onChange={handleInput}
-              placeholder='Brand'
-            />
-          </div>
-          {/*---------- model ----------*/}
-          <div className="xp-form__container input-half">
-            {!model.isValid && (
-              <div className="create-form__error">
-                {model.message}
-              </div>
-            )}
-            <input
-              type='text'
-              className={`${model.isValid ? '' : ' input-error'}`}
-              name='model'
-              value={model.value}
-              onChange={handleInput}
-              placeholder='Model'
-            />
-          </div>
-          {/*---------- color ----------*/}
-          <div className="xp-form__container input-half">
-            {!color.isValid && (
-              <div className="create-form__error">
-                {color.message}
-              </div>
-            )}
-            <input
-              type='text'
-              className={`${color.isValid ? '' : ' input-error'}`}
-              name='color'
-              value={color.value}
-              onChange={handleInput}
-              placeholder='Color'
-            />
-          </div>
-          {/*---------- year ----------*/}
-          <div className="xp-form__container input-half">
-            {!year.isValid && (
-              <div className="create-form__error">
-                {year.message}
-              </div>
-            )}
-            <input
-              type='number'
-              className={`${year.isValid ? '' : ' input-error'}`}
-              name='year'
-              value={year.value}
-              onChange={handleInput}
-              placeholder='Year'
-            />
-          </div>
-          {/*---------- mileage ----------*/}
-          <div className="xp-form__container input-full">
-            {!mileage.isValid && (
-              <div className="create-form__error">
-                {mileage.message}
-              </div>
-            )}
-            <input
-              type='number'
-              className={`${mileage.isValid ? '' : ' input-error'}`}
-              name='mileage'
-              value={mileage.value}
-              onChange={handleInput}
-              placeholder='Mileage'
-            />
-          </div>
-          {/*---------- fuel ----------*/}
-          <div className="xp-form__container input-full">
-            {!selectedFuels.isValid && (
-              <div className="create-form__error">
-                {selectedFuels.message}
-              </div>
-            )}
-            {availableFuels.length && (
-              availableFuels.map((fuel) => {
-                const fuelList = selectedFuels.value;
-                let disabled = false;
-                if (fuelList.includes(DIESEL) && [GASOLINE, LPG, CNG].includes(fuel.id)) {
-                  disabled = true;
-                }
-                if (fuelList.includes(GASOLINE) && fuel.id === DIESEL) {
-                  disabled = true;
-                }
-                if (fuelList.length > 1) {
-                  disabled = true;
-                }
-                if (fuelList.includes(fuel.id)) {
-                  disabled = false;
-                }
-                return (
-                  <div className="fuel-checkbox" key={fuel.id}>
-                    <input
-                      disabled={disabled}
-                      checked={fuelList.includes(fuel.id)}
-                      type="checkbox"
-                      id={fuel.id}
-                      onChange={handleFuel}
-                    />
-                    <label htmlFor={fuel.id}>{fuel.name}</label>
+      <React.Fragment>
+        {ReactDOM.createPortal(
+            <BlackOverlay onClose={props.onClose}/>,
+            overlayContainer
+        )}
+        <Card customClass="create-form">
+          <button className="icon-modal-close" onClick={props.onClose}>
+            <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
+          </button>
+          <form className="create-form__form xp-form" onSubmit={onSubmit}>
+            <h1 className="create-form__title">{props.car ? 'Edit Car' : 'Create Car'}</h1>
+            <div className="xp-form__container form-error">
+              {!form.isValid && (
+                  <div className="create-form__error">
+                    {form.message}
                   </div>
-                )
-              })
-          )}
-          </div>
-          {/*---------- notes ----------*/}
-          <div className="xp-form__container input-full input-textarea">
-            {!notes.isValid && (
-              <div className="create-form__error">
-                {notes.message}
-              </div>
-            )}
-            <textarea
-              name='notes'
-              value={notes.value}
-              onChange={handleInput}
-              placeholder='Additional Notes'
-            />
-          </div>
-          {/*---------- actions ----------*/}
-          <div className="xp-form__actions">
-            <button
-              className={`exp-button exp-button__new ${form.isValid
-                ? '' : ' disabled'}`}
-              type="submit"
-            >
-              {props.car ? 'Edit' : 'Create'}
-            </button>
-            <button
-              type='button'
-              className="exp-button exp-button__danger"
-              value="Cancel"
-              onClick={props.onClose}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </Card>
-    </React.Fragment>
+              )}
+            </div>
+            {/*---------- active ----------*/}
+            <div className="xp-form__container input-full input-checkbox">
+              <button
+                  className={'exp-button button-small' + (isActive ? ' exp-button__success' : ' exp-button__success disabled')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsActive(!isActive);
+                  }}
+              >{isActive ? 'Active' : 'Disabled'}</button>
+            </div>
+            {/*---------- brand ----------*/}
+            <div className="xp-form__container input-half">
+              {!brand.isValid && (
+                  <div className="create-form__error">
+                    {brand.message}
+                  </div>
+              )}
+              <input
+                  type='text'
+                  className={`${brand.isValid ? '' : ' input-error'}`}
+                  name='brand'
+                  value={brand.value}
+                  onChange={handleInput}
+                  placeholder='Brand'
+              />
+            </div>
+            {/*---------- model ----------*/}
+            <div className="xp-form__container input-half">
+              {!model.isValid && (
+                  <div className="create-form__error">
+                    {model.message}
+                  </div>
+              )}
+              <input
+                  type='text'
+                  className={`${model.isValid ? '' : ' input-error'}`}
+                  name='model'
+                  value={model.value}
+                  onChange={handleInput}
+                  placeholder='Model'
+              />
+            </div>
+            {/*---------- color ----------*/}
+            <div className="xp-form__container input-half">
+              {!color.isValid && (
+                  <div className="create-form__error">
+                    {color.message}
+                  </div>
+              )}
+              <input
+                  type='text'
+                  className={`${color.isValid ? '' : ' input-error'}`}
+                  name='color'
+                  value={color.value}
+                  onChange={handleInput}
+                  placeholder='Color'
+              />
+            </div>
+            {/*---------- year ----------*/}
+            <div className="xp-form__container input-half">
+              {!year.isValid && (
+                  <div className="create-form__error">
+                    {year.message}
+                  </div>
+              )}
+              <input
+                  type='number'
+                  className={`${year.isValid ? '' : ' input-error'}`}
+                  name='year'
+                  value={year.value}
+                  onChange={handleInput}
+                  placeholder='Year'
+              />
+            </div>
+            {/*---------- mileage ----------*/}
+            <div className="xp-form__container input-full">
+              {!mileage.isValid && (
+                  <div className="create-form__error">
+                    {mileage.message}
+                  </div>
+              )}
+              <input
+                  type='number'
+                  className={`${mileage.isValid ? '' : ' input-error'}`}
+                  name='mileage'
+                  value={mileage.value}
+                  onChange={handleInput}
+                  placeholder='Mileage'
+              />
+            </div>
+            {/*---------- fuel ----------*/}
+            <div className="xp-form__container input-full">
+              {!selectedFuels.isValid && (
+                  <div className="create-form__error">
+                    {selectedFuels.message}
+                  </div>
+              )}
+              <FuelList
+                  multiple={true}
+                  fuelList={availableFuels}
+                  selectedFuels={selectedFuels.value}
+                  customClass=''
+                  elementClass='item-selector'
+                  clickAction={handleFuel}
+              />
+            </div>
+            {/*---------- notes ----------*/}
+            <div className="xp-form__container input-full input-textarea">
+              {!notes.isValid && (
+                  <div className="create-form__error">
+                    {notes.message}
+                  </div>
+              )}
+              <textarea
+                  name='notes'
+                  value={notes.value}
+                  onChange={handleInput}
+                  placeholder='Additional Notes'
+              />
+            </div>
+            {/*---------- actions ----------*/}
+            <div className="xp-form__actions">
+              <button
+                  className={`exp-button exp-button__new ${form.isValid
+                      ? '' : ' disabled'}`}
+                  type="submit"
+              >
+                {props.car ? 'Edit' : 'Create'}
+              </button>
+              <button
+                  type='button'
+                  className="exp-button exp-button__danger"
+                  value="Cancel"
+                  onClick={props.onClose}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </Card>
+      </React.Fragment>
   );
 }
 

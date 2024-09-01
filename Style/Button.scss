@@ -1,21 +1,25 @@
+@import 'Main';
+
 .exp-button {
   max-width: 33%;
   color: #fff;
   margin: 1px 2px 3px 1px;
-  padding: 10px 20px;
   outline: none !important;
   border: none;
-  font-size: 40px;
+  font-size: 50px;
   font-weight: 600;
-
+  padding: 15px 20px;
 
   @media (min-width: $large) {
-    font-size: 30px;
-    padding: 5px 15px;
+    font-size: 40px;
   }
   @media (min-width: $xlarge) {
+    padding: 10px 20px;
+    font-size: 30px;
+  }
+  @media (min-width: $xxlarge) {
+    padding: 5px 15px;
     font-size: 20px;
-    padding: 0 15px;
   }
 
 

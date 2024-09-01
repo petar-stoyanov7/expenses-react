@@ -50,7 +50,7 @@ const FuelList = (props) => {
                             props.clickAction(fuel.id)
                         }}
                     >
-                        {fuel.displayName}
+                        {fuel.displayName ? fuel.displayName : fuel.name}
                     </Card>
                 );
 

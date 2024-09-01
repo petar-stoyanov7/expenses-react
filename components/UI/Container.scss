@@ -1,6 +1,7 @@
 @import '../../Style/Main';
 
 .content-container {
+  box-sizing: border-box;
   background-color: #ededed;
   padding: 15px;
   border-radius: 2px;

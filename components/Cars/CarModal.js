@@ -80,7 +80,7 @@ const CarModal = (props) => {
                     <strong>Fuel: </strong>
                     {generateFuelString(car.fuel)}
                 </span>
-                <span className='car-details__info-fuel'>
+                <span className='car-details__info-spent'>
                     <strong>Spent over the last five expenses: </strong>
                     {lastFiveSpent}
                 </span>

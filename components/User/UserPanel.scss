@@ -1,5 +1,6 @@
 @import '../../Style/Main';
 @import '../../Style/CreateForm';
+@import '../../Style/Button';
 
 .user-panel {
   width: 100%;
@@ -14,17 +15,34 @@
   &__user {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
-    .row {
-      margin-bottom: 5px;
+    &-info {
+      margin-bottom: 40px;
+
+      @media (min-width: $large) {
+        margin-bottom: 0;
+      }
     }
+
+    &-data {
+      display: flex;
+      flex-direction: column;
+
+      .row {
+        margin-bottom: 5px;
+      }
+    }
+
   }
 
   h1,h3 {
     margin: 0 0 15px 0;
   }
 
-  &__car-list {
-    margin-bottom: 15px;
+  &__cars {
+    &-list {
+      margin-bottom: 40px;
+    }
   }
 }
