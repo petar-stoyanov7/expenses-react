@@ -3,56 +3,90 @@
 @import '../../Style/Button';
 
 .new-expense {
-  padding: 20px;
 
-  @media (min-width: $medium) {
-    padding: 15px;
-  }
-  @media (min-width: $large) {
-    padding: 10px;
+  .xp-file-upload {
+    background-color: orange !important;
+    margin-left: auto;
   }
 
-  &__title {
-    display: block;
-    color: $main-color;
-    margin: 0 0 10px;
-    font-size: 70px;
-
-    @media (min-width: $large) {
-      font-size: 60px;
-      display: block;
-    }
-    @media (min-width: $xlarge) {
-      display: block;
-      font-size: 40px;
-    }
-  }
-
-  &__form-error {
-    margin: 0;
-    color: $red;
-  }
-
-  .car-element.is-selected {
-    background-color: $main-light;
-  }
-
-  &__fuel {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-
-    input.fuel-input {
-      width: calc(30% - 10px);
-      margin-right: 10px;
-    }
-
-    &-list {
-      width: 70%;
-    }
-  }
-
-  &__insurances {
-    margin-bottom: 15px;
-  }
+  //todo: remove if no issues occured
+//  padding: 20px;
+//
+//  @media (min-width: $medium) {
+//    padding: 15px;
+//  }
+//  @media (min-width: $large) {
+//    padding: 10px;
+//  }
+//
+//  &__title {
+//    display: block;
+//    color: $main-color;
+//    margin: 0 0 10px;
+//    font-size: 70px;
+//
+//    @media (min-width: $large) {
+//      font-size: 60px;
+//      display: block;
+//    }
+//    @media (min-width: $xlarge) {
+//      display: block;
+//      font-size: 40px;
+//    }
+//  }
+//
+//  &__form-error {
+//    margin: 0;
+//    color: $red;
+//  }
+//
+//  .car-element.is-selected {
+//    background-color: $main-light;
+//  }
+//
+//  &__fuel {
+//    width: 100%;
+//    display: flex;
+//    flex-direction: row;
+//
+//    input.fuel-input {
+//      width: calc(30% - 10px);
+//      margin-right: 10px;
+//    }
+//
+//    &-list {
+//      width: 70%;
+//    }
+//  }
+//
+//  &__insurances {
+//    margin-bottom: 15px;
+//  }
+//}
+//
+//.import-expense {
+//  padding: 20px;
+//
+//  @media (min-width: $medium) {
+//    padding: 15px;
+//  }
+//  @media (min-width: $large) {
+//    padding: 10px;
+//  }
+//
+//  &__title {
+//    display: block;
+//    color: $main-color;
+//    margin: 0 0 10px;
+//    font-size: 70px;
+//
+//    @media (min-width: $large) {
+//      font-size: 60px;
+//      display: block;
+//    }
+//    @media (min-width: $xlarge) {
+//      display: block;
+//      font-size: 40px;
+//    }
+//  }
 }

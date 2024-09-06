@@ -14,6 +14,7 @@
   "getFuels": "/fuel/get/all",
   "getExpenseTypes": "/expense-type/get/all",
   "addExpense": "/expense/add",
+  "importExpenses": "/expense/import/%u/%c",
 
   "getOverall": "/statistics/get-overall",
   "getLastFive": "/statistics/get-last-five"

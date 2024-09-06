@@ -30,7 +30,7 @@ function App() {
         if (!ctx.userDetails.isLogged) {
             setActiveElement(<HomePage />);
         } else {
-            setActiveElement(<UserPanel />); //todo: remove
+            setActiveElement(<NewExpense />); //todo: remove
         }
     }, [ctx.userDetails.isLogged]);
 

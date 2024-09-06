@@ -8,7 +8,6 @@ import React, {
 import './NewExpense.scss';
 import Container from "../UI/Container";
 import CarList from "../Cars/CarList";
-import Card from "../UI/Card";
 import AuthContext from "../../Store/auth-context";
 import axios from "axios";
 import DatePicker from "react-datepicker";
@@ -16,6 +15,7 @@ import DatePicker from "react-datepicker";
 import "../../assets/css/default-datepicker.css";
 import ExpenseList from "./ExpenseList";
 import FuelList from "../Cars/FuelList";
+import FileUpload from "../File/FileUpload";
 
 const FUEL_EXPENSE_ID = 1; //TODO: change if value changes in DB
 
@@ -183,6 +183,33 @@ const NewExpense = () => {
         }
     }
 
+    const importHandler = (e) => {
+        if (!selectedCar) {
+            return;
+        }
+        const formData = new FormData();
+        const file = e.target.files[0];
+        formData.append('file', file);
+        formData.append('fileName', file.name);
+        const path = `${ajx.server}${ajx.importExpenses}`
+            .replace('%u', currentUser.id)
+            .replace('%c', selectedCar.id);
+
+        axios.post(
+            path,
+            formData,
+            {
+                headers: {'content-type': 'multipart/form-data'}
+            }
+        )
+            .then((response) => {
+                console.log('r', response);
+            })
+            .catch(e => {
+                console.log('Error with file import', e);
+            })
+    }
+
     return (
         <Fragment>
             <Container customClass="new-expense">
@@ -298,6 +325,12 @@ const NewExpense = () => {
                         >
                             Reset
                         </button>
+                        <FileUpload
+                            text="Import"
+                            type="text/csv"
+                            isDisabled={!selectedCar}
+                            uploadHandler={importHandler}
+                        />
                     </div>
                 </div>
             </Container>

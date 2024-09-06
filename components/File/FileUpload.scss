@@ -1,0 +1,24 @@
+@import '../../Style/Main';
+
+.xp-file-upload {
+
+  label.exp-button {
+    display: block;
+    max-width: none;
+    font-size: 50px;
+
+    @media (min-width: $large) {
+      font-size: 40px;
+    }
+    @media (min-width: $xlarge) {
+      font-size: 30px;
+    }
+    @media (min-width: $xxlarge) {
+      font-size: 20px;
+    }
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}
