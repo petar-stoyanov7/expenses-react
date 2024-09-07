@@ -104,15 +104,68 @@
     }
   }
 
-  .react-datepicker-wrapper {
-    width: 100%;
-  }
-
   &__actions {
     width: 100%;
     margin-top: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+  }
+
+  /* react datepicker, please keep it bellow */
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+  .react-datepicker-popper {
+    transform: none !important;
+
+    .react-datepicker {
+      width: 70vw;
+      height: 70vw;
+
+      @media (min-width: $large) {
+        width: auto;
+        height: auto;
+      }
+
+      &__navigation {
+        width: 40px;
+        height: 40px;
+
+        &-icon::before {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+      &__header,
+      &__month-container {
+        width: 100%;
+      }
+
+      &__current-month {
+        font-size: 50px;
+        margin-bottom: 15px;
+      }
+
+      &__year {
+        &-read-view {
+          font-size: 40px;
+        }
+        &-option {
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+      }
+
+      &__day-name, &__day {
+        font-size: 48px;
+        margin: 10px;
+        padding: 10px;
+        width: 2ch;
+        height: 2ch;
+        line-height: 1;
+      }
+    }
   }
 }

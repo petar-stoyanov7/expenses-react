@@ -269,7 +269,7 @@ const Statistics = () => {
                             }}
                         />
                     </div>
-                    <div className="xp-form__container container-half">
+                    <div className="xp-form__container container-half container-right">
                         <h3>To</h3>
                         <DatePicker
                             dateFormat="dd-MMM-YYYY"

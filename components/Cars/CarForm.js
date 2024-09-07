@@ -428,13 +428,11 @@ const CarForm = (props) => {
       notes: notes.value
     }
 
-
     let path = ctx.ajaxConfig.server + ctx.ajaxConfig.createCar;
 
     if (props.car && props.car.id) {
       path = ctx.ajaxConfig.server + ctx.ajaxConfig.editCar.replace('%u', props.car.id);
     }
-    console.log('pp', postData, path);
 
     axios.post(path, postData)
       .then((response) => {
