@@ -5,8 +5,6 @@ import UserForm from '../components/User/UserForm'
 import ajaxConfig from "../cfg/ajax.json";
 import axios from "axios";
 
-/** TODO check redux, recoil */
-
 const AuthContext = createContext({
     isLoggedIn: false,
     ajaxConfig: {},

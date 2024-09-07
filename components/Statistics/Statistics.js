@@ -240,7 +240,7 @@ const Statistics = () => {
     return (
         <div className="statistics">
             <Container customClass="full-width stat-form xp-form">
-                <h1>Statistics</h1>
+                <h1 className="stat-form__title">Statistics</h1>
                 <div
                     className="stat-form__errors"
                     style={{display: formIsValid.isValid ? 'none' : 'block'}}
