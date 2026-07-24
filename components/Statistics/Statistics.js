@@ -288,26 +288,30 @@ const Statistics = () => {
                     <div className="stat-form__date">
                     </div>
                 </div>
-                <ExpenseList
-                    showAll={true}
-                    multiple={true}
-                    expenseList={expenseTypes}
-                    activeExpenses={selectedExpenses}
-                    clickAction={setExpenses}
-                    customClass="stat-form__expenses"
-                    elementClass="expense"
-                />
-                {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 1) && (
-                    <FuelList
-                        multiple={true}
+                <div className="stat-form__expense-list">
+                    <ExpenseList
                         showAll={true}
-                        fuelList={possibleFuels}
-                        selectedFuels={selectedFuels}
-                        customClass="new-expense__fuels-list stat-form__fuel-list"
-                        elementClass="item-selector"
-                        clickAction={setFuel}
+                        multiple={true}
+                        expenseList={expenseTypes}
+                        activeExpenses={selectedExpenses}
+                        clickAction={setExpenses}
+                        customClass="stat-form__expenses"
+                        elementClass="expense"
                     />
-                )}
+                </div>
+                    {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 0) && (
+                        <div className="stat-form__fuel-list">
+                            <FuelList
+                                multiple={true}
+                                showAll={true}
+                                fuelList={possibleFuels}
+                                selectedFuels={selectedFuels}
+                                customClass="new-expense__fuels-list stat-form__fuel-list"
+                                elementClass="item-selector"
+                                clickAction={setFuel}
+                            />
+                        </div>
+                    )}
                 <div className="stat-form__actions xp-form__actions">
                     <button
                         disabled={!formIsValid}

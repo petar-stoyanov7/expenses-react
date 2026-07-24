@@ -107,7 +107,7 @@ const CarList = (props) => {
                     {(props.allCars && carList.length > 1) && (
                         <Car
                             customClass={"all" === selectedCar ? 'is-selected' : ''}
-                            key={0}
+                            key="car-all"
                             allCars={true}
                             clickAction={() => {
                                 clickAction('all');
@@ -123,7 +123,7 @@ const CarList = (props) => {
                         return (
                             <Car
                                 customClass={customClass}
-                                key={car.id}
+                                key={`car-${car.id}`}
                                 currentCar={car}
                                 clickAction={() => {
                                     clickAction(car)

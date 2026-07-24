@@ -24,7 +24,7 @@ const ExpenseList = (props) => {
         const customClass = setIsSelected({name: "Всички", id: "all"});
         cardAll = (
             <Card
-                key="0"
+                key="expense-all"
                 isButton={true}
                 customClass={customClass}
                 clickAction={() => {props.clickAction("all")}}
@@ -41,7 +41,7 @@ const ExpenseList = (props) => {
                 const customClass = setIsSelected(expense);
                 return (
                     <Card
-                        key={expense.id}
+                        key={`expense-${expense.id}`}
                         isButton={true}
                         customClass={customClass}
                         clickAction={() => {props.clickAction(expense.id)}}

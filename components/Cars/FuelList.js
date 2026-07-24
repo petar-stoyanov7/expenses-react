@@ -26,7 +26,7 @@ const FuelList = (props) => {
         cardAll = (
             <Card
                 customClass={customClass}
-                key={0}
+                key="fuel-all"
                 clickAction={() => {
                     props.clickAction("all")
                 }}
@@ -45,7 +45,7 @@ const FuelList = (props) => {
                 return (
                     <Card
                         customClass={customClass}
-                        key={fuel.id}
+                        key={`fuel-${fuel.id}`}
                         clickAction={() => {
                             props.clickAction(fuel.id)
                         }}

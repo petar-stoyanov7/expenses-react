@@ -27,7 +27,7 @@ const ExpenseTable = (props) => {
             });
             return (
                 <tr
-                    key={expense.id}
+                    key={`expense-t-${expense.id}`}
                     onClick={null == props.clickAction ? undefined : () => {
                         props.clickAction(expense.id);
                     }}
