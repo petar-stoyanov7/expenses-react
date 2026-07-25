@@ -47,8 +47,9 @@ const ExpenseTable = (props) => {
                     <td className="expenses-list__fuel-type">
                         {expense.fuel}
                     </td>
-                    <td className="expenses-list__liters">
-                        {expense.liters}
+                    <td className="expenses-list__quantity">
+                        {/*TODO: change quantity to l/kW based on car type*/}
+                        {expense.quantity}
                     </td>
                     <td className="expenses-list__price">
                         {expense.value}
@@ -83,8 +84,8 @@ const ExpenseTable = (props) => {
                     <th className="expenses-list__fuel-type">
                         Fuel Type
                     </th>
-                    <th className="expenses-list__liters">
-                        Liters
+                    <th className="expenses-list__quantity">
+                        Quantity
                     </th>
                     <th className="expenses-list__price">
                         Value

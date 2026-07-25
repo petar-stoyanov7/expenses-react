@@ -6,6 +6,7 @@ import AuthContext from '../../Store/auth-context'
 
 const Overall = (props) => {
   const data = props.data;
+  const car = props.car;
   const overall = data.overall ? data.overall : 0;
   const ctx = useContext(AuthContext);
 
@@ -24,10 +25,10 @@ const Overall = (props) => {
             <div className="expense-overall__value">{data.mileage}</div>
           </div>
         )}
-        {data.liters && (
+        {data.quantity && (
           <div className="expense-overall__row">
-            <div className="expense-overall__index">Liters</div>
-            <div className="expense-overall__value">{data.liters}</div>
+            <div className="expense-overall__index">Quantity</div>
+            <div className="expense-overall__value">{data.quantity}</div>
           </div>
         )}
         <div className="expense-overall__row">

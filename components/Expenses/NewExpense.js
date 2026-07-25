@@ -32,7 +32,7 @@ const NewExpense = () => {
     const [mileage, setMileage] = useState('');
     const [date, setDate] = useState(currentDate);
     const [fuelType, setFuelType] = useState(null);
-    const [liters, setLiters] = useState('');
+    const [quantity, setQuantity] = useState('');
     const [value, setValue] = useState('');
     const [notes, setNotes] = useState('');
 
@@ -78,7 +78,7 @@ const NewExpense = () => {
     /** validity, fuel */
     useEffect(() => {
         if (expenseType !== FUEL_EXPENSE_ID) {
-            setLiters('');
+            setQuantity('');
             setFuel(null);
         }
         let validity =
@@ -88,10 +88,10 @@ const NewExpense = () => {
             '' !== value;
         if (validity && expenseType === FUEL_EXPENSE_ID) {
             validity = null !== fuelType;
-            validity = validity && '' !== liters;
+            validity = validity && '' !== quantity;
         }
         setFormIsValid(validity);
-    }, [selectedCar, expenseType, fuelType, mileage, date, value, liters]);
+    }, [selectedCar, expenseType, fuelType, mileage, date, value, quantity]);
 
     const setCar = (car) => {
         if (!car.isActive) {
@@ -101,7 +101,7 @@ const NewExpense = () => {
         setMileageValue(car.mileage);
         setExpenseType(null);
         setFuelType(null);
-        setLiters('');
+        setQuantity('');
 
         const carFuelsList = car.fuel.map((fuel) => {
             return fuel;
@@ -152,7 +152,7 @@ const NewExpense = () => {
                 expenseId: expenseType,
                 value: value,
                 fuelId: fuelType,
-                liters: liters,
+                quantity: quantity,
                 notes: notes
             }
 
@@ -250,10 +250,10 @@ const NewExpense = () => {
                                 <input
                                     className="fuel-input"
                                     type="number"
-                                    placeholder="Liters"
-                                    value={liters}
+                                    placeholder="Quantity"
+                                    value={quantity}
                                     onChange={(e) => {
-                                        setLiters(e.target.value);
+                                        setQuantity(e.target.value);
                                     }}
                                 />
                                 <FuelList

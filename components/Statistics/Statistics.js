@@ -116,7 +116,7 @@ const Statistics = () => {
 
         let overallData = {};
         let overall = 0;
-        let liters = 0;
+        let quantity = 0;
         let minMileage = 999999999;
         let maxMileage = 0;
         expenseList.map((expense) => {
@@ -126,15 +126,15 @@ const Statistics = () => {
                 maxMileage = expense.mileage > maxMileage ? expense.mileage : maxMileage;
             }
             if (selectedFuels.length === 1) {
-                liters += expense.liters;
+                quantity += expense.quantity;
             }
         });
         overallData.overall = overall;
         if (maxMileage !== 0 && minMileage !== 999999999) {
             overallData.mileage = maxMileage - minMileage;
         }
-        if (liters) {
-            overallData.liters = liters;
+        if (quantity) {
+            overallData.quantity = quantity;
         }
         if (overallData.mileage) {
             overallData.rate = (overallData.overall / overallData.mileage).toFixed(2);
@@ -336,7 +336,10 @@ const Statistics = () => {
                 <h3>Statistics</h3>
                 {expenseList.length !== 0 && (
                   <>
-                      <Overall data={overall} />
+                      <Overall
+                          data={overall}
+                          car={selectedCar}
+                      />
                       <ExpenseTable
                         expenses={expenseList}
                         isSmall={false}

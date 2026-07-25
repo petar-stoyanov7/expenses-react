@@ -7,7 +7,7 @@ export const parseRawData = (data) => {
             type: expense.expense_name,
             cid: expense.CID,
             fuelId: expense.Fuel_ID,
-            liters: expense.Liters,
+            quantity: expense.Quantity,
             insuranceId: expense.Insurance_ID,
             mileage: expense.Mileage,
             price: expense.Price,

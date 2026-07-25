@@ -17,7 +17,7 @@ const dummyData = [
             timezone_type: 3
         },
         car: 'BMW 330i',
-        liters: 8,
+        quantity: 8,
         price: 20,
         notes: 'theft'
     },
@@ -32,7 +32,7 @@ const dummyData = [
             timezone_type: 3
         },
         car: 'BMW 330i',
-        liters: 33,
+        quantity: 33,
         price: 50,
         notes: 'crap gas station'
     },

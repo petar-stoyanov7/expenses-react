@@ -46,7 +46,7 @@
     }
   }
 
-  &__mileage, &__notes, &__liters {
+  &__mileage, &__notes, &__quantity {
     display: none;
 
     @media (min-width: $large) {
