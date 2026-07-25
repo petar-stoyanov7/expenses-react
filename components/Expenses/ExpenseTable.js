@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './ExpenseTable.scss';
+import AuthContext from "../../Store/auth-context";
 
 const ExpenseTable = (props) => {
     let expenses;
     let tableClass = "expenses-list";
+    const ctx = useContext(AuthContext);
+    const currency = ctx.userDetails.user.currency
+        ? ctx.userDetails.user.currency
+        : 'EUR';
 
     if (null != props.isDetailed) {
         tableClass += " exp-detailed";
@@ -20,6 +25,10 @@ const ExpenseTable = (props) => {
         )
     } else {
         expenses = props.expenses.map((expense) => {
+            let unit = '';
+            if (null !== expense.fuel) {
+                unit = expense.fuel.toLowerCase() === "електричество" ? "kW": "l";
+            }
             const date = new Date(expense.updatedAt.date).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
@@ -49,10 +58,11 @@ const ExpenseTable = (props) => {
                     </td>
                     <td className="expenses-list__quantity">
                         {/*TODO: change quantity to l/kW based on car type*/}
-                        {expense.quantity}
+                        {null !== expense.quantity && `${expense.quantity} ${unit}`}
+                        {/*}*/}
                     </td>
                     <td className="expenses-list__price">
-                        {expense.value}
+                        {`${expense.value} ${currency}`}
                     </td>
                     <td className="expenses-list__notes">
                         {expense.notes}

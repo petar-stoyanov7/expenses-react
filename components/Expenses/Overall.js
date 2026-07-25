@@ -22,18 +22,18 @@ const Overall = (props) => {
         {data.mileage && (
           <div className="expense-overall__row">
             <div className="expense-overall__index">Mileage</div>
-            <div className="expense-overall__value">{data.mileage}</div>
+            <div className="expense-overall__value">{data.mileage} km</div>
           </div>
         )}
         {data.quantity && (
           <div className="expense-overall__row">
-            <div className="expense-overall__index">Quantity</div>
+            <div className="expense-overall__index">Fuel:</div>
             <div className="expense-overall__value">{data.quantity}</div>
           </div>
         )}
         <div className="expense-overall__row">
           <div className="expense-overall__index">Overall</div>
-          <div className="expense-overall__value">{overall}</div>
+          <div className="expense-overall__value">{`${overall} ${currency}`}</div>
         </div>
         {data.rate && (
           <div className="expense-overall__row">

@@ -16,6 +16,10 @@
     background-color: $disabled-background;
     color: $disabled-text;
     box-shadow: 2px 2px 2px #1e779b;
+
+    .car-element__delete {
+      background-color: $disabled-background;
+    }
   }
 
   &:last-of-type {
