@@ -10,6 +10,10 @@ import './UserPanel.scss';
 import Confirmation from '../UI/Confirmation'
 import axios from 'axios'
 
+const API_URL = process.env.SERVER_URL;
+const HASH = process.env.HASH;
+const DELETE_CAR = process.env.DELETE_CAR_PATH;
+
 const UserPanel = () => {
   const ctx = useContext(AuthContext);
   const user = ctx.userDetails.user;
@@ -49,7 +53,7 @@ const UserPanel = () => {
       setShowConfirmation(false);
       return;
     }
-    const path = ctx.ajaxConfig.server + ctx.ajaxConfig.deleteCar.replace('%u', car.id);
+    const path = API_URL + DELETE_CAR.replace('%u', car.id);
 
     axios.post(path).then((response) => {
       if (response.data.success) {

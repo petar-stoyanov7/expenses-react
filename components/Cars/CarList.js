@@ -6,7 +6,6 @@ import Car from "./Car";
 import ReactDOM from "react-dom";
 import CarModal from "./CarModal";
 
-
 const overlayContainer = document.getElementById('black-overlay-1');
 
 const dummyData = [
@@ -72,7 +71,7 @@ const CarList = (props) => {
         } else if (userData.user && userData.user.cars.length) {
             setCarList(userData.user.cars);
         }
-    }, [ctx.userDetails, ctx.ajaxConfig]);
+    }, [ctx.userDetails]);
 
     const clickAction = (car) => {
         if (null != props.clickAction) {
@@ -88,7 +87,6 @@ const CarList = (props) => {
                 <Fragment>
                     <CarModal
                         onClose={hideCarDetails}
-                        ajaxCfg={ctx.ajaxConfig}
                         car={carModal.car}
                         showControls={showControls}
                     />
@@ -115,6 +113,9 @@ const CarList = (props) => {
                         />
                     )}
                     {carList.map((car) => {
+                        if (!car.isActive && props.showDisabled === false) {
+                            return;
+                        }
                         let customClass;
                         if (selectedCar && selectedCar.id) {
                             customClass = car.id === selectedCar.id ? 'is-selected' : '';

@@ -8,7 +8,7 @@ import iconClose from '../../assets/icons/icon-close.svg'
 const Car = (props) => {
     const car = props.currentCar;
     const isDetailed = null != props.isDetailed ? props.isDetailed : false;
-    const customClass = null != props.customClass ? props.customClass : '';
+    const customClass = props.customClass ? props.customClass : '';
 
     if (props.allCars) {
         return (

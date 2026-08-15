@@ -13,16 +13,18 @@ import {generateFuelString} from "../../helpers/fuel-string-generator";
 import AuthContext from "../../Store/auth-context";
 import axios from "axios";
 
-const CarModal = (props) => {
-    const car = props.car;
-    const ctx = useContext(AuthContext);
+const API_URL = process.env.SERVER_URL;
+const CAR_EXPENSES = process.env.GET_CAR_EXPENSES_PATH;
+const HASH = process.env.HASH;
+
+const CarModal = ({ car, onClose, showControls }) => {
 
     const [lastFive, setLastFive] = useState([]);
     const [lastFiveSpent, setLastFiveSpent] = useState(0);
 
 
     useEffect(() => {
-        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getCarExpenses.replace('%u', car.id);
+        const path = API_URL + CAR_EXPENSES.replace('%u', car.id);
 
         axios.post(
             path,
@@ -32,7 +34,7 @@ const CarModal = (props) => {
                 order: 'DESC',
                 // from: `${currentYear}-01-01`, //TODO: uncomment when we have more recent data
                 // to: currentDate.toISOString().split('T')[0],
-                hash: ctx.ajaxConfig.hash
+                hash: HASH
             },
         )
             .then((response) => {
@@ -57,7 +59,7 @@ const CarModal = (props) => {
 
     return (
         <Card customClass='car-details'>
-            <button className='car-details__close icon-modal-close' onClick={props.onClose}>
+            <button className='car-details__close icon-modal-close' onClick={onClose}>
                 <img src={iconClose} className="icon-modal-close__icon" alt="close button"/>
             </button>
             <h2 className='car-details__name'>
@@ -92,7 +94,7 @@ const CarModal = (props) => {
                 isSmall={true}
                 lastFive={lastFive}
             />
-            {props.showControls && (
+            {showControls && (
                 <div className="car-details__actions">
                     <button className="exp-button exp-button__new">
                         Edit

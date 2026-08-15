@@ -2,12 +2,14 @@ import React, {useEffect, useState, createContext} from 'react';
 import {useCookies} from "react-cookie";
 import Login from "../components/Login/Login";
 import UserForm from '../components/User/UserForm'
-import ajaxConfig from "../cfg/ajax.json";
 import axios from "axios";
+
+const API_URL = process.env.SERVER_URL;
+const HASH = process.env.HASH;
+const GET_USER = process.env.GET_USER_PATH;
 
 const AuthContext = createContext({
     isLoggedIn: false,
-    ajaxConfig: {},
     showLogin: () => {},
     showRegister: () => {},
     onLogin: (user, isAdmin) => {},
@@ -43,9 +45,9 @@ export const AuthContextProvider = (props) => {
             storedLoggedIn &&
             !userDetails.isLogged
         ) {
-            const path = ajaxConfig.server + ajaxConfig.getUser.replace('%u', storedUserId);
+            const path = API_URL + GET_USER.replace('%u', storedUserId);
             axios.get(path, {
-                hash: ajaxConfig.hash
+                hash: HASH
             }).then((response) => {
                 let data = response.data;
                 if (data.success) {
@@ -133,7 +135,6 @@ export const AuthContextProvider = (props) => {
     return (
         <AuthContext.Provider
             value={{
-                ajaxConfig: ajaxConfig,
                 userDetails: userDetails,
                 showLogin: showLoginForm,
                 showRegister: showRegisterForm,

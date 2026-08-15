@@ -6,6 +6,10 @@ import AuthContext from "../../Store/auth-context";
 import LastFive from "../LastFive/LastFive";
 import axios from "axios";
 
+const API_URL = process.env.SERVER_URL;
+const GET_USER_EXPENSES = process.env.GET_USER_EXPENSES_PATH;
+const HASH = process.env.HASH;
+
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
 
@@ -29,7 +33,7 @@ const HomePage = (props) => {
         if (undefined !== userDetails && Object.keys(userDetails).length !== 0) {
             setUserData(userDetails);
 
-            const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getUserExpenses.replace('%u', ctx.userDetails.user.id);
+            const path = API_URL + GET_USER_EXPENSES.replace('%u', ctx.userDetails.user.id);
 
             axios.post(
                 path,
@@ -39,7 +43,7 @@ const HomePage = (props) => {
                     order: 'DESC',
                     // from: `${currentYear}-01-01`, //TODO: uncomment when we have more recent data
                     // to: currentDate.toISOString().split('T')[0],
-                    hash: ctx.ajaxConfig.hash
+                    hash: HASH
                 },
             )
                 .then((response) => {
@@ -66,7 +70,7 @@ const HomePage = (props) => {
         } else {
             setUserData(dummyData);
         }
-    }, [ctx.userDetails, ctx.ajaxConfig]);
+    }, [ctx.userDetails]);
 
 
     return (

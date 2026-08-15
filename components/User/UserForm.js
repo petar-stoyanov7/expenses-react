@@ -8,6 +8,11 @@ import { checkStringValidity } from '../../helpers/general';
 
 import '../../Style/CreateForm.scss';
 
+const API_URL = process.env.SERVER_URL;
+const REGISTER = process.env.REGISTER_PATH;
+const EDIT_USER = process.env.USER_EDIT_PATH;
+const HASH = process.env.HASH;
+
 const overlayContainer = document.getElementById('black-overlay-1');
 
 const UserForm = (props) => {
@@ -312,7 +317,7 @@ const UserForm = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        let path = ctx.ajaxConfig.server + ctx.ajaxConfig.register;
+        let path = API_URL + REGISTER;
         if (!form.isValid) {
             setForm({
                 ...form,
@@ -353,7 +358,7 @@ const UserForm = (props) => {
                 return;
             }
             console.log('p', postData);
-            path = ctx.ajaxConfig.server + ctx.ajaxConfig.userEdit.replace('%u', userData.id);
+            path = API_URL + EDIT_USER.replace('%u', userData.id);
         } else {
             postData = {
                 username: user.value,
@@ -364,7 +369,7 @@ const UserForm = (props) => {
                 firstName: firstName.value,
                 lastName: lastName.value,
                 notes: notes.value,
-                hash: ctx.ajaxConfig.hash
+                hash: HASH
             };
         }
         axios.post(path, postData).then((response) => {

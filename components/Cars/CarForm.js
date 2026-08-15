@@ -10,6 +10,11 @@ import './CarForm.scss';
 import FuelList from "./FuelList";
 const overlayContainer = document.getElementById('black-overlay-1');
 
+const API_URL = process.env.SERVER_URL;
+const GET_FUELS = process.env.GET_FUELS_PATH;
+const CREATE_CAR = process.env.CREATE_CAR_PATH;
+const EDIT_CAR = process.env.EDIT_CAR_PATH;
+
 const GASOLINE = 1;
 const DIESEL = 2;
 const LPG = 3;
@@ -76,7 +81,8 @@ const CarForm = (props) => {
         value: fuelList
       });
     }
-    axios.get(ctx.ajaxConfig.server + ctx.ajaxConfig.getFuels)
+
+    axios.get(API_URL + GET_FUELS)
         .then((response) => {
           if (response.data.success && response.data.data.length) {
             const fuelData = response.data.data.map((fuel) => {
@@ -428,10 +434,10 @@ const CarForm = (props) => {
       notes: notes.value
     }
 
-    let path = ctx.ajaxConfig.server + ctx.ajaxConfig.createCar;
+    let path = API_URL + CREATE_CAR;
 
     if (props.car && props.car.id) {
-      path = ctx.ajaxConfig.server + ctx.ajaxConfig.editCar.replace('%u', props.car.id);
+      path = API_URL + EDIT_CAR.replace('%u', props.car.id);
     }
 
     axios.post(path, postData)

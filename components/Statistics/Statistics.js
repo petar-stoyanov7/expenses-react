@@ -24,11 +24,14 @@ const firstOfJan = new Date();
 firstOfJan.setMonth(0);
 firstOfJan.setDate(1);
 
+const API_URL = process.env.SERVER_URL;
+const GET_EXPENSE_TYPES = process.env.GET_EXPENSE_TYPES_PATH;
+const GET_USER_EXPENSES = process.env.GET_USER_EXPENSES_PATH;
+const HASH = process.env.HASH;
 const FUEL_EXPENSE_ID = 1;
 
 const Statistics = () => {
     const ctx = useContext(AuthContext);
-    const ajx = ctx.ajaxConfig;
 
     const currentUser = ctx.userDetails.user;
 
@@ -49,7 +52,7 @@ const Statistics = () => {
 
     /* startup */
     useEffect(() => {
-        axios.get(ajx.server+ajx.getExpenseTypes, {hash: ajx.hash})
+        axios.get(API_URL + GET_EXPENSE_TYPES, {hash: HASH})
             .then((response) => {
                 if (response.data.success && response.data.data) {
                     setExpenseTypes(response.data.data);
@@ -145,14 +148,6 @@ const Statistics = () => {
 
     //---//
 
-    const setCar = (car) => {
-        if (!car.isActive && "all" !== car) {
-            return;
-        }
-
-        setSelectedCar(car);
-    }
-
     const setExpenses = (expenseId) => {
         if ('all' === expenseId) {
             setSelectedExpenses('all');
@@ -218,7 +213,7 @@ const Statistics = () => {
             expenseData['fuels'] = selectedFuels;
         }
 
-        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.getUserExpenses.replace('%u', currentUser.id);
+        const path = API_URL + GET_USER_EXPENSES.replace('%u', currentUser.id);
 
         axios.post(
             path,
@@ -251,8 +246,9 @@ const Statistics = () => {
                 </div>
                 <CarList
                     customClass="stat-form__cars"
+                    showDisabled={true}
                     isDetailed={false}
-                    clickAction={setCar}
+                    clickAction={setSelectedCar}
                     allCars={true}
                     selectedCar={selectedCar}
                 />

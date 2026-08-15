@@ -21,9 +21,15 @@ const FUEL_EXPENSE_ID = 1; //TODO: change if value changes in DB
 
 const currentDate = new Date();
 
+const API_URL = process.env.SERVER_URL;
+const GET_FUEL_TYPES = process.env.GET_FUELS_PATH;
+const GET_EXPENSE_TYPES = process.env.GET_EXPENSE_TYPES_PATH;
+const ADD_EXPENSE_PATH = process.env.ADD_EXPENSE_PATH;
+const IMPORT_EXPENSES_PATH = process.env.IMPORT_EXPENSES_PATH;
+const HASH = process.env.HASH;
+
 const NewExpense = () => {
     const ctx = useContext(AuthContext);
-    const ajx = ctx.ajaxConfig;
 
     const currentUser = ctx.userDetails.user;
 
@@ -48,7 +54,7 @@ const NewExpense = () => {
 
     /** generate lists of available expense and fuel types */
     useEffect(() => {
-        axios.post(ajx.server+ajx.getFuels, {hash: ajx.hash})
+        axios.post(API_URL + GET_FUEL_TYPES, {hash: HASH})
             .then((response) => {
                 if (response.data.success && response.data.data) {
                     setFuelList(response.data.data);
@@ -57,7 +63,7 @@ const NewExpense = () => {
             .catch((e) => {
                 console.log("Error fetching fuels: ", e);
             });
-        axios.get(ajx.server+ajx.getExpenseTypes, {hash: ajx.hash})
+        axios.get(API_URL + GET_EXPENSE_TYPES, {hash: HASH})
             .then((response) => {
                 if (response.data.success && response.data.data) {
                     setExpenseList(response.data.data);
@@ -144,7 +150,7 @@ const NewExpense = () => {
         e.preventDefault();
         if (formIsValid) {
             const expenseData = {
-                hash: ajx.hash,
+                hash: HASH,
                 userId: currentUser.id,
                 carId: selectedCar.id,
                 date: new Date(date).toISOString().split('T')[0],
@@ -156,7 +162,7 @@ const NewExpense = () => {
                 notes: notes
             }
 
-            axios.post(ajx.server+ajx.addExpense, expenseData)
+            axios.post(API_URL + ADD_EXPENSE_PATH, expenseData)
                 .then((response) => {
                     const result = response.data;
 
@@ -191,7 +197,7 @@ const NewExpense = () => {
         const file = e.target.files[0];
         formData.append('file', file);
         formData.append('fileName', file.name);
-        const path = `${ajx.server}${ajx.importExpenses}`
+        const path = API_URL + IMPORT_EXPENSES_PATH
             .replace('%u', currentUser.id)
             .replace('%c', selectedCar.id);
 
@@ -229,6 +235,7 @@ const NewExpense = () => {
                     <CarList
                         isDetailed={false}
                         hasModal={false}
+                        showDisabled={false}
                         clickAction={setCar}
                         selectedCar={selectedCar}
                     />
@@ -325,12 +332,13 @@ const NewExpense = () => {
                         >
                             Reset
                         </button>
-                        <FileUpload
-                            text="Import"
-                            type="text/csv"
-                            isDisabled={!selectedCar}
-                            uploadHandler={importHandler}
-                        />
+                        {/* Disabling import for now */}
+                        {/*<FileUpload*/}
+                        {/*    text="Import"*/}
+                        {/*    type="text/csv"*/}
+                        {/*    isDisabled={!selectedCar}*/}
+                        {/*    uploadHandler={importHandler}*/}
+                        {/*/>*/}
                     </div>
                 </div>
             </Container>

@@ -6,6 +6,10 @@ import axios from "axios";
 import '../../Style/CreateForm.scss';
 import iconClose from '../../assets/icons/icon-close.svg';
 
+const API_URL = process.env.SERVER_URL;
+const LOGIN = process.env.LOGIN_PATH;
+const HASH = process.env.HASH;
+
 const overlayContainer = document.getElementById('black-overlay-1');
 
 const Login = (props) => {
@@ -127,12 +131,12 @@ const Login = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        const path = ctx.ajaxConfig.server + ctx.ajaxConfig.login;
+        const path = API_URL + LOGIN;
         if (user.isValid && pass.isValid && form.isValid) {
             axios.post(path, {
                 username: user.value,
                 password: pass.value,
-                hash: ctx.ajaxConfig.hash
+                hash: HASH
             }).then((response) => {
                 const data = response.data;
                 if (data.success) {
