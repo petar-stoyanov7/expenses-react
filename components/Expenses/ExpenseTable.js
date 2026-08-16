@@ -1,8 +1,19 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import './ExpenseTable.scss';
 import AuthContext from "../../Store/auth-context";
+import iconEdit from "../../assets/icons/icon-edit.svg";
+import iconDelete from "../../assets/icons/icon-close.svg";
+import Confirmation from "../UI/Confirmation";
+import axios from "axios";
+
+const API_URL = process.env.SERVER_URL;
+const HASH = process.env.HASH;
+const DELETE_EXPENSE = process.env.DELETE_EXPENSE_PATH;
 
 const ExpenseTable = (props) => {
+    const [selectedExpense, setSelectedExpense] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState();
+
     let expenses;
     let tableClass = "expenses-list";
     const ctx = useContext(AuthContext);
@@ -17,6 +28,26 @@ const ExpenseTable = (props) => {
         tableClass += " exp-small";
     }
 
+    const handleDelete = () => {
+        if (null === selectedExpense) {
+            console.log("No expense selected!");
+            return;
+        }
+        axios.post(API_URL + DELETE_EXPENSE.replace('%u', selectedExpense.id))
+            .then((response) => {
+                if (response.data.statusText !== "OK") {
+                    console.log("Error from remote server: ", response);
+                }
+            })
+            .catch((e) => {
+                console.log("Error with deletion of expense: ", selectedExpense);
+            })
+            .finally(() => {
+                setShowConfirmation(false);
+            });
+        props.deleteAction(selectedExpense);
+    }
+
     if (null == props.expenses) {
         expenses = (
             <tr>
@@ -27,7 +58,7 @@ const ExpenseTable = (props) => {
         expenses = props.expenses.map((expense) => {
             let unit = '';
             if (null !== expense.fuel) {
-                unit = expense.fuel.toLowerCase() === "електричество" ? "kW": "l";
+                unit = expense.fuel.toLowerCase() === "електричество" ? "kW" : "l";
             }
             const date = new Date(expense.updatedAt.date).toLocaleDateString("en-GB", {
                 day: "numeric",
@@ -57,9 +88,7 @@ const ExpenseTable = (props) => {
                         {expense.fuel}
                     </td>
                     <td className="expenses-list__quantity">
-                        {/*TODO: change quantity to l/kW based on car type*/}
                         {null !== expense.quantity && `${expense.quantity} ${unit}`}
-                        {/*}*/}
                     </td>
                     <td className="expenses-list__price">
                         {`${expense.value} ${currency}`}
@@ -67,17 +96,45 @@ const ExpenseTable = (props) => {
                     <td className="expenses-list__notes">
                         {expense.notes}
                     </td>
+                    {props.showEdit && (
+                        <td className="expenses-list__actions">
+                            <span onClick={() => {
+                                setSelectedExpense(expense);
+                            }}>
+                                <img src={iconEdit} className="icon-edit" alt="edit expense"/>
+                            </span>
+                            <span onClick={() => {
+                                setShowConfirmation(true);
+                                setSelectedExpense(expense);
+                            }}>
+                                <img src={iconDelete} className="icon-edit" alt="delete expense"/>
+                            </span>
+                        </td>
+                    )}
                 </tr>
             )
         });
     }
 
     return (
-        <table
-            className={tableClass}
-            cellSpacing='0'
-        >
-            <thead className='expenses-list__header'>
+        <>
+            {showConfirmation && (
+                <Confirmation
+                    confirmColor="red"
+                    cancelColor="green"
+                    onConfirm={handleDelete}
+                    onCancel={() => {setShowConfirmation(false)}}
+                    text={
+                    `Are you sure you want to delete expense: id: ${selectedExpense.id} ` +
+                    `from ${selectedExpense.createdAt.date} for ${selectedExpense.value} ${currency}`
+                    }
+                />
+            )}
+            <table
+                className={tableClass}
+                cellSpacing='0'
+            >
+                <thead className='expenses-list__header'>
                 <tr>
                     <th className="expenses-list__mileage">
                         Mileage
@@ -103,12 +160,18 @@ const ExpenseTable = (props) => {
                     <th className="expenses-list__notes">
                         Notes
                     </th>
+                    {props.showEdit && (
+                        <th className="expenses-list__actions">
+                            Actions
+                        </th>
+                    )}
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {expenses}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </>
     )
 };
 

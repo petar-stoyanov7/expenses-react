@@ -2,6 +2,7 @@
 
 .expenses-list {
   width: 100%;
+  border-spacing: 0 5px;
 
   &__header {
     background-color: $main-color;
@@ -31,14 +32,6 @@
     }
   }
 
-  tr {
-    margin-bottom: 10px;
-
-    @media screen and (min-width: $large) {
-      margin-bottom: 0;
-    }
-  }
-
   &__detail, &__date {
     display: none;
     @media (min-width: $medium) {
@@ -51,6 +44,29 @@
 
     @media (min-width: $large) {
       display: table-cell;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    img {
+      cursor: pointer;
+      max-height: 24px;
+
+       @media (min-width: $large) {
+         max-height: 22px;
+       }
+    }
+
+    icon-edit {
+
+    }
+
+    icon-delete {
+
     }
   }
 

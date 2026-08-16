@@ -24,11 +24,12 @@ const currentDate = new Date();
 const API_URL = process.env.SERVER_URL;
 const GET_FUEL_TYPES = process.env.GET_FUELS_PATH;
 const GET_EXPENSE_TYPES = process.env.GET_EXPENSE_TYPES_PATH;
-const ADD_EXPENSE_PATH = process.env.ADD_EXPENSE_PATH;
-const IMPORT_EXPENSES_PATH = process.env.IMPORT_EXPENSES_PATH;
+const ADD_EXPENSE = process.env.ADD_EXPENSE_PATH;
+const EDIT_EXPENSE = process.env.EDIT_EXPENSE_PATH;
+const IMPORT_EXPENSES = process.env.IMPORT_EXPENSES_PATH;
 const HASH = process.env.HASH;
 
-const NewExpense = () => {
+const NewExpense = ({expense}) => {
     const ctx = useContext(AuthContext);
 
     const currentUser = ctx.userDetails.user;
@@ -162,7 +163,7 @@ const NewExpense = () => {
                 notes: notes
             }
 
-            axios.post(API_URL + ADD_EXPENSE_PATH, expenseData)
+            axios.post(API_URL + ADD_EXPENSE, expenseData)
                 .then((response) => {
                     const result = response.data;
 
@@ -197,7 +198,7 @@ const NewExpense = () => {
         const file = e.target.files[0];
         formData.append('file', file);
         formData.append('fileName', file.name);
-        const path = API_URL + IMPORT_EXPENSES_PATH
+        const path = API_URL + IMPORT_EXPENSES
             .replace('%u', currentUser.id)
             .replace('%c', selectedCar.id);
 

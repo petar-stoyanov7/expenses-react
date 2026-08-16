@@ -8,7 +8,6 @@ import './Statistics.scss';
 import Container from "../UI/Container";
 import AuthContext from "../../Store/auth-context";
 
-
 import "../../assets/css/default-datepicker.css";
 import CarList from "../Cars/CarList";
 import DatePicker from "react-datepicker";
@@ -30,12 +29,15 @@ const GET_USER_EXPENSES = process.env.GET_USER_EXPENSES_PATH;
 const HASH = process.env.HASH;
 const FUEL_EXPENSE_ID = 1;
 
+const overlayContainer = document.getElementById('black-overlay-1');
+
 const Statistics = () => {
     const ctx = useContext(AuthContext);
 
     const currentUser = ctx.userDetails.user;
 
     const [formIsValid, setFormIsValid] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
 
     const [dateFrom, setDateFrom] = useState(firstOfJan);
     const [dateTo, setDateTo] = useState(new Date());
@@ -199,9 +201,12 @@ const Statistics = () => {
     }
 
     const submitHandler = () => {
+        setShowEdit(false);
         const expenseData = {
             from: dateFrom.toISOString().split('T')[0],
             to: dateTo.toISOString().split('T')[0],
+            orderBy: 'date',
+            order: 'desc'
         };
         if ('all' !== selectedCar) {
             expenseData['car'] = selectedCar.id;
@@ -220,7 +225,7 @@ const Statistics = () => {
             expenseData
         ).then((response) => {
             if (!response.data || !response.data.success) {
-                console.log('Error with execution!');
+                console.log('Error with execution!', response);
                 return;
             }
 
@@ -228,7 +233,21 @@ const Statistics = () => {
         }).catch((e) => {
             console.log('Error with execution: ', e);
         })
+    }
 
+    const editExpense = (expense) => {
+        console.log('edit expense: ', expense);
+    }
+
+    const deleteExpense = async(expense) => {
+        let newExpenses = [];
+        expenseList.forEach((tmpExp) => {
+            if (tmpExp.id !== expense.id) {
+                newExpenses.push(tmpExp);
+            }
+        });
+
+        setExpenseList(newExpenses);
     }
 
 
@@ -295,19 +314,19 @@ const Statistics = () => {
                         elementClass="expense"
                     />
                 </div>
-                    {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 0) && (
-                        <div className="stat-form__fuel-list">
-                            <FuelList
-                                multiple={true}
-                                showAll={true}
-                                fuelList={possibleFuels}
-                                selectedFuels={selectedFuels}
-                                customClass="new-expense__fuels-list stat-form__fuel-list"
-                                elementClass="item-selector"
-                                clickAction={setFuel}
-                            />
-                        </div>
-                    )}
+                {(selectedExpenses.includes(FUEL_EXPENSE_ID) && possibleFuels.length > 0) && (
+                    <div className="stat-form__fuel-list">
+                        <FuelList
+                            multiple={true}
+                            showAll={true}
+                            fuelList={possibleFuels}
+                            selectedFuels={selectedFuels}
+                            customClass="new-expense__fuels-list stat-form__fuel-list"
+                            elementClass="item-selector"
+                            clickAction={setFuel}
+                        />
+                    </div>
+                )}
                 <div className="stat-form__actions xp-form__actions">
                     <button
                         disabled={!formIsValid}
@@ -328,20 +347,31 @@ const Statistics = () => {
                 </div>
 
             </Container>
-            <Container customClass="full-width">
-                <h3>Statistics</h3>
+            <Container customClass="full-width expenses-list">
+                <h3>Data</h3>
                 {expenseList.length !== 0 && (
-                  <>
-                      <Overall
-                          data={overall}
-                          car={selectedCar}
-                      />
-                      <ExpenseTable
-                        expenses={expenseList}
-                        isSmall={false}
-                        isDetailed={true}
-                      />
-                  </>
+                    <>
+                        <button
+                            className={'exp-button expenses-edit button-small' +
+                                (showEdit ? ' exp-button__danger' : ' exp-button__new')}
+                            type='submit'
+                            onClick={() => {setShowEdit(!showEdit)}}
+                        >
+                            {showEdit ? "Cancel" : "Edit"}
+                        </button>
+                        <Overall
+                            data={overall}
+                            car={selectedCar}
+                        />
+                        <ExpenseTable
+                            showEdit={showEdit}
+                            editAction={editExpense}
+                            deleteAction={deleteExpense}
+                            expenses={expenseList}
+                            isSmall={false}
+                            isDetailed={true}
+                        />
+                    </>
                 )}
             </Container>
         </div>
