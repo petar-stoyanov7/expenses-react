@@ -7,8 +7,9 @@
 }
 
 .confirmation-window {
-  position: absolute;
+  position: fixed;
   width: 90%;
+  top: 30%;
   left: 5%;
   z-index: $med-plus-z-index;
   padding: 15px;

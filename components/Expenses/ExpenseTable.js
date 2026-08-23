@@ -5,16 +5,24 @@ import iconEdit from "../../assets/icons/icon-edit.svg";
 import iconDelete from "../../assets/icons/icon-close.svg";
 import Confirmation from "../UI/Confirmation";
 import axios from "axios";
+import NewExpense from "./NewExpense";
 
 const API_URL = process.env.SERVER_URL;
 const HASH = process.env.HASH;
 const DELETE_EXPENSE = process.env.DELETE_EXPENSE_PATH;
 
+const overlayContainer = document.getElementById('black-overlay-1');
+/**
+ * TODO: update edited component
+ * TODO: remove the ugly 300ms hack in newExpense
+ * */
+
 const ExpenseTable = (props) => {
+    const [showEditExpense, setShowEditExpense] = useState(false);
     const [selectedExpense, setSelectedExpense] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState();
 
-    let expenses;
+    let expenseTable;
     let tableClass = "expenses-list";
     const ctx = useContext(AuthContext);
     const currency = ctx.userDetails.user.currency
@@ -49,13 +57,13 @@ const ExpenseTable = (props) => {
     }
 
     if (null == props.expenses) {
-        expenses = (
+        expenseTable = (
             <tr>
                 <td>No expenses recorded</td>
             </tr>
         )
     } else {
-        expenses = props.expenses.map((expense) => {
+        expenseTable = props.expenses.map((expense) => {
             let unit = '';
             if (null !== expense.fuel) {
                 unit = expense.fuel.toLowerCase() === "електричество" ? "kW" : "l";
@@ -100,6 +108,7 @@ const ExpenseTable = (props) => {
                         <td className="expenses-list__actions">
                             <span onClick={() => {
                                 setSelectedExpense(expense);
+                                setShowEditExpense(true);
                             }}>
                                 <img src={iconEdit} className="icon-edit" alt="edit expense"/>
                             </span>
@@ -117,7 +126,7 @@ const ExpenseTable = (props) => {
     }
 
     return (
-        <>
+        <React.Fragment>
             {showConfirmation && (
                 <Confirmation
                     confirmColor="red"
@@ -168,10 +177,31 @@ const ExpenseTable = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {expenses}
+                {expenseTable}
                 </tbody>
             </table>
-        </>
+            {showEditExpense && (
+                <>
+                    <div
+                        className="site-overlay black-overlay-1"
+                        onClick={() => {
+                            setShowEditExpense(false);
+                            setSelectedExpense(null);
+                        }}
+                    />
+                    overlayContainer
+                    <div className="create-form">
+                        <NewExpense
+                            expense={selectedExpense}
+                            onSubmit={() => {
+                                setShowEditExpense(false);
+                                setSelectedExpense(null);
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+        </React.Fragment>
     )
 };
 

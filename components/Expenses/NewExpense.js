@@ -29,11 +29,12 @@ const EDIT_EXPENSE = process.env.EDIT_EXPENSE_PATH;
 const IMPORT_EXPENSES = process.env.IMPORT_EXPENSES_PATH;
 const HASH = process.env.HASH;
 
-const NewExpense = ({expense}) => {
+const NewExpense = ({expense, onSubmit}) => {
     const ctx = useContext(AuthContext);
 
     const currentUser = ctx.userDetails.user;
 
+    const [expenseId, setExpenseId] = useState(null);
     const [selectedCar, setSelectedCar] = useState(null);
     const [expenseType, setExpenseType] = useState(null);
     const [mileage, setMileage] = useState('');
@@ -55,29 +56,43 @@ const NewExpense = ({expense}) => {
 
     /** generate lists of available expense and fuel types */
     useEffect(() => {
-        axios.post(API_URL + GET_FUEL_TYPES, {hash: HASH})
-            .then((response) => {
-                if (response.data.success && response.data.data) {
-                    setFuelList(response.data.data);
+        getFuelTypes();
+        getExpenseTypes();
+
+        /*
+        very ugly hack to make sure the expenses are populated when the component and its children are ready :X
+        todo: fix please!
+        */
+        setTimeout(() => {
+            if (expense) {
+                let currentCar = {};
+                ctx.userDetails.user.cars.forEach((car) => {
+                    if (car.id === expense.carId) {
+                        currentCar = car;
+                    }
+                });
+                setExpenseId(expense.id);
+                setCar(currentCar);
+                setExpenseType(expense.expenseId);
+                setDate(new Date(expense.updatedAt.date));
+                setValue(expense.value);
+                setNotes(expense.notes);
+                if (expense.expenseId === FUEL_EXPENSE_ID && null !== expense.fuelTypeId) {
+                    setFuel(expense.fuelTypeId);
+                    setQuantity(expense.quantity);
                 }
-            })
-            .catch((e) => {
-                console.log("Error fetching fuels: ", e);
-            });
-        axios.get(API_URL + GET_EXPENSE_TYPES, {hash: HASH})
-            .then((response) => {
-                if (response.data.success && response.data.data) {
-                    setExpenseList(response.data.data);
-                }
-            })
-            .catch((e) => {
-                console.log("Error fetching expense types: ", e);
-            });
+            }
+        }, 300);
+
+    }, []);
+
+    useEffect(() => {
+
     }, []);
 
     /** auto select first car if only one car is present */
     useEffect(() => {
-        if (currentUser.cars && 1 === currentUser.cars.length) {
+        if (!expense && currentUser.cars && 1 === currentUser.cars.length) {
             setCar(currentUser.cars[0]);
         }
     }, [ctx]);
@@ -99,6 +114,29 @@ const NewExpense = ({expense}) => {
         }
         setFormIsValid(validity);
     }, [selectedCar, expenseType, fuelType, mileage, date, value, quantity]);
+
+    const getFuelTypes = async () => {
+        try {
+            const response = await axios.post(API_URL + GET_FUEL_TYPES, {hash: HASH});
+            if (response.data.success && response.data.data) {
+                setFuelList(response.data.data);
+            }
+
+        } catch (e) {
+            console.log("Error getting fuel types: ", e);
+        }
+    }
+
+    const getExpenseTypes = async () => {
+        try {
+            const response = await axios.get(API_URL + GET_EXPENSE_TYPES, {hash: HASH});
+            if (response.data.success && response.data.data) {
+                setExpenseList(response.data.data);
+            }
+        } catch (e) {
+            console.log("Error fetching expense types: ", e);
+        }
+    }
 
     const setCar = (car) => {
         if (!car.isActive) {
@@ -131,6 +169,7 @@ const NewExpense = ({expense}) => {
         }
     }
 
+    //todo: maybe remove?
     const setFuel = (fuelId) => {
         setFuelType(fuelId);
     }
@@ -145,11 +184,15 @@ const NewExpense = ({expense}) => {
         setValue('');
         setNotes('');
         setIsFormSubmit(true);
+        if (onSubmit) {
+            onSubmit();
+        }
     }
 
     const submitHandler = (e) => {
         e.preventDefault();
         if (formIsValid) {
+            let url = API_URL + ADD_EXPENSE;
             const expenseData = {
                 hash: HASH,
                 userId: currentUser.id,
@@ -162,14 +205,16 @@ const NewExpense = ({expense}) => {
                 quantity: quantity,
                 notes: notes
             }
+            if (null !== expenseId) {
+                url = API_URL + EDIT_EXPENSE.replace('%u', expenseId);
+            }
 
-            axios.post(API_URL + ADD_EXPENSE, expenseData)
+            axios.post(url, expenseData)
                 .then((response) => {
                     const result = response.data;
 
                     if (result.success) {
                         const currentCar = selectedCar; //after resetting the form the state value is erased
-                        resetForm();
                         /* update context to match new mileage */
                         if (mileage !== currentCar.mileage) {
                             const tempCurrentUser = {...currentUser};
@@ -179,14 +224,15 @@ const NewExpense = ({expense}) => {
                             tempCurrentUser.cars[idx].mileage = mileage;
                             ctx.updateUserData(tempCurrentUser);
                         }
-
-                        resetForm();
                     }
                     console.log("Expense submitted: ", response);
                 })
                 .catch((error) => {
                     console.log('Error with execution: ', error);
-                });
+                })
+                .finally(() => {
+                    resetForm();
+                })
         }
     }
 
@@ -221,7 +267,7 @@ const NewExpense = ({expense}) => {
         <Fragment>
             <Container customClass="new-expense">
                 <h1 className="new-expense__title">
-                    New Expense
+                    {null !== expenseId ? "Edit Expense" : "New Expense"}
                 </h1>
                 <div
                     className={`new-expense__form-errors`}

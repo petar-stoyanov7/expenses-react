@@ -29,8 +29,6 @@ const GET_USER_EXPENSES = process.env.GET_USER_EXPENSES_PATH;
 const HASH = process.env.HASH;
 const FUEL_EXPENSE_ID = 1;
 
-const overlayContainer = document.getElementById('black-overlay-1');
-
 const Statistics = () => {
     const ctx = useContext(AuthContext);
 
