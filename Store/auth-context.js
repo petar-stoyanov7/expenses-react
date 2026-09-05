@@ -38,7 +38,6 @@ export const AuthContextProvider = (props) => {
     useEffect(() => {
         const storedUserId = parseInt(cookies.expUserId);
         const storedLoggedIn = parseInt(cookies.expIsLoggedIn) === 1;
-        const storedIsAdmin = parseInt(cookies.expIsAdmin) === 1;
 
         if (
             Boolean(storedUserId) &&
@@ -67,7 +66,6 @@ export const AuthContextProvider = (props) => {
 
                     setUserDetails({
                         isLogged: storedLoggedIn,
-                        isAdmin: storedIsAdmin,
                         user: user,
                     });
                     hideLoginForm();
@@ -78,8 +76,7 @@ export const AuthContextProvider = (props) => {
     }, [
         userDetails,
         cookies.expUserId,
-        cookies.expIsLoggedIn,
-        cookies.expIsAdmin
+        cookies.expIsLoggedIn
     ]);
 
     const showLoginForm = () => {
@@ -107,7 +104,6 @@ export const AuthContextProvider = (props) => {
         console.log('logging out');
         removeCookie('expUserId');
         removeCookie('expIsLoggedIn');
-        removeCookie('expIsAdmin');
 
         setUserDetails({
             isLogged: false,
@@ -119,10 +115,15 @@ export const AuthContextProvider = (props) => {
     };
 
     const loginHandler = (user, isAdmin) => {
+        const cookieOpts = {
+            path: '/',
+            maxAge: (60 * 60 * 24 * 30),
+            sameSite: "Strict",
+            secure: true
+        };
         console.log('Logging in');
-        setCookie('expUserId', user.id, {path: '/'});
-        setCookie('expIsLoggedIn', 1, {path: '/'});
-        setCookie('expIsAdmin', isAdmin ? 1 : 0, {path: '/'});
+        setCookie('expUserId', user.id, cookieOpts);
+        setCookie('expIsLoggedIn', 1, cookieOpts);
         setUserDetails({
             isLogged: true,
             isAdmin: isAdmin,
